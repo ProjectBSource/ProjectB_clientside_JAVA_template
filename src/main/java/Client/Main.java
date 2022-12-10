@@ -26,7 +26,6 @@ public class Main {
 		SocketClient sc = new SocketClient("funganything@gmail.com", "123");
 		//sc.request("13.250.98.96", "8888", obj);
 		sc.request("localhost", "8888", obj);
-		//test the push to github
 		
 		while(true) {
 			response = sc.getResponse();

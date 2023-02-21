@@ -18,14 +18,13 @@ public class Main {
 		obj.put("market", "Future");
 		obj.put("index", "YM");
 		obj.put("startdate", "20210701");
-		obj.put("enddate", "20210701");
+		obj.put("enddate", "20211201");
 		obj.put("starttime", "120000");
 		obj.put("endtime", "130000");
 		obj.put("interval", "59");
 		
 		SocketClient sc = new SocketClient("funganything@gmail.com", "123");
-		//sc.request("13.250.98.96", "8888", obj);
-		sc.request("localhost", "8888", obj);
+		sc.request(obj);
 		
 		while(true) {
 			response = sc.getResponse();

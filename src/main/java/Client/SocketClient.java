@@ -18,7 +18,7 @@ public class SocketClient implements Runnable {
 
 	private JSONObject JSONrequest;
 	private String serverIPaddress;
-	private int serverPort;
+	private int serverPort = 8888;
 	private Socket client;
 	private BufferedWriter bw;
 	private String messageFromServer;
@@ -37,15 +37,23 @@ public class SocketClient implements Runnable {
 		}else {
 			this.clientID = result.getString("clientID");
 			this.apiAccessCode = result.getString("accessCode");
+			getTheServerIPaddress();
 		}
 	}
 	
-	public void request(String serverIPaddress, String serverPort, JSONObject request) throws Exception {
+	public void getTheServerIPaddress() throws Exception {
+		JSONObject result = postRequest("https://www.projectb.click/ProjectB/GetTheServerIPaddress.php", null);
+		if(result.has("type") && result.getString("type").equals("error")) {
+			throw new Exception(result.getString("message"));
+		}else {
+			this.serverIPaddress = result.getString("ipaddress");
+		}
+	}
+	
+	public void request(JSONObject request) throws Exception {
 		if(clientID==null || apiAccessCode==null) {
 			throw new Exception("No available API access code");
 		}else {
-			this.serverIPaddress = serverIPaddress;
-			this.serverPort = Integer.parseInt(serverPort);
 			this.JSONrequest = request;
 			JSONrequest.put("clientID", clientID);
 			JSONrequest.put("accessCode", apiAccessCode);
@@ -101,11 +109,13 @@ public class SocketClient implements Runnable {
         httpURLConnection.setRequestProperty("User-Agent", "Mozilla/5.0");
 
         // For POST only - START
-        httpURLConnection.setDoOutput(true);
-        OutputStream os = httpURLConnection.getOutputStream();
-        os.write(message.getBytes());
-        os.flush();
-        os.close();
+        if(message!=null) {
+	        httpURLConnection.setDoOutput(true);
+	        OutputStream os = httpURLConnection.getOutputStream();
+	        os.write(message.getBytes());
+	        os.flush();
+	        os.close();
+        }
         // For POST only - END
 
         int responseCode = httpURLConnection.getResponseCode();

@@ -78,11 +78,14 @@ public class SocketClient implements Runnable {
 			
 			//get response from server
 			JSONresponse = new ArrayList<JSONObject>();
-			while(true) {
+			boolean stopstreaming = false;
+			while(!stopstreaming) {
+				is = client.getInputStream();
 				br = new BufferedReader(new InputStreamReader(is));
 				while((messageFromServer = br.readLine())!=null) {
 					if(messageFromServer.contains("done")) {
-						JSONresponse.add(null);
+						JSONresponse.add(new JSONObject().put("done", " "));
+						stopstreaming = true;
 						break; 
 					}
 					JSONresponse.add(new JSONObject(messageFromServer));
@@ -141,10 +144,10 @@ public class SocketClient implements Runnable {
 		if(JSONresponse.size()>0) {
 			JSONObject temp = JSONresponse.get(0);
 			JSONresponse.remove(0);
-			return temp;
+			if(temp!=null) {
+				return temp;
+			}
 		}
-		else{
-			return new JSONObject();
-		}
+		return new JSONObject();
 	}
 }

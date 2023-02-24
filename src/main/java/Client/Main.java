@@ -17,10 +17,10 @@ public class Main {
 		obj.put("activity", "DataStreaming");
 		obj.put("market", "Future");
 		obj.put("index", "YM");
-		obj.put("startdate", "20210701");
-		obj.put("enddate", "20211201");
-		obj.put("starttime", "120000");
-		obj.put("endtime", "130000");
+		obj.put("startdate", "20210630");
+		obj.put("enddate", "20220228");
+		obj.put("starttime", "000000");
+		obj.put("endtime", "235959");
 		obj.put("interval", "59");
 		
 		SocketClient sc = new SocketClient("funganything@gmail.com", "123");
@@ -28,9 +28,10 @@ public class Main {
 		
 		while(true) {
 			response = sc.getResponse();
-			if(response==null) 
-				break;
 			if(!response.isEmpty()) {
+				if(doneOrNot(response)==true) {
+					break;
+				}
 				System.out.println( 
 					String.format("%s,%s,%s,%s,%s,%s,%s,%s",
 						getDateTime(response),
@@ -43,10 +44,8 @@ public class Main {
 						getTotalVolumn(response)
 					) 
 				);
-				
 			}
 		}
-		
 	}
 	
 	public static Date getDate(JSONObject JSONresponse) throws Exception {
@@ -126,6 +125,14 @@ public class Main {
 			return Integer.parseInt(JSONresponse.getString("total volumn"));
 		}else {
 			return -1;
+		}
+	}
+	
+	public static boolean doneOrNot(JSONObject JSONresponse) throws Exception {
+		if( JSONresponse!=null && JSONresponse.has("done") ) {
+			return true;
+		}else {
+			return false;
 		}
 	}
 }

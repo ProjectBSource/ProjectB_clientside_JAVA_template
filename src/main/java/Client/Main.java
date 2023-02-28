@@ -14,7 +14,7 @@ public class Main {
 	
 	public static void main(String args[]) throws Exception {
 		JSONObject obj = new JSONObject();
-		obj.put("activity", "DataStreaming");
+		obj.put("activity", "TickDataStreaming");
 		obj.put("market", "Future");
 		obj.put("index", "YM");
 		obj.put("startdate", "20210630");
@@ -30,6 +30,10 @@ public class Main {
 			response = sc.getResponse();
 			if(!response.isEmpty()) {
 				if(doneOrNot(response)==true) {
+					break;
+				}
+				if(errorhappened(response)!=null) {
+					System.out.println(errorhappened(response));
 					break;
 				}
 				System.out.println( 
@@ -133,6 +137,14 @@ public class Main {
 			return true;
 		}else {
 			return false;
+		}
+	}
+	
+	public static String errorhappened(JSONObject JSONresponse) throws Exception {
+		if( JSONresponse!=null && JSONresponse.has("error") ) {
+			return JSONresponse.getString("error");
+		}else {
+			return null;
 		}
 	}
 }

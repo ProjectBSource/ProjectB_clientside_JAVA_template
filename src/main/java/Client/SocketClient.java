@@ -18,7 +18,7 @@ public class SocketClient implements Runnable {
 
 	private JSONObject JSONrequest;
 	private String serverIPaddress;
-	private int serverPort = 8888;
+	private int serverPort = -1;
 	private Socket client;
 	private BufferedWriter bw;
 	private String messageFromServer;
@@ -42,11 +42,12 @@ public class SocketClient implements Runnable {
 	}
 	
 	public void getTheServerIPaddress() throws Exception {
-		JSONObject result = postRequest("https://www.projectb.click/ProjectB/GetTheServerIPaddress.php", null);
+		JSONObject result = postRequest("https://www.projectb.click/ProjectB/GetTheServerIPaddress.php?clientID="+this.clientID, null);
 		if(result.has("type") && result.getString("type").equals("error")) {
 			throw new Exception(result.getString("message"));
 		}else {
 			this.serverIPaddress = result.getString("ipaddress");
+			this.serverPort = Integer.parseInt(result.getString("port"));
 		}
 	}
 	
@@ -80,6 +81,9 @@ public class SocketClient implements Runnable {
 			JSONresponse = new ArrayList<JSONObject>();
 			boolean stopstreaming = false;
 			while(!stopstreaming) {
+				if(!client.isConnected()) {
+					throw new Exception("Lost server connection, please contact admin");
+				}
 				is = client.getInputStream();
 				br = new BufferedReader(new InputStreamReader(is));
 				while((messageFromServer = br.readLine())!=null) {

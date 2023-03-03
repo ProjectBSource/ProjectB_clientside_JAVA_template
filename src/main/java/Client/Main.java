@@ -37,7 +37,8 @@ public class Main {
 					break;
 				}
 				System.out.println( 
-					String.format("%s,%s,%s,%s,%s,%s,%s,%s",
+					String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s",
+						getType(response),
 						getDateTime(response),
 						getIndex(response),
 						getVolumn(response),
@@ -49,6 +50,14 @@ public class Main {
 					) 
 				);
 			}
+		}
+	}
+	
+	public static String getType(JSONObject JSONresponse) throws Exception {
+		if( JSONresponse!=null && JSONresponse.has("type") ) {
+			return JSONresponse.getString("type");
+		}else {
+			return null;
 		}
 	}
 	

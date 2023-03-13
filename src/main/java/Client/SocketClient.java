@@ -42,7 +42,10 @@ public class SocketClient implements Runnable {
 	}
 	
 	public void getTheServerIPaddress() throws Exception {
-		JSONObject result = postRequest("https://www.projectb.click/ProjectB/GetTheServerIPaddress.php?clientID="+this.clientID, null);
+		JSONObject obj = new JSONObject();
+		obj.put("clientID", clientID);
+		obj.put("apiAccessCode", apiAccessCode);
+		JSONObject result = postRequest("https://www.projectb.click/ProjectB/GetTheServerIPaddress.php", obj.toString());
 		if(result.has("type") && result.getString("type").equals("error")) {
 			throw new Exception(result.getString("message"));
 		}else {

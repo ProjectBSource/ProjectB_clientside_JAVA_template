@@ -1,18 +1,10 @@
 package Client;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import org.json.JSONObject;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Main {
-
-	private static SimpleDateFormat df_yyyyMMdd = new SimpleDateFormat("yyyyMMdd");
-	private static SimpleDateFormat df_kkmmss = new SimpleDateFormat("kkmmss");
-	private static SimpleDateFormat df_yyyyMMddkkmmss = new SimpleDateFormat("yyyyMMddkkmmss");
-	private static JSONObject response = null;
 	
 	public static void main(String args[]) throws Exception {
 		JSONObject obj = new JSONObject();
@@ -29,7 +21,7 @@ public class Main {
 		sc.request(obj);
 		
 		while(true) {
-			response = sc.getResponse();
+			JSONObject response = sc.getResponse();
 			if(!response.isEmpty()) {
 
 				ObjectMapper mapper = new ObjectMapper();

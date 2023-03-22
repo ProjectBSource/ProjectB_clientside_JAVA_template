@@ -37,6 +37,7 @@ public class SocketClient implements Runnable {
 		}else {
 			this.clientID = result.getString("clientID");
 			this.apiAccessCode = result.getString("accessCode");
+			System.out.println("Login successful");
 			getTheServerIPaddress();
 		}
 	}
@@ -51,6 +52,7 @@ public class SocketClient implements Runnable {
 		}else {
 			this.serverIPaddress = result.getString("ipaddress");
 			this.serverPort = result.getInt("port");
+			System.out.println("Server "+serverIPaddress+", Port "+serverPort+" available");
 		}
 	}
 	
@@ -61,6 +63,7 @@ public class SocketClient implements Runnable {
 			this.JSONrequest = request;
 			JSONrequest.put("clientID", clientID);
 			JSONrequest.put("accessCode", apiAccessCode);
+			System.out.println("Server processing request");
 			//Run program
 			Thread thread = new Thread(this);
 			thread.start();

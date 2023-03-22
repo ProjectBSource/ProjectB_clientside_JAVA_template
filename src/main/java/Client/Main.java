@@ -12,7 +12,7 @@ public class Main {
 		obj.put("market", "Future");
 		obj.put("index", "YM");
 		obj.put("startdate", "20210630");
-		obj.put("enddate", "20220228");
+		obj.put("enddate", "20210705");
 		obj.put("starttime", "000000");
 		obj.put("endtime", "235959");
 		obj.put("interval", "59");
@@ -21,6 +21,7 @@ public class Main {
 		sc.request(obj);
 		
 		while(true) {
+			System.out.print("");
 			JSONObject response = sc.getResponse();
 			if(!response.isEmpty()) {
 

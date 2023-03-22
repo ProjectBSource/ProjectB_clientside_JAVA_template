@@ -50,7 +50,7 @@ public class SocketClient implements Runnable {
 			throw new Exception(result.getString("message"));
 		}else {
 			this.serverIPaddress = result.getString("ipaddress");
-			this.serverPort = Integer.parseInt(result.getString("port"));
+			this.serverPort = result.getInt("port");
 		}
 	}
 	

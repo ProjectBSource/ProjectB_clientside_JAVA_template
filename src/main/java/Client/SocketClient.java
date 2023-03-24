@@ -26,8 +26,11 @@ public class SocketClient implements Runnable {
 	private String apiAccessCode;
 	private String clientID;
 	private ArrayList<JSONObject> JSONresponse = new ArrayList<JSONObject>();
+	private InputStream is;
+	private OutputStream os;
 	
 	public SocketClient(String loginname, String password) throws Exception {
+		/*
 		JSONObject obj = new JSONObject();
 		obj.put("clientID", loginname);
 		obj.put("password", password);
@@ -40,6 +43,11 @@ public class SocketClient implements Runnable {
 			System.out.println("Login successful");
 			getTheServerIPaddress();
 		}
+		*/
+		this.clientID = "636e7543ea44b";
+		this.apiAccessCode = "65839231";
+		this.serverIPaddress = "localhost";
+		this.serverPort = 1101;
 	}
 	
 	public void getTheServerIPaddress() throws Exception {
@@ -63,10 +71,14 @@ public class SocketClient implements Runnable {
 			this.JSONrequest = request;
 			JSONrequest.put("clientID", clientID);
 			JSONrequest.put("accessCode", apiAccessCode);
-			System.out.println("Server processing request");
-			//Run program
-			Thread thread = new Thread(this);
-			thread.start();
+			if(client!=null && client.isClosed()==false) {
+				//send request from server
+				sendResquestToServer(JSONrequest);
+			}else {
+				//Run program
+				Thread thread = new Thread(this);
+				thread.start();
+			}
 		}
 	}
 	
@@ -77,11 +89,7 @@ public class SocketClient implements Runnable {
 			client = new Socket(serverIPaddress, serverPort);
 			
 			//send request from server
-			InputStream is = client.getInputStream();
-			OutputStream os = client.getOutputStream();
-			bw = new BufferedWriter(new OutputStreamWriter(os));
-			bw.write(JSONrequest.toString());
-			bw.flush();
+			sendResquestToServer(JSONrequest);
 			
 			//get response from server
 			JSONresponse = new ArrayList<JSONObject>();
@@ -113,6 +121,15 @@ public class SocketClient implements Runnable {
 				client.close();
 			} catch (IOException e) {}
 		}
+	}
+	
+	private void sendResquestToServer(JSONObject request) throws IOException {
+		//send request from server
+		is = client.getInputStream();
+		os = client.getOutputStream();
+		bw = new BufferedWriter(new OutputStreamWriter(os));
+		bw.write(request.toString());
+		bw.flush();
 	}
 	
 	private JSONObject postRequest(String url, String message) throws IOException {

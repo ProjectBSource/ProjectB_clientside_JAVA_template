@@ -1,7 +1,7 @@
-package Client;
+package Util;
 
 public class DataStructure {
-	String runJobID = null;
+	String dataSourceID = null;
 	String type = null;
 	String symbol = null;
 	String market = null;
@@ -18,11 +18,11 @@ public class DataStructure {
 	String error = null;
 	String done = null;
 	
-	public String getRunJobID() {
-		return runJobID;
+	public String getDataSourceID() {
+		return dataSourceID;
 	}
-	public void setRunJobID(String runJobID) {
-		this.runJobID = runJobID;
+	public void setDataSourceID(String dataSourceID) {
+		this.dataSourceID = dataSourceID;
 	}
 	public String getType() {
 		return type;

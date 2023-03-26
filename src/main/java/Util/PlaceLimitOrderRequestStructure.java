@@ -2,14 +2,12 @@ package Util;
 
 public class PlaceLimitOrderRequestStructure {
 	private String activity;
-	private String dataSourceID;
 	private final String ordertype = "Limit";
 	private String action;
 	private int quantity;
 	private double lmtprice;
-	public PlaceLimitOrderRequestStructure(String activity, String dataSourceID, String action, int quantity, double lmtprice) {
+	public PlaceLimitOrderRequestStructure(String activity, String action, int quantity, double lmtprice) {
 		this.activity = activity;
-		this.dataSourceID = dataSourceID;
 		this.action = action;
 		this.quantity = quantity;
 		this.lmtprice = lmtprice;
@@ -19,12 +17,6 @@ public class PlaceLimitOrderRequestStructure {
 	}
 	public void setActivity(String activity) {
 		this.activity = activity;
-	}
-	public String getDataSourceID() {
-		return dataSourceID;
-	}
-	public void setDataSourceID(String dataSourceID) {
-		this.dataSourceID = dataSourceID;
 	}
 	public String getOrdertype() {
 		return ordertype;

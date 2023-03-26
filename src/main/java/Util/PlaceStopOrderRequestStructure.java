@@ -2,14 +2,12 @@ package Util;
 
 public class PlaceStopOrderRequestStructure {
 	private String activity;
-	private String dataSourceID;
 	private final String ordertype = "Stop";
 	private String action;
 	private int quantity;
 	private double stpprice;
-	public PlaceStopOrderRequestStructure(String activity, String dataSourceID, String action, int quantity, double stpprice) {
+	public PlaceStopOrderRequestStructure(String activity, String action, int quantity, double stpprice) {
 		this.activity = activity;
-		this.dataSourceID = dataSourceID;
 		this.action = action;
 		this.quantity = quantity;
 		this.stpprice = stpprice;
@@ -19,12 +17,6 @@ public class PlaceStopOrderRequestStructure {
 	}
 	public void setActivity(String activity) {
 		this.activity = activity;
-	}
-	public String getDataSourceID() {
-		return dataSourceID;
-	}
-	public void setDataSourceID(String dataSourceID) {
-		this.dataSourceID = dataSourceID;
 	}
 	public String getOrdertype() {
 		return ordertype;

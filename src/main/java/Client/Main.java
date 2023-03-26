@@ -26,16 +26,16 @@ public class Main {
 		drs = new DataStreamingRequestStructure("IntervalDataStreaming", "Future", "YM", "20210630", "20210705", "000000", "235959", 59);
 		JSONObject dataStreamingRequest = new JSONObject(mapper.writeValueAsString(drs));
 
-		marketOrder = new PlaceMarketOrderRequestStructure("PlaceOrder", "[dataSourceID]", "BUY", 1);
+		marketOrder = new PlaceMarketOrderRequestStructure("PlaceOrder", "BUY", 1);
 		JSONObject placeMarketOrderRequest = new JSONObject(mapper.writeValueAsString(marketOrder));
 		
-		limitOrder = new PlaceLimitOrderRequestStructure("PlaceOrder", "[dataSourceID]", "BUY", 1, 123.456);
+		limitOrder = new PlaceLimitOrderRequestStructure("PlaceOrder", "BUY", 1, 123.456);
 		JSONObject placeLimitOrderRequest = new JSONObject(mapper.writeValueAsString(limitOrder));
 		
-		stopOrder = new PlaceStopOrderRequestStructure("PlaceOrder", "[dataSourceID]", "BUY", 1, 123.456);
+		stopOrder = new PlaceStopOrderRequestStructure("PlaceOrder", "BUY", 1, 123.456);
 		JSONObject placeStopOrderRequest = new JSONObject(mapper.writeValueAsString(stopOrder));
 		
-		stoplimitOrder = new PlaceStopLimitOrderRequestStructure("PlaceOrder", "[dataSourceID]", "BUY", 1, 12.34, 56.78);
+		stoplimitOrder = new PlaceStopLimitOrderRequestStructure("PlaceOrder", "BUY", 1, 12.34, 56.78);
 		JSONObject placeStopLimitOrderRequest = new JSONObject(mapper.writeValueAsString(stoplimitOrder));
 		
 		SocketClient sc = new SocketClient("funganything@gmail.com", "123");

@@ -2,15 +2,13 @@ package Util;
 
 public class PlaceStopLimitOrderRequestStructure {
 	private String activity;
-	private String dataSourceID;
 	private final String ordertype = "StopLimit";
 	private String action;
 	private int quantity;
 	private double lmtprice;
 	private double stpprice;
-	public PlaceStopLimitOrderRequestStructure(String activity, String dataSourceID, String action, int quantity, double lmtprice, double stpprice) {
+	public PlaceStopLimitOrderRequestStructure(String activity, String action, int quantity, double lmtprice, double stpprice) {
 		this.activity = activity;
-		this.dataSourceID = dataSourceID;
 		this.action = action;
 		this.quantity = quantity;
 		this.lmtprice = lmtprice;
@@ -21,12 +19,6 @@ public class PlaceStopLimitOrderRequestStructure {
 	}
 	public void setActivity(String activity) {
 		this.activity = activity;
-	}
-	public String getDataSourceID() {
-		return dataSourceID;
-	}
-	public void setDataSourceID(String dataSourceID) {
-		this.dataSourceID = dataSourceID;
 	}
 	public String getOrdertype() {
 		return ordertype;

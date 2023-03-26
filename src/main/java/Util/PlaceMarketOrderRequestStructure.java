@@ -2,13 +2,11 @@ package Util;
 
 public class PlaceMarketOrderRequestStructure {
 	private String activity;
-	private String dataSourceID;
-	private final String ordertype = "market";
+	private final String ordertype = "Market";
 	private String action;
 	private int quantity;
-	public PlaceMarketOrderRequestStructure(String activity, String dataSourceID, String action, int quantity) {
+	public PlaceMarketOrderRequestStructure(String activity, String action, int quantity) {
 		this.activity = activity;
-		this.dataSourceID = dataSourceID;
 		this.action = action;
 		this.quantity = quantity;
 	}
@@ -17,12 +15,6 @@ public class PlaceMarketOrderRequestStructure {
 	}
 	public void setActivity(String activity) {
 		this.activity = activity;
-	}
-	public String getDataSourceID() {
-		return dataSourceID;
-	}
-	public void setDataSourceID(String dataSourceID) {
-		this.dataSourceID = dataSourceID;
 	}
 	public String getOrdertype() {
 		return ordertype;

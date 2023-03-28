@@ -71,14 +71,16 @@ public class MarketOrder extends Constants{
 
 	public JSONObject trade(DataStructure data) throws JsonProcessingException, JSONException {
 		if(direction==null && sp==null && ed==null) {
-			if()
-			this.traded = (data.getVolumn()>this.quantity)?this.quantity:data.getVolumn();
-			this.remained = this.quantity - this.traded;
-			this.averageTradePrice = this.averageTradePrice + (this.traded * data.getIndex())
+			if(remained>0) {
+				int temp_trade_amount = (data.getVolumn()>=remained)?remained:data.getVolumn();
+				traded += temp_trade_amount;
+				remained -= temp_trade_amount;
+				averageTradePrice = (averageTradePrice + (temp_trade_amount * data.getIndex())) / traded;
+				MarketOrder temp_maket = new MarketOrder(this);
+				history.add(temp_maket);
+				return new JSONObject(this);
+			}
 		}
-		
-		
-		this.history.add(new MarketOrder(this));
 		return null;
 	}
 	

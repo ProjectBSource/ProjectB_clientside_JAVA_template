@@ -5,24 +5,24 @@ import org.json.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Main {
-	
-	public static void main(String args[]) throws Exception {
-		JSONObject obj = new JSONObject();
-		obj.put("activity", "TickDataStreaming");
-		obj.put("market", "Future");
-		obj.put("index", "YM");
-		obj.put("startdate", "20210630");
-		obj.put("enddate", "20210705");
-		obj.put("starttime", "000000");
-		obj.put("endtime", "235959");
-		obj.put("interval", "59");
 		
-		SocketClient sc = new SocketClient("funganything@gmail.com", "123");
-		sc.request(obj);
+	public static void main(String args[]) throws Exception {
+		
+		SocketClient dataStreaming = new SocketClient("funganything@gmail.com", "123");
+		JSONObject dataStreamingRequest = new JSONObject();
+		dataStreamingRequest.put("activity", "TickDataStreaming");
+		dataStreamingRequest.put("market", "Future");
+		dataStreamingRequest.put("index", "YM");
+		dataStreamingRequest.put("startdate", "20210630");
+		dataStreamingRequest.put("enddate", "20210705");
+		dataStreamingRequest.put("starttime", "000000");
+		dataStreamingRequest.put("endtime", "235959");
+		dataStreamingRequest.put("interval", "59");
+		dataStreaming.request(dataStreamingRequest);
 		
 		while(true) {
 			System.out.print("");
-			JSONObject response = sc.getResponse();
+			JSONObject response = dataStreaming.getResponse();
 			if(!response.isEmpty()) {
 
 				ObjectMapper mapper = new ObjectMapper();

@@ -1,28 +1,30 @@
 package Client;
 
 public class DataStructure {
-	String runJobID = null;
+	String dataSourceID = null;
 	String type = null;
 	String symbol = null;
 	String market = null;
+	Integer strike_price = null;
+	String expiry_date = null;
 	String date = null;
 	String time = null;
 	String datetime = null;
-	String index = null;
-	String open = null;
-	String high = null;
-	String low = null;
-	String close = null;
-	String volumn = null;
-	String total_volumn = null;
+	Double index = null;
+	Double open = null;
+	Double high = null;
+	Double low = null;
+	Double close = null;
+	Integer volumn = null;
+	Integer total_volumn = null;
 	String error = null;
 	String done = null;
 	
-	public String getRunJobID() {
-		return runJobID;
+	public String getDataSourceID() {
+		return dataSourceID;
 	}
-	public void setRunJobID(String runJobID) {
-		this.runJobID = runJobID;
+	public void setDataSourceID(String dataSourceID) {
+		this.dataSourceID = dataSourceID;
 	}
 	public String getType() {
 		return type;
@@ -42,6 +44,18 @@ public class DataStructure {
 	public void setMarket(String market) {
 		this.market = market;
 	}
+	public Integer getStrike_price() {
+		return strike_price;
+	}
+	public void setStrike_price(Integer strike_price) {
+		this.strike_price = strike_price;
+	}
+	public String getExpiry_date() {
+		return expiry_date;
+	}
+	public void setExpiry_date(String expiry_date) {
+		this.expiry_date = expiry_date;
+	}
 	public String getDate() {
 		return date;
 	}
@@ -60,46 +74,46 @@ public class DataStructure {
 	public void setDatetime(String datetime) {
 		this.datetime = datetime;
 	}
-	public String getIndex() {
+	public Double getIndex() {
 		return index;
 	}
-	public void setIndex(String index) {
+	public void setIndex(Double index) {
 		this.index = index;
 	}
-	public String getOpen() {
+	public Double getOpen() {
 		return open;
 	}
-	public void setOpen(String open) {
+	public void setOpen(Double open) {
 		this.open = open;
 	}
-	public String getHigh() {
+	public Double getHigh() {
 		return high;
 	}
-	public void setHigh(String high) {
+	public void setHigh(Double high) {
 		this.high = high;
 	}
-	public String getLow() {
+	public Double getLow() {
 		return low;
 	}
-	public void setLow(String low) {
+	public void setLow(Double low) {
 		this.low = low;
 	}
-	public String getClose() {
+	public Double getClose() {
 		return close;
 	}
-	public void setClose(String close) {
+	public void setClose(Double close) {
 		this.close = close;
 	}
-	public String getVolumn() {
+	public Integer getVolumn() {
 		return volumn;
 	}
-	public void setVolumn(String volumn) {
+	public void setVolumn(Integer volumn) {
 		this.volumn = volumn;
 	}
-	public String getTotal_volumn() {
+	public Integer getTotal_volumn() {
 		return total_volumn;
 	}
-	public void setTotal_volumn(String total_volumn) {
+	public void setTotal_volumn(Integer total_volumn) {
 		this.total_volumn = total_volumn;
 	}
 	public String getError() {

@@ -1,4 +1,4 @@
-package TradeController;
+package TradeControl;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -8,15 +8,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-import Client.DataStructure;
-import TradeController.OrderActionConstants.Action;
-import TradeController.OrderActionConstants.Direction;
-import TradeController.OrderActionConstants.ExpiryDate;
-import TradeController.OrderActionConstants.StrikePrice;
+import ClientSocketControl.DataStructure;
+import TradeControl.OrderActionConstants.Action;
+import TradeControl.OrderActionConstants.Direction;
+import TradeControl.OrderActionConstants.ExpiryDate;
+import TradeControl.OrderActionConstants.StrikePrice;
 
 public class MarketOrder extends Constants{
+	private String symbol;
 	private Action action;
 	private Direction direction;
 	private StrikePrice sp;
@@ -29,7 +29,8 @@ public class MarketOrder extends Constants{
 	private Date lastUpdateDateTime;
 	private ArrayList<MarketOrder> history = new ArrayList<>();
 
-	public MarketOrder(Action action, int quantity) {
+	public MarketOrder(String symbol, Action action, int quantity) {
+		this.symbol = symbol;
 		this.orderid = UUID.randomUUID().toString();
 		this.orderDateTime = new Date();
 		this.action = action;
@@ -40,7 +41,8 @@ public class MarketOrder extends Constants{
 		this.history.add(new MarketOrder(this));
 	}
 	
-	public MarketOrder(Action action, Direction direction, StrikePrice sp, ExpiryDate ed,  int quantity) {
+	public MarketOrder(String symbol, Action action, Direction direction, StrikePrice sp, ExpiryDate ed,  int quantity) {
+		this.symbol = symbol;
 		this.orderid = UUID.randomUUID().toString();
 		this.orderDateTime = new Date();
 		this.action = action;
@@ -55,6 +57,7 @@ public class MarketOrder extends Constants{
 	}
 	
 	private MarketOrder(MarketOrder market) {
+		this.symbol = market.symbol;
 		this.orderid = market.orderid;
 		this.orderDateTime = market.orderDateTime;
 		this.action = market.action;
@@ -69,7 +72,7 @@ public class MarketOrder extends Constants{
 		this.lastUpdateDateTime = market.lastUpdateDateTime;
 	}
 
-	public JSONObject trade(DataStructure data) throws JsonProcessingException, JSONException {
+	public JSONObject trade(Profile profile, DataStructure data) throws JsonProcessingException, JSONException {
 		if(direction==null && sp==null && ed==null) {
 			if(remained>0) {
 				int temp_trade_amount = (data.getVolumn()>=remained)?remained:data.getVolumn();
@@ -78,6 +81,9 @@ public class MarketOrder extends Constants{
 				averageTradePrice = (averageTradePrice + (temp_trade_amount * data.getIndex())) / traded;
 				MarketOrder temp_maket = new MarketOrder(this);
 				history.add(temp_maket);
+				//Update profle
+				if(action == Action.SELL) { temp_trade_amount *= -1; }
+				profile.update(symbol, temp_trade_amount, data.getIndex());
 				return new JSONObject(this);
 			}
 		}

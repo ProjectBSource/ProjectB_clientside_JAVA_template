@@ -1,4 +1,4 @@
-package Client;
+package ClientSocketControl;
 
 public class DataStructure {
 	String dataSourceID = null;

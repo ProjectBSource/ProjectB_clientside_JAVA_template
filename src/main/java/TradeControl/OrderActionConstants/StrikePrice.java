@@ -1,4 +1,4 @@
-package TradeController.OrderActionConstants;
+package TradeControl.OrderActionConstants;
 
 public enum StrikePrice {
 	_100(100),

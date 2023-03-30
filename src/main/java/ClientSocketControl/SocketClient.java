@@ -1,4 +1,4 @@
-package Client;
+package ClientSocketControl;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -28,7 +28,6 @@ public class SocketClient implements Runnable {
 	private ArrayList<JSONObject> JSONresponse = new ArrayList<JSONObject>();
 	
 	public SocketClient(String loginname, String password) throws Exception {
-		/*
 		JSONObject obj = new JSONObject();
 		obj.put("clientID", loginname);
 		obj.put("password", password);
@@ -41,12 +40,6 @@ public class SocketClient implements Runnable {
 			System.out.println("Login successful");
 			getTheServerIPaddress();
 		}
-		*/
-		
-		this.clientID = "636e7543ea44b";
-		this.apiAccessCode = "65839231";
-		this.serverIPaddress = "localhost";
-		this.serverPort = 1101;
 	}
 	
 	public void getTheServerIPaddress() throws Exception {

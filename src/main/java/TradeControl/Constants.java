@@ -1,4 +1,4 @@
-package TradeController;
+package TradeControl;
 
 import java.util.Date;
 

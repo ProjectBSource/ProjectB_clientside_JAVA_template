@@ -37,6 +37,7 @@ public class Main {
 		 * You may modify the function to fit your back test
 		 */
 		TradeController tradeController = new TradeController();
+		tradeController.setSlippage(0.0005);
 		
 		//Initial the ObjectMapper
 		ObjectMapper mapper = new ObjectMapper();
@@ -81,7 +82,7 @@ public class Main {
 					) 
 				);
 				
-				tradeController.placeMarketOrder(dataStructure.getSymbol(), Action.BUY, 1);
+				tradeController.placeOrder(dataStructure.getSymbol(), Action.BUY, 1);
 				
 				System.out.println( tradeController.getProfile() );
 				

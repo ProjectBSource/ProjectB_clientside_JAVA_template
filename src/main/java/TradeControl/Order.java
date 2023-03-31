@@ -2,6 +2,7 @@ package TradeControl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Random;
 import java.util.UUID;
 
 import org.json.JSONException;
@@ -15,7 +16,8 @@ import TradeControl.OrderActionConstants.Direction;
 import TradeControl.OrderActionConstants.ExpiryDate;
 import TradeControl.OrderActionConstants.StrikePrice;
 
-public class MarketOrder extends Constants{
+public class Order extends Constants{
+	private Random random = new Random();
 	private String symbol;
 	private Action action;
 	private Direction direction;
@@ -27,9 +29,9 @@ public class MarketOrder extends Constants{
 	private double averageTradePrice;
 	private String status;
 	private Date lastUpdateDateTime;
-	private ArrayList<MarketOrder> history = new ArrayList<>();
+	private ArrayList<Order> history = new ArrayList<>();
 
-	public MarketOrder(String symbol, Action action, int quantity) {
+	public Order(String symbol, Action action, int quantity) {
 		this.symbol = symbol;
 		this.orderid = UUID.randomUUID().toString();
 		this.orderDateTime = new Date();
@@ -38,10 +40,10 @@ public class MarketOrder extends Constants{
 		this.remained = quantity;
 		this.status = status_OPEN;
 		this.lastUpdateDateTime = this.orderDateTime;
-		this.history.add(new MarketOrder(this));
+		this.history.add(new Order(this));
 	}
 	
-	public MarketOrder(String symbol, Action action, Direction direction, StrikePrice sp, ExpiryDate ed,  int quantity) {
+	public Order(String symbol, Action action, Direction direction, StrikePrice sp, ExpiryDate ed,  int quantity) {
 		this.symbol = symbol;
 		this.orderid = UUID.randomUUID().toString();
 		this.orderDateTime = new Date();
@@ -53,10 +55,10 @@ public class MarketOrder extends Constants{
 		this.remained = quantity;
 		this.status = status_OPEN;
 		this.lastUpdateDateTime = this.orderDateTime;
-		this.history.add(new MarketOrder(this));
+		this.history.add(new Order(this));
 	}
 	
-	private MarketOrder(MarketOrder market) {
+	private Order(Order market) {
 		this.symbol = market.symbol;
 		this.orderid = market.orderid;
 		this.orderDateTime = market.orderDateTime;
@@ -72,14 +74,15 @@ public class MarketOrder extends Constants{
 		this.lastUpdateDateTime = market.lastUpdateDateTime;
 	}
 
-	public JSONObject trade(Profile profile, DataStructure data) throws JsonProcessingException, JSONException {
+	public JSONObject trade(Profile profile, DataStructure data, double slippage) throws JsonProcessingException, JSONException {
 		if(direction==null && sp==null && ed==null) {
 			if(remained>0) {
 				int temp_trade_amount = (data.getVolumn()>=remained)?remained:data.getVolumn();
 				traded += temp_trade_amount;
 				remained -= temp_trade_amount;
+				double temp_trade_price = data.getIndex() + ( (data.getIndex() *  slippage) * (random.nextInt(2)==0?1:-1) );
 				averageTradePrice = (averageTradePrice + (temp_trade_amount * data.getIndex())) / traded;
-				MarketOrder temp_maket = new MarketOrder(this);
+				Order temp_maket = new Order(this);
 				history.add(temp_maket);
 				//Update profle
 				if(action == Action.SELL) { temp_trade_amount *= -1; }

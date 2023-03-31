@@ -16,8 +16,10 @@ import TradeControl.OrderActionConstants.Direction;
 import TradeControl.OrderActionConstants.ExpiryDate;
 import TradeControl.OrderActionConstants.StrikePrice;
 
-public class Order extends Constants{
+public class Order {
 	private Random random = new Random();
+	private String orderid;
+	private Date orderDateTime;
 	private String symbol;
 	private Action action;
 	private Direction direction;
@@ -27,7 +29,6 @@ public class Order extends Constants{
 	private int traded;
 	private int remained;
 	private double averageTradePrice;
-	private String status;
 	private Date lastUpdateDateTime;
 	private ArrayList<Order> history = new ArrayList<>();
 
@@ -38,7 +39,6 @@ public class Order extends Constants{
 		this.action = action;
 		this.quantity = quantity;
 		this.remained = quantity;
-		this.status = status_OPEN;
 		this.lastUpdateDateTime = this.orderDateTime;
 		this.history.add(new Order(this));
 	}
@@ -53,7 +53,6 @@ public class Order extends Constants{
 		this.ed = ed;
 		this.quantity = quantity;
 		this.remained = quantity;
-		this.status = status_OPEN;
 		this.lastUpdateDateTime = this.orderDateTime;
 		this.history.add(new Order(this));
 	}
@@ -70,7 +69,6 @@ public class Order extends Constants{
 		this.traded = market.traded;
 		this.remained = market.remained;
 		this.averageTradePrice = market.averageTradePrice;
-		this.status = market.status;
 		this.lastUpdateDateTime = market.lastUpdateDateTime;
 	}
 
@@ -81,12 +79,12 @@ public class Order extends Constants{
 				traded += temp_trade_amount;
 				remained -= temp_trade_amount;
 				double temp_trade_price = data.getIndex() + ( (data.getIndex() *  slippage) * (random.nextInt(2)==0?1:-1) );
-				averageTradePrice = (averageTradePrice + (temp_trade_amount * data.getIndex())) / traded;
+				averageTradePrice = (averageTradePrice + (temp_trade_amount * temp_trade_price)) / traded;
 				Order temp_maket = new Order(this);
 				history.add(temp_maket);
 				//Update profle
 				if(action == Action.SELL) { temp_trade_amount *= -1; }
-				profile.update(symbol, temp_trade_amount, data.getIndex());
+				profile.update(symbol, temp_trade_amount, temp_trade_price);
 				return new JSONObject(this);
 			}
 		}

@@ -73,20 +73,23 @@ public class Order {
 	}
 
 	public JSONObject trade(Profile profile, DataStructure data, double slippage) throws JsonProcessingException, JSONException {
-		if(direction==null && sp==null && ed==null) {
-			if(remained>0) {
-				int temp_trade_amount = (data.getVolumn()>=remained)?remained:data.getVolumn();
-				traded += temp_trade_amount;
-				remained -= temp_trade_amount;
-				double temp_trade_price = data.getIndex() + ( (data.getIndex() *  slippage) * (random.nextInt(2)==0?1:-1) );
-				averageTradePrice = (averageTradePrice + (temp_trade_amount * temp_trade_price)) / traded;
-				Order temp_maket = new Order(this);
-				history.add(temp_maket);
-				//Update profle
-				if(action == Action.SELL) { temp_trade_amount *= -1; }
-				profile.update(symbol, temp_trade_amount, temp_trade_price);
-				return new JSONObject(this);
+		if(data.getType().equals("interval")==false) {
+			if(direction==null && sp==null && ed==null) {
+				if(remained>0) {
+					int temp_trade_amount = (data.getVolumn()>=remained)?remained:data.getVolumn();
+					traded += temp_trade_amount;
+					remained -= temp_trade_amount;
+					double temp_trade_price = data.getIndex() + ( (data.getIndex() *  slippage) * (random.nextInt(2)==0?1:-1) );
+					averageTradePrice = (averageTradePrice + (temp_trade_amount * temp_trade_price)) / traded;
+					Order temp_maket = new Order(this);
+					history.add(temp_maket);
+					//Update profle
+					if(action == Action.SELL) { temp_trade_amount *= -1; }
+					profile.update(symbol, temp_trade_amount, temp_trade_price);
+					return new JSONObject(this);
+				}
 			}
+			return null;
 		}
 		return null;
 	}

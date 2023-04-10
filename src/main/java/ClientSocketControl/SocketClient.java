@@ -42,7 +42,7 @@ public class SocketClient implements Runnable {
 		}
 	}
 	
-	public void getTheServerIPaddress() throws Exception {
+	private void getTheServerIPaddress() throws Exception {
 		JSONObject obj = new JSONObject();
 		obj.put("clientID", clientID);
 		obj.put("apiAccessCode", apiAccessCode);

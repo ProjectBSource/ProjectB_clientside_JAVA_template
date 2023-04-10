@@ -2,8 +2,6 @@ package TradeControl;
 
 import java.util.HashMap;
 
-import org.json.JSONObject;
-
 class Profile {
 	public HashMap<String, Integer> holding = new HashMap<>();
 	public double balance;

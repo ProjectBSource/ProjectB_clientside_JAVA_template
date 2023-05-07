@@ -1,13 +1,13 @@
 package Main;
 
-import org.json.JSONObject;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import ClientSocketControl.DataStructure;
 import ClientSocketControl.SocketClient;
-import TradeControl.TradeController;
 import TradeControl.OrderActionConstants.Action;
+import TradeControl.TradeController;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.JSONObject;
+
+
 
 
 
@@ -27,7 +27,7 @@ public class Main {
 		dataStreamingRequest.put("enddate", "20210705");
 		dataStreamingRequest.put("starttime", "000000");
 		dataStreamingRequest.put("endtime", "235959");
-		dataStreamingRequest.put("interval", "59");
+		dataStreamingRequest.put("interval", 59);
 		
 		//Send the request to server
 		dataStreaming.request(dataStreamingRequest);

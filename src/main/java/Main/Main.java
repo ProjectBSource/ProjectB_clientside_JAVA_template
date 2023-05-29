@@ -1,13 +1,13 @@
 package Main;
 
-import org.json.JSONObject;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import ClientSocketControl.DataStructure;
 import ClientSocketControl.SocketClient;
-import TradeControl.TradeController;
 import TradeControl.OrderActionConstants.Action;
+import TradeControl.TradeController;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.JSONObject;
+
+
 
 
 
@@ -84,9 +84,11 @@ public class Main {
 					) 
 				);
 				
-				tradeController.placeOrder(dataStructure.getSymbol(), Action.BUY, 1);
+                if(tradeController.getProfile().holding.size()==0){
+				    tradeController.placeOrder(dataStructure.getSymbol(), Action.BUY, 1);
+                }
 				
-				System.out.println( tradeController.getProfile() );
+				//System.out.println( tradeController.getProfile() );
 				
 				/*
 				 * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

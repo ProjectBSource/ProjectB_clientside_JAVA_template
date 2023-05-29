@@ -1,20 +1,20 @@
 package TradeControl;
 
-import java.util.ArrayList;
-import java.util.Map;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.gson.Gson;
-
 import ClientSocketControl.DataStructure;
 import TradeControl.OrderActionConstants.Action;
 import TradeControl.OrderActionConstants.Direction;
 import TradeControl.OrderActionConstants.ExpiryDate;
 import TradeControl.OrderActionConstants.StrikePrice;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.gson.Gson;
+import java.util.ArrayList;
+import java.util.Map;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+
+
 
 public class TradeController {
 	Profile profile = new Profile();
@@ -75,9 +75,9 @@ public class TradeController {
 	}
 	
 	/**
-     *Get the Profile information 
+     *Get the Profile information in JSON
      */
-	public JSONObject getProfile() {
+	public JSONObject getProfileInJSON() {
 		//return profile.toJSONObject();
 		gson = new Gson();
 		String jsonString = gson.toJson(profile);
@@ -85,5 +85,12 @@ public class TradeController {
 			return new JSONObject(jsonString);
 		}
 		return null;
+	}
+
+    /**
+     *Get the Profile information
+     */
+	public Profile getProfile() {
+		return profile;
 	}
 }

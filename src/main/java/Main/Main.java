@@ -2,19 +2,20 @@ package Main;
 
 import ClientSocketControl.DataStructure;
 import ClientSocketControl.SocketClient;
-import TradeControl.OrderActionConstants.Action;
+import Indicators.BollingerBands;
 import TradeControl.TradeController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONObject;
 
-
-
-
-
-
-
 public class Main {
 		
+    //Initial the ObjectMapper
+    public static ObjectMapper mapper = new ObjectMapper();
+    //Initial the JSONObject 
+    public static JSONObject response = null;
+    //Initial the DataStructure
+    public static DataStructure dataStructure;
+
 	public static void main(String args[]) throws Exception {
 		
 		//Login here
@@ -22,14 +23,15 @@ public class Main {
 		
 		//Form JSON object message for data streaming request
 		JSONObject dataStreamingRequest = new JSONObject();
-		dataStreamingRequest.put("activity", "TickDataStreaming");
+		dataStreamingRequest.put("activity", "IntervalDataStreaming");
 		dataStreamingRequest.put("market", "Future");
-		dataStreamingRequest.put("index", "YM");
-		dataStreamingRequest.put("startdate", "20210630");
-		dataStreamingRequest.put("enddate", "20210705");
+		dataStreamingRequest.put("index", "HSI");
+		dataStreamingRequest.put("startdate", "20230101");
+		dataStreamingRequest.put("enddate", "20230531");
 		dataStreamingRequest.put("starttime", "000000");
 		dataStreamingRequest.put("endtime", "235959");
-		dataStreamingRequest.put("interval", 59);
+		dataStreamingRequest.put("interval", 60-1);
+        dataStreamingRequest.put("mitigateNoiseWithinPrecentage", 200);
 		
 		//Send the request to server
 		dataStreaming.request(dataStreamingRequest);
@@ -41,10 +43,8 @@ public class Main {
 		TradeController tradeController = new TradeController();
 		tradeController.setSlippage(0.0005);
 		
-		//Initial the ObjectMapper
-		ObjectMapper mapper = new ObjectMapper();
-		//Initial the JSONObject 
-		JSONObject response = null;
+        //Setup the indicatories you need here
+        BollingerBands bollingerBands = new BollingerBands(20,2);
 		
 		while(true) {
 			//get the response
@@ -69,9 +69,11 @@ public class Main {
 				 * You may write your back test program below within the while loop
 				 * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 				 */
-				
+
+                bollingerBands.addPrice(dataStructure.getIndex());
+
 				System.out.println( 
-					String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s",
+					String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
 						dataStructure.getType(),
 						dataStructure.getDatetime(),
 						dataStructure.getIndex(),
@@ -80,14 +82,20 @@ public class Main {
 						dataStructure.getHigh(),
 						dataStructure.getLow(),
 						dataStructure.getClose(),
-						dataStructure.getTotal_volumn()
+						dataStructure.getTotal_volumn(),
+                        bollingerBands.getUpperBand(),
+                        bollingerBands.getMiddleBand(),
+                        bollingerBands.getLowerBand()
 					) 
 				);
 				
+
+
+                /*
                 if(tradeController.getProfile().holding.size()==0){
 				    tradeController.placeOrder(dataStructure.getSymbol(), Action.BUY, 1);
                 }
-				
+				*/
 				//System.out.println( tradeController.getProfile() );
 				
 				/*

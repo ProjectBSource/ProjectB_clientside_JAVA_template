@@ -6,9 +6,6 @@ import TradeControl.TradeController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import org.json.JSONObject;
 
 public abstract class MainController {
@@ -28,24 +25,10 @@ public abstract class MainController {
         }
     }
 
-    public void createDataStreamingRequest(String activity, String market, String index, Date startdate, Date enddate, Date starttime, Date endtime, int interval) throws Exception {
+    public void createDataStreamingRequest(JSONObject dataStreamingRequest) throws Exception {
         if(dataStreaming==null){
             throw new Exception("Please login first");
         }else{
-            dataStreamingRequest = new JSONObject();
-            dataStreamingRequest.put("activity", activity);
-            dataStreamingRequest.put("market", market);
-            dataStreamingRequest.put("index", index);
-            Calendar calendar = new GregorianCalendar();
-            calendar.setTime(startdate);
-            dataStreamingRequest.put("startdate", String.format("%04d%02d%02d", calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)+1, calendar.get(Calendar.DAY_OF_MONTH)) );
-            calendar.setTime(enddate);
-            dataStreamingRequest.put("enddate", String.format("%04d%02d%02d", calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)+1, calendar.get(Calendar.DAY_OF_MONTH)) );
-            calendar.setTime(starttime);
-            dataStreamingRequest.put("starttime", String.format("%02d%02d%02d", calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND)) );
-            calendar.setTime(endtime);
-            dataStreamingRequest.put("endtime", String.format("%02d%02d%02d", calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND)) );
-            dataStreamingRequest.put("interval", interval);
             dataStreaming.request(dataStreamingRequest);
         }
     }

@@ -32,13 +32,16 @@ public class SocketClient implements Runnable {
 		obj.put("clientID", loginname);
 		obj.put("password", password);
 		JSONObject result = postRequest("https://www.projectb.click/ProjectB/APIgetAccessCode.php", obj.toString());
-		if(result.has("type") && result.getString("type").equals("error")) {
-			throw new Exception(result.getString("message"));
-		}else {
-			this.clientID = result.getString("clientID");
-			this.apiAccessCode = result.getString("accessCode");
-			System.out.println("Login successful");
-			getTheServerIPaddress();
+		if(result.has("type")) {
+            if(result.getString("type").equals("error")){
+			    throw new Exception(result.getString("message"));
+            }
+            else if(result.getString("type").equals("success")){
+                this.clientID = result.getString("clientID");
+                this.apiAccessCode = result.getString("accessCode");
+                System.out.println(result.getString("message"));
+                getTheServerIPaddress();
+            }
 		}
 	}
 	
@@ -47,12 +50,15 @@ public class SocketClient implements Runnable {
 		obj.put("clientID", clientID);
 		obj.put("apiAccessCode", apiAccessCode);
 		JSONObject result = postRequest("https://www.projectb.click/ProjectB/GetTheServerIPaddress.php", obj.toString());
-		if(result.has("type") && result.getString("type").equals("error")) {
-			throw new Exception(result.getString("message"));
-		}else {
-			this.serverIPaddress = result.getString("ipaddress");
-			this.serverPort = result.getInt("port");
-			System.out.println("Server "+serverIPaddress+", Port "+serverPort+" available");
+		if(result.has("type")) {
+            if(result.getString("type").equals("error")){
+			    throw new Exception(result.getString("message"));
+            }
+            else if(result.getString("type").equals("success")){
+                this.serverIPaddress = result.getString("ipaddress");
+                this.serverPort = result.getInt("port");
+                System.out.println(result.getString("message"));
+            }
 		}
 	}
 	

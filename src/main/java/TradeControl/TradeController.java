@@ -1,17 +1,19 @@
 package TradeControl;
 
+import java.util.ArrayList;
+import java.util.Map;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.google.gson.Gson;
+
 import ClientSocketControl.DataStructure;
 import TradeControl.OrderActionConstants.Action;
 import TradeControl.OrderActionConstants.Direction;
 import TradeControl.OrderActionConstants.ExpiryDate;
 import TradeControl.OrderActionConstants.StrikePrice;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.gson.Gson;
-import java.util.ArrayList;
-import java.util.Map;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 
 
@@ -27,7 +29,7 @@ public class TradeController {
 	/**
      *A necessary method to check the order allow to trade or not, you should call this method every read the data streaming message.
      */
-	public JSONArray tradeCheckingAndBalanceUpdate(DataStructure ds) throws JsonProcessingException, JSONException {
+	public JSONArray tradeCheckingAndBalanceUpdate(DataStructure ds) throws JSONException {
 		//check and update the order
 		trade_notification_list = new JSONArray();
 		trade_notification = null;

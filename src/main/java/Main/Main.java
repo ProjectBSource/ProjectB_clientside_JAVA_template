@@ -1,12 +1,13 @@
 package Main;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ClientSocketControl.DataStructure;
 import DataController.Future;
@@ -62,7 +63,7 @@ public class Main {
         }
 	}
 
-    private static void mainLogicLevel1(ArrayList<JSONObject> dataList) throws JsonProcessingException, JSONException{
+    private static void mainLogicLevel1(ArrayList<JSONObject> dataList) throws JSONException, JsonParseException, JsonMappingException, IOException{
 		if(dataList.size()>0) {
             int tempDataListSize = dataList.size();
             for(int i=0; i<tempDataListSize; i++) {

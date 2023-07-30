@@ -8,8 +8,6 @@ import java.util.UUID;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import ClientSocketControl.DataStructure;
 import TradeControl.OrderActionConstants.Action;
 import TradeControl.OrderActionConstants.Direction;
@@ -72,7 +70,7 @@ public class Order {
 		this.lastUpdateDateTime = market.lastUpdateDateTime;
 	}
 
-	public JSONObject trade(Profile profile, DataStructure data, double slippage) throws JsonProcessingException, JSONException {
+	public JSONObject trade(Profile profile, DataStructure data, double slippage) throws JSONException {
 		if(data.getType().equals("interval")==false) {
 			if(direction==null && sp==null && ed==null) {
 				if(remained>0) {

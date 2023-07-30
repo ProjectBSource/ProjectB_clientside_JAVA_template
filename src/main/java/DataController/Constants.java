@@ -19,10 +19,11 @@ public class Constants {
 	public static SimpleDateFormat df_kkmmss = new SimpleDateFormat("kkmmss");
 	public static SimpleDateFormat df_yyyyMMddkkmmss = new SimpleDateFormat("yyyyMMddkkmmss");
 	public static Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+	private static ClassLoader loader = Thread.currentThread().getContextClassLoader();
 	
 	public Constants() {
 		Properties prop = new Properties();
-	    try (InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("env.properties")) {
+	    try (InputStream resourceAsStream = loader.getResourceAsStream("env.properties")) {
 	        prop.load(resourceAsStream);
 	        futuretickdatafilesparentpath = prop.get("env.futuretickdatafilesparentpath").toString();
 	    } catch (IOException e) {

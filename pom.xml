@@ -42,42 +42,91 @@
               </plugin>
           </plugins>
         </build>
-      <dependencies>
-            <!-- https://mvnrepository.com/artifact/org.json/json -->
-           <dependency>
-              <groupId>org.json</groupId>
-              <artifactId>json</artifactId>
-              <version>20220924</version>
-           </dependency>
-           <dependency>
-              <groupId>com.fasterxml.jackson.core</groupId>
-              <artifactId>jackson-databind</artifactId>
-              <version>2.13.3</version>
-          </dependency>
-          <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
-          <dependency>
-              <groupId>com.google.code.gson</groupId>
-              <artifactId>gson</artifactId>
-              <version>2.10.1</version>
-          </dependency>  
-      </dependencies>
-      <profiles>
-        <profile>
-          <id>dev</id>
-            
-          <properties>
-               <env.futuretickdatafilesparentpath>//Users//patrickfung//Desktop//ProjectB_notes//TickData//futuretickdatafiles//HKEX//HSI//formated_data_source//</env.futuretickdatafilesparentpath>
-               <env.loggerstoragepath>C://Users//Patrick Fung//Downloads//server.log</env.loggerstoragepath>
-               <env.environment>dev</env.environment>
-          </properties>
-      </profile>
-      <profile>
-          <id>prd</id>
-          <properties>
-               <env.futuretickdatafilesparentpath>//home//ec2-user//dataSource//TickData//futuretickdatafiles//</env.futuretickdatafilesparentpath>
-               <env.loggerstoragepath>//home//ec2-user//dataSource//server//log//server.log</env.loggerstoragepath>
-               <env.environment>prd</env.environment>
-          </properties>
-      </profile>
-    </profiles>
+		<profiles>
+		  	<profile>
+		        <id>dev</id>
+			  	<dependencies>
+				  	<!-- https://mvnrepository.com/artifact/org.json/json -->
+				 	<dependency>
+				    	<groupId>org.json</groupId>
+				    	<artifactId>json</artifactId>
+				    	<version>20220924</version>
+				 	</dependency>
+				 	<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+					<dependency>
+				    	<groupId>mysql</groupId>
+				    	<artifactId>mysql-connector-java</artifactId>
+				    	<version>8.0.31</version>
+					</dependency>
+					<!-- https://mvnrepository.com/artifact/commons-logging/commons-logging -->
+					<dependency>
+					    <groupId>commons-logging</groupId>
+					    <artifactId>commons-logging</artifactId>
+					    <version>1.2</version>
+					</dependency>
+					<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+					<dependency>
+					    <groupId>com.google.code.gson</groupId>
+					    <artifactId>gson</artifactId>
+					    <version>2.10.1</version>
+					</dependency>
+					<!-- https://mvnrepository.com/artifact/com.fasterxml/jackson-xml-databind -->
+					<dependency>
+					    <groupId>com.fasterxml</groupId>
+					    <artifactId>jackson-xml-databind</artifactId>
+					    <version>0.6.2</version>
+					</dependency>
+										
+										
+				</dependencies>
+				<properties>
+			         <env.futuretickdatafilesparentpath>/Users/patrickfung/Desktop/ProjectB_notes/TickData/futuretickdatafiles/HKEX/HSI/formated_data_source/</env.futuretickdatafilesparentpath>
+			         <env.loggerstoragepath>//Users//patrickfung//Downloads//server.log</env.loggerstoragepath>
+			         <env.environment>dev</env.environment>
+				</properties>
+			</profile>
+			<profile>
+		        <id>prd</id>
+			  	<dependencies>
+				  <!-- https://mvnrepository.com/artifact/org.json/json -->
+				 	<dependency>
+				    	<groupId>org.json</groupId>
+				    	<artifactId>json</artifactId>
+				    	<version>20230618</version>
+				 	</dependency>
+				 	<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+					<dependency>
+				    	<groupId>mysql</groupId>
+				    	<artifactId>mysql-connector-java</artifactId>
+				    	<version>8.0.31</version>
+					</dependency>
+					<!-- https://mvnrepository.com/artifact/commons-logging/commons-logging -->
+					<dependency>
+					    <groupId>commons-logging</groupId>
+					    <artifactId>commons-logging</artifactId>
+					    <version>1.2</version>
+					</dependency>
+					<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+					<dependency>
+					    <groupId>com.google.code.gson</groupId>
+					    <artifactId>gson</artifactId>
+					    <version>2.10.1</version>
+					</dependency>
+					<!-- https://mvnrepository.com/artifact/com.fasterxml/jackson-xml-databind -->
+					<dependency>
+					    <groupId>com.fasterxml</groupId>
+					    <artifactId>jackson-xml-databind</artifactId>
+					    <version>0.6.2</version>
+					</dependency>
+										
+										
+				</dependencies>
+				<properties>
+			         <env.futuretickdatafilesparentpath>//home//ec2-user//dataSource//TickData//futuretickdatafiles//</env.futuretickdatafilesparentpath>
+			         <env.loggerstoragepath>//home//ec2-user//dataSource//server//log//server.log</env.loggerstoragepath>
+			         <env.environment>prd</env.environment>
+				</properties>
+			</profile>
+		  </profiles>
+
   </project>

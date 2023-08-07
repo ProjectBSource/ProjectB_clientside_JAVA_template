@@ -13,6 +13,7 @@ import ClientSocketControl.DataStructure;
 import DataController.Future;
 import Indicators.BollingerBands;
 import TradeControl.TradeController;
+import Util.WebTaskConstants;
 
 public class Main {
 		
@@ -26,39 +27,55 @@ public class Main {
     public static BollingerBands bollingerBands = null;
 
 	public static void main(String args[]) throws Exception {
+
+        //initial
+        WebTaskConstants.setupLogger();
+        WebTaskConstants.setupDBconnection();
+        WebTaskConstants.setIPaddress();
 		
-        //Form JSON object message for data streaming request
-		JSONObject input = new JSONObject(args[0]);
-		/*
-		 * This template included a simple account and order management function
-		 * You may modify the function to fit your back test
-		 */
+        //get the input parameters
+        WebTaskConstants.clientID = args[0];
+        WebTaskConstants.runJobID = args[1];
+        WebTaskConstants.logger("clientID:"+WebTaskConstants.clientID+", runJobID:"+WebTaskConstants.runJobID);
 
-        if(input.has("dataChangeLimitInPrecentage")){ 
-            tradeController = new TradeController();
-            tradeController.setSlippage( input.getDouble("dataChangeLimitInPrecentage") );
-        }
+        //get task detail
+        JSONObject input = WebTaskConstants.getMessage();
 
-        if(input.has("Indicator")){
-            for(Object ind : input.getJSONArray("Indicator")){
-                JSONObject indJSON = (JSONObject)ind;
-                if(indJSON.getString("name").equals("BollingerBands")){
-                    bollingerBands = new BollingerBands(indJSON.getInt("period"), indJSON.getDouble("multiplier"));
+        //Validation
+        boolean requestSyntaxValidationPass = WebTaskConstants.requestSyntaxValidation(input);
+
+        if(requestSyntaxValidationPass==true){
+            /*
+            * This template included a simple account and order management function
+            * You may modify the function to fit your back test
+            */
+
+            if(input.has("dataChangeLimitInPrecentage")){ 
+                tradeController = new TradeController();
+                tradeController.setSlippage( input.getDouble("dataChangeLimitInPrecentage") );
+            }
+
+            if(input.has("Indicator")){
+                for(Object ind : input.getJSONArray("Indicator")){
+                    JSONObject indJSON = (JSONObject)ind;
+                    if(indJSON.getString("name").equals("BollingerBands")){
+                        bollingerBands = new BollingerBands(indJSON.getInt("period"), indJSON.getDouble("multiplier"));
+                    }
                 }
             }
-        }
 
-        boolean onlyIntervalData = false;
-        if (input.getString("activity").equalsIgnoreCase(Constants.intervaldataStreamingRequest)) {
-            onlyIntervalData = true;
-        }
-        if (input.getString("market").equalsIgnoreCase(Constants.dataStreamingFutureRequest)) {
-            Future future = new Future(input, onlyIntervalData);
-            Thread thread = new Thread(future);
-            thread.start();
-            while(future.processDone == false || future.data.size()>0) {
-                System.out.print("");
-                mainLogicLevel1(future.data);
+            boolean onlyIntervalData = false;
+            if (input.getString("activity").equalsIgnoreCase(Constants.intervaldataStreamingRequest)) {
+                onlyIntervalData = true;
+            }
+            if (input.getString("market").equalsIgnoreCase(Constants.dataStreamingFutureRequest)) {
+                Future future = new Future(input, onlyIntervalData);
+                Thread thread = new Thread(future);
+                thread.start();
+                while(future.processDone == false || future.data.size()>0) {
+                    System.out.print("");
+                    mainLogicLevel1(future.data);
+                }
             }
         }
 	}

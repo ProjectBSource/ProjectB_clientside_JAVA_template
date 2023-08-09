@@ -31,7 +31,7 @@ public class Main {
   		dataStreamingRequest.put("starttime", "@#starttime#@");
   		dataStreamingRequest.put("endtime", "@#endtime#@");
   		dataStreamingRequest.put("interval", @#interval#@-1);
-      dataStreamingRequest.put("mitigateNoiseWithinPrecentage", @#mitigateNoiseWithinPrecentage#@);
+      	dataStreamingRequest.put("mitigateNoiseWithinPrecentage", @#mitigateNoiseWithinPrecentage#@);
   		
   		//Send the request to server
   		dataStreaming.request(dataStreamingRequest);
@@ -43,8 +43,8 @@ public class Main {
   		TradeController tradeController = new TradeController();
   		tradeController.setSlippage(@#slippage#@);
   		
-      //Setup the indicatories you need here
-      @#indicatories#@
+      	//Setup the indicatories you need here
+      	@#indicatories#@
   		
   		while(true) {
 			//get the response
@@ -70,9 +70,9 @@ public class Main {
     				 * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     				 */
     
-            @#indicatoriesUpdateLogic#@
+           		 @#indicatoriesUpdateLogic#@
     
-            @#actionAndTradeLogic#@
+            		@#actionAndTradeLogic#@
     
     				/*
     				 * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

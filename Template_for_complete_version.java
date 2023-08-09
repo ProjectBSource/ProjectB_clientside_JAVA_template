@@ -19,7 +19,7 @@ public class Main {
 	  public static void main(String args[]) throws Exception {
 		
   		//Login here
-  		SocketClient dataStreaming = new SocketClient(@#username#@, @#password#@);
+  		SocketClient dataStreaming = new SocketClient(/*email*/, /*password*/);
   		
   		//Form JSON object message for data streaming request
   		JSONObject dataStreamingRequest = new JSONObject();

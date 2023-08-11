@@ -73,6 +73,8 @@ public class Main {
                      @#indicatoriesUpdateLogic#@
 
                      @#baseLogicResult#@
+
+                     @#logicGatewayResult#@
                              
                      @#actionAndTradeLogic#@
     

@@ -44,7 +44,7 @@ public class Main {
           tradeController.setSlippage(@#slippage#@);
           
           //Setup the indicatories you need here
-          @#indicatories#@
+@#indicatories#@
           
           while(true) {
             //get the response
@@ -70,13 +70,13 @@ public class Main {
                      * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
                      */
     
-                     @#indicatoriesUpdateLogic#@
+@#indicatoriesUpdateLogic#@
 
-                     @#baseLogicResult#@
+@#baseLogicResult#@
 
-                     @#logicGatewayResult#@
+@#logicGatewayResult#@
                              
-                     @#actionAndTradeLogic#@
+@#actionAndTradeLogic#@
     
                     /*
                      * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

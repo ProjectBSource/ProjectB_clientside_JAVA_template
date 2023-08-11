@@ -71,7 +71,9 @@ public class Main {
                      */
     
                      @#indicatoriesUpdateLogic#@
-    
+
+                     @#baseLogicResult#@
+                             
                      @#actionAndTradeLogic#@
     
                     /*

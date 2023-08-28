@@ -3,13 +3,15 @@ package Indicators;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BollingerBands {
+public class BollingerBands extends Indicator{
     
     private List<Double> prices;
     private int period;
     private double multiplier;
     
-    public BollingerBands(int period, double multiplier) {
+    public BollingerBands(double period, double multiplier) {
+        super.name = "Bollinger Bands";
+        super.parametersAmount = 2
         this.prices = new ArrayList<>();
         this.period = period;
         this.multiplier = multiplier;

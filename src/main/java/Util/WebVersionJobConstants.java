@@ -16,8 +16,13 @@ import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
+import Indicators.Indicator;
 import Main.LoggerFilter;
 import Main.LoggerFormatter;
 import Main.LoggerHandler;
@@ -42,13 +47,13 @@ public class WebVersionJobConstants {
 	public static String serverInstanceID;
 	public static String serverScreenTaskID;
 	public static String serverRunJobTaskID;
-	public static float servercpuusage;
+	public static float cpuusage;
 	private static DataBaseCommunication dbcommunication;
 	private static Date lastWebVersionJobInformationUpdateDateTime = null;
     public static String clientID = "";
     public static String runJobID = "";
-	public JSONParser jsonParser = new JSONParser(); 
-	public ArratLisy<Indicator> indicators = new ArrayList<>();
+	public static JSONParser jsonParser = new JSONParser(); 
+	public static ArrayList<Indicator> indicators = new ArrayList<>();
 	
 	public static void setupEnvironmentProperties() {
 		Properties prop = new Properties();
@@ -157,18 +162,18 @@ public class WebVersionJobConstants {
 	
 	public static void setWebVersionJobCPUUsage() throws IOException, InterruptedException {
 		if(environment.equals("dev")) {
-			servercpuusage = 0;
+			cpuusage = 0;
 		}
 		else if(environment.equals("prd")) {
 			cmd[2] = "ps -eo %cpu,pid | grep "+serverRunJobTaskID+" | awk '{print $1}'";
 			p = Runtime.getRuntime().exec(cmd);
 			p.waitFor();
 	        br = new BufferedReader(new InputStreamReader(p.getInputStream()));
-	        servercpuusage = Float.parseFloat(br.readLine());
+	        cpuusage = Float.parseFloat(br.readLine());
 	        br.close();
 	        p.destroy();
 		}
-        logger("setWebVersionJobCPUUsage() completed, servercpuusage:"+servercpuusage);
+        logger("setWebVersionJobCPUUsage() completed, cpuusage:"+cpuusage);
 	}
 	
 	public static void stopWebVersionJob() throws IOException, InterruptedException {
@@ -179,28 +184,30 @@ public class WebVersionJobConstants {
         logger("stopWebVersionJob() completed");
 	}
 
-	public static void updateWebJobHistory(boolean testPass, StringBuilder testResultDetail, String predictRunTimeInSeconds, String predictTaskFee)[
+	public static void updateWebJobHistory(boolean testPass, StringBuilder testResultDetail, String predictRunTimeInSeconds, String predictTaskFee) throws SQLException{
 		dbcommunication.updateWebJobHistory(testPass, testResultDetail, predictRunTimeInSeconds, predictTaskFee);
-	]
+    }
 
 	public static void updateWebVersionJobInformation() throws IOException, SQLException, InterruptedException{		
 		//refresh the CPU usage 
 		setWebVersionJobCPUUsage();
 		
-		dbcommunication.updateWebVersionJobInformation(serverIPaddress, serverPort, servercpuusage);
+		dbcommunication.updateWebVersionJobInformation(cpuusage);
 	}
 
-	public static ArrayList<String> subscribedDataListValidation(JSONArray nodeDataArray){
+	public static ArrayList<String> subscribedDataListValidation(JSONArray nodeDataArray) throws JSONException, ParseException{
 		ArrayList<String> errorMessage = new ArrayList<String>();
 		int subscribedDataListCount = 0;
-		for(JSONObject node : nodeDataArray){
+		for(Object objectNode : nodeDataArray){
+            JSONObject node = (JSONObject) objectNode;
 			if(node.has("subscribedDataList")){
 				subscribedDataListCount++;
 				if(node.has("data")){
-					JSONObject data = jsonParser.parse(node.getString("data"));
+					Object oj = jsonParser.parse(node.getString("data"));
+                    JSONObject data = (JSONObject) oj;
 
 					if(data.has("activity")==false) { errorMessage.add("Error: Do not have the key 'activity'"); }
-					else if(data.isNull("activity") || data.get("activity").getClass()!=(String.class) || data.getString("activity").isEmpty() || data.getString("activity").isBlank()) { errorMessage.add("Error: Key 'activity' no value"); }
+					else if(data.isNull("activity") || data.get("activity").getClass()!=(String.class) || data.getString("activity").isEmpty()) { errorMessage.add("Error: Key 'activity' no value"); }
 					else if(data.has("activity")==true) {
 						if(
 							data.getString("activity").equalsIgnoreCase(tickdataStreamingRequest) == false &&
@@ -211,7 +218,7 @@ public class WebVersionJobConstants {
 					}
 
 					else if(data.has("market")==false) { errorMessage.add("Error: Do not have the key 'market'"); }
-					else if(data.isNull("market") || data.get("market").getClass()!=(String.class) || data.getString("market").isEmpty() || data.getString("market").isBlank()) { errorMessage.add("Error: Key 'market' no value"); }
+					else if(data.isNull("market") || data.get("market").getClass()!=(String.class) || data.getString("market").isEmpty()) { errorMessage.add("Error: Key 'market' no value"); }
 					else if(data.has("market")==true) {
 						if(
 							data.getString("market").equalsIgnoreCase(dataStreamingFutureRequest) == false
@@ -222,16 +229,16 @@ public class WebVersionJobConstants {
 
 					else if(data.getString("market").equalsIgnoreCase(dataStreamingTestingRequest)==false) { 
 						if(data.has("index")==false) { errorMessage.add("Error: Do not have the key 'index'"); }
-						else if(data.isNull("index") || data.get("index").getClass()!=(String.class) || data.getString("index").isEmpty() || data.getString("index").isBlank()) { errorMessage.add("Error: Key 'index' no value"); }
+						else if(data.isNull("index") || data.get("index").getClass()!=(String.class) || data.getString("index").isEmpty()) { errorMessage.add("Error: Key 'index' no value"); }
 						else if(data.has("startdate")==false) { errorMessage.add("Error: Do not have the key 'startdate'"); }
-						else if(data.isNull("startdate") || data.get("startdate").getClass()!=(String.class) || data.getString("startdate").isEmpty() || data.getString("startdate").isBlank()) { errorMessage.add("Error: Key 'startdate' no value"); }
+						else if(data.isNull("startdate") || data.get("startdate").getClass()!=(String.class) || data.getString("startdate").isEmpty()) { errorMessage.add("Error: Key 'startdate' no value"); }
 						else if(data.has("enddate")==false) { errorMessage.add("Error: Do not have the key 'enddate'"); }
-						else if(data.isNull("enddate") || data.get("enddate").getClass()!=(String.class) || data.getString("enddate").isEmpty() || data.getString("enddate").isBlank()) { errorMessage.add("Error: Key 'enddate' no value"); }
+						else if(data.isNull("enddate") || data.get("enddate").getClass()!=(String.class) || data.getString("enddate").isEmpty()) { errorMessage.add("Error: Key 'enddate' no value"); }
 						else if(data.has("starttime")==false) { errorMessage.add("Error: Do not have the key 'starttime'"); }
-						else if(data.isNull("starttime") || data.get("starttime").getClass()!=(String.class) || data.getString("starttime").isEmpty() || data.getString("starttime").isBlank()) { errorMessage.add("Error: Key 'starttime' no value"); }
+						else if(data.isNull("starttime") || data.get("starttime").getClass()!=(String.class) || data.getString("starttime").isEmpty()) { errorMessage.add("Error: Key 'starttime' no value"); }
 						else if(data.has("endtime")==false) { errorMessage.add("Error: Do not have the key 'endtime'"); }
-						else if(data.isNull("endtime") || data.get("endtime").getClass()!=(String.class) || data.getString("endtime").isEmpty() || data.getString("endtime").isBlank()) { errorMessage.add("Error: Key 'endtime' no value"); }
-						else if(data.has("interval") && data.get("interval").getClass()!=(Double.class) || data.getDouble("interval").isEmpty() || data.getDouble("interval")<=0) { errorMessage.add("Error: Key 'endtime' no value"); }
+						else if(data.isNull("endtime") || data.get("endtime").getClass()!=(String.class) || data.getString("endtime").isEmpty()) { errorMessage.add("Error: Key 'endtime' no value"); }
+						else if(data.has("interval") && data.get("interval").getClass()!=(Double.class) || data.getDouble("interval")<=0) { errorMessage.add("Error: Key 'endtime' no value"); }
 					}
 				}
 				else{
@@ -246,22 +253,24 @@ public class WebVersionJobConstants {
 		return errorMessage;
     }
 
-	public static ArrayList<String> commonIndicatorListValidation(JSONArray nodeDataArray){
+	public static ArrayList<String> commonIndicatorListValidation(JSONArray nodeDataArray) throws JSONException, ParseException{
 		ArrayList<String> errorMessage = new ArrayList<String>();
 		int commonIndicatorListCount = 0;
-		for(JSONObject node : nodeDataArray){
+		for(Object objectNode : nodeDataArray){
+            JSONObject node = (JSONObject) objectNode;
 			if(node.has("commonIndicatorList")){
 				commonIndicatorListCount++;
 				if(node.has("data")){
-					JSONObject data = jsonParser.parse(node.getString("data"));
+					Object oj = jsonParser.parse(node.getString("data"));
+                    JSONObject data = (JSONObject) oj;
 
 					if(data.has("indicatorName")==false) { errorMessage.add("Error: Do not have the key 'indicatorName'"); }
-					else if(data.isNull("indicatorName") || data.get("indicatorName").getClass()!=(String.class) || data.getString("indicatorName").isEmpty() || data.getString("indicatorName").isBlank()) { errorMessage.add("Error: Key 'indicatorName' no value"); }
+					else if(data.isNull("indicatorName") || data.get("indicatorName").getClass()!=(String.class) || data.getString("indicatorName").isEmpty()) { errorMessage.add("Error: Key 'indicatorName' no value"); }
 					else if(data.has("indicatorName")==true) {
 						boolean indicatorFunctionExist = false;
 						Indicator tempIndicator = null;
 						for(Indicator i : indicators){
-							if(i.name.equals("Bollinger Bands")){ i
+							if(i.indicatorName.equals("Bollinger Bands")){
 								indicatorFunctionExist=true; 
 								tempIndicator = i;
 								break; 
@@ -273,7 +282,7 @@ public class WebVersionJobConstants {
 							int parametersCount = 0;
 							for(int i=0; i<5; i++){
 								if(data.has("parameter"+i)==true){
-									if(data.isNull("parameter"+i) || data.get("parameter"+i).getClass()!=(Double.class) || data.getDouble("parameter"+i).isEmpty() || data.getDouble("parameter"+i)<=0) { errorMessage.add("Error: Key 'parameter"+i+"' no value"); }
+									if(data.isNull("parameter"+i) || data.get("parameter"+i).getClass()!=(Double.class) || data.getDouble("parameter"+i)<=0) { errorMessage.add("Error: Key 'parameter"+i+"' no value"); }
 									else if(data.has("parameter"+i)==true){ parametersCount++; }
 								}
 							}
@@ -295,21 +304,23 @@ public class WebVersionJobConstants {
 		return errorMessage;
     }
 
-	public static ArrayList<String> indicatorOutputValidation(JSONArray nodeDataArray){
+	public static ArrayList<String> indicatorOutputValidation(JSONArray nodeDataArray) throws JSONException, ParseException{
 		ArrayList<String> errorMessage = new ArrayList<String>();
 		int indicatorOutputCount = 0;
-		for(JSONObject node : nodeDataArray){
+		for(Object objectNode : nodeDataArray){
+            JSONObject node = (JSONObject) objectNode;
 			if(node.has("category")){
-				if(node.getString("IndicatorOutput")){
+				if(node.getString("category").equals("IndicatorOutput")){
 					indicatorOutputCount++;
 					if(node.has("data")){
-						JSONObject data = jsonParser.parse(node.getString("data"));
+						Object oj = jsonParser.parse(node.getString("data"));
+                        JSONObject data = (JSONObject) oj;
 						if(data.has("outputParameter")==false) { errorMessage.add("Error: Do not have the key 'outputParameter' in 'IndicatorOutput'"); }
-						else if(data.isNull("outputParameter") || data.get("outputParameter").getClass()!=(String.class) || data.getString("outputParameter").isEmpty() || data.getString("outputParameter").isBlank()) { errorMessage.add("Error: Key 'outputParameter' no value"); }
+						else if(data.isNull("outputParameter") || data.get("outputParameter").getClass()!=(String.class) || data.getString("outputParameter").isEmpty()) { errorMessage.add("Error: Key 'outputParameter' no value"); }
 						if(data.has("operator")==false) { errorMessage.add("Error: Do not have the key 'operator' in 'IndicatorOutput'"); }
-						else if(data.isNull("operator") || data.get("operator").getClass()!=(String.class) || data.getString("operator").isEmpty() || data.getString("operator").isBlank()) { errorMessage.add("Error: Key 'operator' no value"); }
+						else if(data.isNull("operator") || data.get("operator").getClass()!=(String.class) || data.getString("operator").isEmpty()) { errorMessage.add("Error: Key 'operator' no value"); }
 						if(data.has("constant0")==false) { errorMessage.add("Error: Do not have the key 'constant0' in 'IndicatorOutput'"); }
-						else if(data.isNull("constant0") || data.get("constant0").getClass()!=(String.class) || data.getString("constant0").isEmpty() || data.getString("constant0").isBlank()) { errorMessage.add("Error: Key 'constant0' no value"); }
+						else if(data.isNull("constant0") || data.get("constant0").getClass()!=(String.class) || data.getString("constant0").isEmpty()) { errorMessage.add("Error: Key 'constant0' no value"); }
 					}
 				}
 			}
@@ -321,20 +332,22 @@ public class WebVersionJobConstants {
 		return errorMessage;
 	}
 
-	public static ArrayList<String> tradeActionValidation(JSONArray nodeDataArray){
+	public static ArrayList<String> tradeActionValidation(JSONArray nodeDataArray) throws JSONException, ParseException{
 		ArrayList<String> errorMessage = new ArrayList<String>();
 		int tradeActionCount = 0;
-		for(JSONObject node : nodeDataArray){
+		for(Object objectNode : nodeDataArray){
+            JSONObject node = (JSONObject) objectNode;
 			if(node.has("category")){
-				if(node.getString("SELL") || node.getString("BUY")){
+                if(node.getString("category").equals("SELL") || node.getString("category").equals("BUY")){
 					tradeActionCount++;
 					if(node.has("action")){
-						JSONObject data = jsonParser.parse(node.getString("data"));
+						Object oj = jsonParser.parse(node.getString("data"));
+                        JSONObject data = (JSONObject) oj;
 						if(data.has("action")==false) { errorMessage.add("Error: Do not have the key 'action' in Trade Action"); }
-						else if(data.isNull("action") || data.get("action").getClass()!=(String.class) || data.getString("action").isEmpty() || data.getString("action").isBlank()) { errorMessage.add("Error: Key 'action' no value"); }
+						else if(data.isNull("action") || data.get("action").getClass()!=(String.class) || data.getString("action").isEmpty()) { errorMessage.add("Error: Key 'action' no value"); }
 						else if(data.getString("action")!="BUY" && data.getString("action")!="SELL") { errorMessage.add("Error: Key 'action' incorrect value"); }
 						if(data.has("quality")==false) { errorMessage.add("Error: Do not have the key 'quality' in Trade Action"); }
-						else if(data.isNull("quality") || data.get("quality").getClass()!=(Double.class) || data.getString("action").isEmpty() || data.getString("action").isBlank()) { errorMessage.add("Error: Key 'action' no value"); }
+						else if(data.isNull("quality") || data.get("quality").getClass()!=(Double.class) || data.getString("action").isEmpty()) { errorMessage.add("Error: Key 'action' no value"); }
 						else if(data.getDouble("quality")<=0) { errorMessage.add("Error: Key 'quality' incorrect value"); }
 					}
 				}
@@ -346,4 +359,10 @@ public class WebVersionJobConstants {
 
 		return errorMessage;
 	}
+
+    public static void initialIndicator() {
+    }
+
+    public static void insertWebVersionJobInformation() {
+    }
 }

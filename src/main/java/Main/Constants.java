@@ -26,7 +26,7 @@ public class Constants {
 	public static String serverInstanceID;
 	public static String serverScreenTaskID;
 	public static String serverRunJobTaskID;
-	public static float servercpuusage;
+	public static float cpuusage;
 	private static Date lastServerInformationUpdateDateTime = null;
 	
 	

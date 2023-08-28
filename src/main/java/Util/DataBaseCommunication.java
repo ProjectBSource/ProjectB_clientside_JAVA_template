@@ -1,10 +1,17 @@
 package Util;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Set;
+
+import javax.management.ReflectionException;
+
+import Indicators.Indicator;
 
 public class DataBaseCommunication {
 	
@@ -44,7 +51,7 @@ public class DataBaseCommunication {
         return message;
     }
 	
-    public static void updateWebJobHistory(boolean testPass, StringBuilder testResultDetail, String predictRunTimeInSeconds, String predictTaskFee){
+    public static void updateWebJobHistory(boolean testPass, StringBuilder testResultDetail, String predictRunTimeInSeconds, String predictTaskFee) throws SQLException{
         Statement stmt = con.createStatement();
         stmt.execute(
 			" UPDATE ProjectB_WebJobHistory SET " +
@@ -56,14 +63,14 @@ public class DataBaseCommunication {
             " PredictRunTimeInSeconds="+predictRunTimeInSeconds+", " +
             " PredictTaskFee="+predictTaskFee+", " +
 			" WHERE " +
-			" RunJobID ='"+runJobID+"'' "
+			" RunJobID ='"+WebVersionJobConstants.runJobID+"'' "
 		);
     }
 
     public void initialIndicator(){
-        String packageToScan = "src.Indicators"; // Specify the package to scan
+        Exception packageToScan = "src.Indicators"; // Specify the package to scan
 
-        Reflections reflections = new Reflections(packageToScan);
+        ReflectionException reflections = new ReflectionException(packageToScan);
         Set<Class<? extends Indicator>> subTypes = reflections.getSubTypesOf(Indicator.class);
 
         for (Class<? extends Indicator> clazz : subTypes) {
@@ -92,14 +99,14 @@ public class DataBaseCommunication {
 		);
 	}
 
-    public void updateWebVersionJobInformation(String runJobID, float CPUusage) throws IOException, SQLException, InterruptedException {	
+    public void updateWebVersionJobInformation(float CPUusage) throws IOException, SQLException, InterruptedException {	
         Statement stmt = con.createStatement();
         stmt.execute(
 			" UPDATE ProjectB_WebVersionJobsController SET " +
 			" CPUusage="+CPUusage+", " +
 			" UpdateDateTime=NOW() " +
 			" WHERE " +
-			" RunJobID ='"+runJobID+"'' "
+			" RunJobID ='"+WebVersionJobConstants.runJobID+"'' "
 		);
 	}
 	

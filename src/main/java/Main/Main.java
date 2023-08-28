@@ -2,10 +2,12 @@ package Main;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -45,9 +47,9 @@ public class Main {
             WebVersionJobConstants.setupDBconnection();
             WebVersionJobConstants.initialIndicator();
             WebVersionJobConstants.insertWebVersionJobInformation();
-            Constants.logger("WebVersionJob(runJobID:"+WebVersionJobConstants.runJobID+") started up");
+            WebVersionJobConstants.logger("WebVersionJob(runJobID:"+WebVersionJobConstants.runJobID+") started up");
         } catch (Exception e) {
-			Constants.logger("Exception :" + e.toString());
+			WebVersionJobConstants.logger("Exception :" + e.toString());
 		}
 
         //get task detail
@@ -74,13 +76,13 @@ public class Main {
 
         if(requestValidationPass==true){
             //Generate the data request JSON object
-            HashMap<String, JSONObject> dataStreamingRequest = HashMap<String, JSONObject>();
+            HashMap<String, JSONObject> dataStreamingRequest = new HashMap<String, JSONObject>();
             for(JSONObject node : nodeDataArray){
                 if(node.has("subscribedDataList")){
                     dataStreamingRequest.put(
                         node.getString("key"), 
                         WebVersionJobConstants.jsonParser.parse(node.getString("data"))
-                    )
+                    );
                 }
             }
 

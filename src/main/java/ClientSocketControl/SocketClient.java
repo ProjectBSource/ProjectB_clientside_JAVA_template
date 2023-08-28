@@ -21,7 +21,7 @@ public class SocketClient implements Runnable {
 	private int serverPort = -1;
 	private Socket client;
 	private BufferedWriter bw;
-	private String messageFromServer;
+	private String messageFromWebVersionJob;
 	private BufferedReader br;
 	private String apiAccessCode;
 	private String clientID;
@@ -40,16 +40,16 @@ public class SocketClient implements Runnable {
                 this.clientID = result.getString("clientID");
                 this.apiAccessCode = result.getString("accessCode");
                 System.out.println(result.getString("message"));
-                getTheServerIPaddress();
+                getTheWebVersionJobIPaddress();
             }
 		}
 	}
 	
-	private void getTheServerIPaddress() throws Exception {
+	private void getTheWebVersionJobIPaddress() throws Exception {
 		JSONObject obj = new JSONObject();
 		obj.put("clientID", clientID);
 		obj.put("apiAccessCode", apiAccessCode);
-		JSONObject result = postRequest("https://www.projectb.click/ProjectB/GetTheServerIPaddress.php", obj.toString());
+		JSONObject result = postRequest("https://www.projectb.click/ProjectB/GetTheWebVersionJobIPaddress.php", obj.toString());
 		if(result.has("type")) {
             if(result.getString("type").equals("error")){
 			    throw new Exception(result.getString("message"));
@@ -69,7 +69,7 @@ public class SocketClient implements Runnable {
 			this.JSONrequest = request;
 			JSONrequest.put("clientID", clientID);
 			JSONrequest.put("accessCode", apiAccessCode);
-			System.out.println("Server processing request");
+			System.out.println("WebVersionJob processing request");
 			//Run program
 			Thread thread = new Thread(this);
 			thread.start();
@@ -98,13 +98,13 @@ public class SocketClient implements Runnable {
 				}
 				is = client.getInputStream();
 				br = new BufferedReader(new InputStreamReader(is));
-				while((messageFromServer = br.readLine())!=null) {
-					if(messageFromServer.contains("done")) {
+				while((messageFromWebVersionJob = br.readLine())!=null) {
+					if(messageFromWebVersionJob.contains("done")) {
 						JSONresponse.add(new JSONObject().put("done", " "));
 						stopstreaming = true;
 						break; 
 					}
-					JSONresponse.add(new JSONObject(messageFromServer));
+					JSONresponse.add(new JSONObject(messageFromWebVersionJob));
 				}
 			}
 		} catch (java.io.IOException e) {

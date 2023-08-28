@@ -30,8 +30,8 @@ public class DataBaseCommunication {
     public static String getMessage(){
         String message = null;
         try(PreparedStatement pstmt = con.prepareStatement("SELECT * FROM ProjectB_WebJobHistory WHERE RunJobID=? AND ClientID=? ");) {
-            pstmt.setString(1, WebTaskConstants.runJobID);
-            pstmt.setString(2, WebTaskConstants.clientID);
+            pstmt.setString(1, WebVersionJobConstants.runJobID);
+            pstmt.setString(2, WebVersionJobConstants.clientID);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 message = rs.getString("Message");
@@ -44,18 +44,63 @@ public class DataBaseCommunication {
         return message;
     }
 	
-    public static void updateTestResult(boolean testPass, StringBuilder testPassDetail){
-        try(PreparedStatement pstmt = con.prepareStatement("UPDATE ProjectB_WebJobHistory SET TestPass=?, TestResultDetail=? WHERE RunJobID=? AND ClientID=? ");) {
-            pstmt.setBoolean(1, testPass);
-            pstmt.setString(2, testPassDetail.toString());
-            pstmt.setString(3, WebTaskConstants.runJobID);
-            pstmt.setString(4, WebTaskConstants.clientID);
-            pstmt.executeQuery();
-        }
-        // Handle any errors that may have occurred.
-        catch (SQLException e) {
-            e.printStackTrace();
+    public static void updateWebJobHistory(boolean testPass, StringBuilder testResultDetail, String predictRunTimeInSeconds, String predictTaskFee){
+        Statement stmt = con.createStatement();
+        stmt.execute(
+			" UPDATE ProjectB_WebJobHistory SET " +
+			" EndDateTime=NOW(), " +
+			" Status='PendingForUserConfirmTestResult', " +
+            " UpdateDateTime=NOW(), " +
+            " TestPass="+(testPass==false?"FALSE":"TRUE")+", " +
+            " TestResultDetail="+(testResultDetail)+", " +
+            " PredictRunTimeInSeconds="+predictRunTimeInSeconds+", " +
+            " PredictTaskFee="+predictTaskFee+", " +
+			" WHERE " +
+			" RunJobID ='"+runJobID+"'' "
+		);
+    }
+
+    public void initialIndicator(){
+        String packageToScan = "src.Indicators"; // Specify the package to scan
+
+        Reflections reflections = new Reflections(packageToScan);
+        Set<Class<? extends Indicator>> subTypes = reflections.getSubTypesOf(Indicator.class);
+
+        for (Class<? extends Indicator> clazz : subTypes) {
+            try {
+                Indicator instance = clazz.getDeclaredConstructor().newInstance();
+                WebVersionJobConstants.indicators.add(instance);
+            } catch (ReflectiveOperationException e) {
+                e.printStackTrace();
+            }
         }
     }
+
+    public void insertWebVersionJobInformation(String instanceID, String instanceIPaddress, int taskID, String runJobID, float CPUusage) throws SQLException, IOException, InterruptedException {
+		Statement stmt = con.createStatement();  
+		stmt.execute(
+			"INSERT INTO ProjectB_WebVersionJobsController VALUES ( "+
+			"'"+instanceID+"', "+
+			"'"+instanceIPaddress+"', "+
+			"'"+taskID+"', "+
+			"'"+runJobID+"', "+
+			""+CPUusage+", "+
+			"false, "+
+			"NOW(), "+
+			"NOW() "+
+			")"
+		);
+	}
+
+    public void updateWebVersionJobInformation(String runJobID, float CPUusage) throws IOException, SQLException, InterruptedException {	
+        Statement stmt = con.createStatement();
+        stmt.execute(
+			" UPDATE ProjectB_WebVersionJobsController SET " +
+			" CPUusage="+CPUusage+", " +
+			" UpdateDateTime=NOW() " +
+			" WHERE " +
+			" RunJobID ='"+runJobID+"'' "
+		);
+	}
 	
 }

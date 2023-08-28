@@ -13,7 +13,7 @@ import ClientSocketControl.DataStructure;
 import DataController.Future;
 import Indicators.BollingerBands;
 import TradeControl.TradeController;
-import Util.WebTaskConstants;
+import Util.WebVersionJobConstants;
 
 public class Main {
 		
@@ -28,27 +28,61 @@ public class Main {
 
 	public static void main(String args[]) throws Exception {
 
-        //initial
-        WebTaskConstants.setupLogger();
-        WebTaskConstants.setupDBconnection();
-        WebTaskConstants.setIPaddress();
-		
         //get the input parameters
-        WebTaskConstants.clientID = args[0];
-        WebTaskConstants.runJobID = args[1];
-        WebTaskConstants.logger("clientID:"+WebTaskConstants.clientID+", runJobID:"+WebTaskConstants.runJobID);
+        WebVersionJobConstants.clientID = args[0];
+        WebVersionJobConstants.logger("runJobID:"+WebVersionJobConstants.runJobID);
+
+        try{
+            //initial
+            WebVersionJobConstants.setupEnvironmentProperties();
+            WebVersionJobConstants.setupLogger();
+            WebVersionJobConstants.setWebVersionJobInstanceID();
+            WebVersionJobConstants.setWebVersionJobIPaddress();
+            WebVersionJobConstants.setWebVersionJobScreenTaskID();
+            WebVersionJobConstants.setWebVersionJobRunJobTaskID();
+            WebVersionJobConstants.setWebVersionJobCPUUsage();
+            //setup Database communication
+            WebVersionJobConstants.setupDBconnection();
+            WebVersionJobConstants.initialIndicator();
+            WebVersionJobConstants.insertWebVersionJobInformation();
+            Constants.logger("WebVersionJob(runJobID:"+WebVersionJobConstants.runJobID+") started up");
+        } catch (Exception e) {
+			Constants.logger("Exception :" + e.toString());
+		}
 
         //get task detail
-        JSONObject input = WebTaskConstants.getMessage();
+        JSONObject input = WebVersionJobConstants.getMessage();
+        JSONArray nodeDataArray = input.has("nodeDataArray")==true?input.getJSONArray("nodeDataArray"):null;
+        JSONArray linkDataArray = input.has("linkDataArray")==true?input.getJSONArray("linkDataArray"):null;
 
-        //Validation
-        boolean requestSyntaxValidationPass = WebTaskConstants.requestSyntaxValidation(input);
+        //Request testing
+        ArrayList<String> errorMessage = new ArrayList<String>();
+        errorMessage.addAll(WebVersionJobConstants.subscribedDataListValidation(nodeDataArray));
+        errorMessage.addAll(WebVersionJobConstants.commonIndicatorListValidation(nodeDataArray));
+        errorMessage.addAll(WebVersionJobConstants.indicatorOutputValidation(nodeDataArray));
+        errorMessage.addAll(WebVersionJobConstants.tradeActionValidation(nodeDataArray));
 
-        if(requestSyntaxValidationPass==true){
-            /*
-            * This template included a simple account and order management function
-            * You may modify the function to fit your back test
-            */
+        boolean requestValidationPass = true;
+        if(errorMessage.size()>0){
+            requestValidationPass = false; 
+            StringBuilder testResultDetail = new StringBuilder();
+            for(String s : errorMessage){ 
+                testResultDetail.append(s); testResultDetail.append("\n"); 
+            }
+            WebVersionJobConstants.updateWebJobHistory(false, testResultDetail, "NULL", "NULL");
+        }
+
+        if(requestValidationPass==true){
+            //Generate the data request JSON object
+            HashMap<String, JSONObject> dataStreamingRequest = HashMap<String, JSONObject>();
+            for(JSONObject node : nodeDataArray){
+                if(node.has("subscribedDataList")){
+                    dataStreamingRequest.put(
+                        node.getString("key"), 
+                        WebVersionJobConstants.jsonParser.parse(node.getString("data"))
+                    )
+                }
+            }
 
             if(input.has("dataChangeLimitInPrecentage")){ 
                 tradeController = new TradeController();

@@ -26,7 +26,11 @@ public class Main {
     //Trade controller
     public static TradeController tradeController = null;
 
-    public static BollingerBands bollingerBands = null;
+    /* Setup the indicatories you need here */
+    //############################################################################################################################
+    @#indicatories_Variables#@
+    //############################################################################################################################
+
 
 	public static void main(String args[]) throws Exception {
 
@@ -53,7 +57,7 @@ public class Main {
 		}
 
         //get task detail
-        JSONObject input = WebVersionJobConstants.getMessage();
+        JSONObject input = WebVersionJobConstants.getRequestMessage();
         JSONArray nodeDataArray = input.has("nodeDataArray")==true?input.getJSONArray("nodeDataArray"):null;
         JSONArray linkDataArray = input.has("linkDataArray")==true?input.getJSONArray("linkDataArray"):null;
 
@@ -75,36 +79,34 @@ public class Main {
         }
 
         if(requestValidationPass==true){
+
+            /* Setup the indicatories you need here */
+            @#indicatories_Initial#@
+
             //Generate the data request JSON object
-            HashMap<String, JSONObject> dataStreamingRequest = new HashMap<String, JSONObject>();
-            for(JSONObject node : nodeDataArray){
-                if(node.has("subscribedDataList")){
-                    dataStreamingRequest.put(
-                        node.getString("key"), 
-                        WebVersionJobConstants.jsonParser.parse(node.getString("data"))
-                    );
-                }
-            }
+            JSONObject dataStreamingRequest = new JSONObject();
+            dataStreamingRequest.put("activity", "@#activity#@");
+            dataStreamingRequest.put("market", "@#market#@");
+            dataStreamingRequest.put("index", "@#index#@");
+            dataStreamingRequest.put("startdate", "@#startdate#@");
+            dataStreamingRequest.put("enddate", "@#enddate#@");
+            dataStreamingRequest.put("starttime", "@#starttime#@");
+            dataStreamingRequest.put("endtime", "@#endtime#@");
+            dataStreamingRequest.put("interval", @#interval#@-1);
+            dataStreamingRequest.put("mitigateNoiseWithPrecentage", @#mitigateNoiseWithinPrecentage#@);
+            
 
-            if(input.has("dataChangeLimitInPrecentage")){ 
+            if(dataStreamingRequest.has("slippagePrecentage")){ 
                 tradeController = new TradeController();
-                tradeController.setSlippage( input.getDouble("dataChangeLimitInPrecentage") );
-            }
-
-            if(input.has("Indicator")){
-                for(Object ind : input.getJSONArray("Indicator")){
-                    JSONObject indJSON = (JSONObject)ind;
-                    if(indJSON.getString("name").equals("BollingerBands")){
-                        bollingerBands = new BollingerBands(indJSON.getInt("period"), indJSON.getDouble("multiplier"));
-                    }
-                }
+                tradeController.setSlippage( input.getDouble("slippagePrecentage") );
             }
 
             boolean onlyIntervalData = false;
             if (input.getString("activity").equalsIgnoreCase(Constants.intervaldataStreamingRequest)) {
                 onlyIntervalData = true;
             }
-            if (input.getString("market").equalsIgnoreCase(Constants.dataStreamingFutureRequest)) {
+
+            if (dataStreamingRequest.getString("market").equalsIgnoreCase(Constants.dataStreamingFutureRequest)) {
                 Future future = new Future(input, onlyIntervalData);
                 Thread thread = new Thread(future);
                 thread.start();
@@ -145,9 +147,13 @@ public class Main {
                     * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
                     */
 
-                    if(bollingerBands!=null){ bollingerBands.addPrice(dataStructure.getIndex()); }
+                    @#indicatoriesUpdateLogic#@
 
-                    mainLogicLevel2(dataStructure);
+                    @#baseLogicResult#@
+
+                    @#logicGatewayResult#@
+
+                    @#actionAndTradeLogic#@
                     
                     /*
                     * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -160,33 +166,4 @@ public class Main {
 			}
 		}
     }
-
-    private static void mainLogicLevel2(DataStructure dataStructure){
-        System.out.println( 
-            String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
-                dataStructure.getType(),
-                dataStructure.getDatetime(),
-                dataStructure.getIndex(),
-                dataStructure.getVolumn(),
-                dataStructure.getOpen(),
-                dataStructure.getHigh(),
-                dataStructure.getLow(),
-                dataStructure.getClose(),
-                dataStructure.getTotal_volumn(),
-                bollingerBands.getUpperBand(),
-                bollingerBands.getMiddleBand(),
-                bollingerBands.getLowerBand()
-            ) 
-        );
-        
-
-
-        /*
-        if(tradeController.getProfile().holding.size()==0){
-            tradeController.placeOrder(dataStructure.getSymbol(), Action.BUY, 1);
-        }
-        */
-        //System.out.println( tradeController.getProfile() );
-    }
-
 }

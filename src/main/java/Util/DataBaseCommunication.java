@@ -34,14 +34,13 @@ public class DataBaseCommunication {
 		return renewConnectiontimeCount;
 	}
 
-    public static String getMessage(){
+    public static String getRequestMessage(){
         String message = null;
-        try(PreparedStatement pstmt = con.prepareStatement("SELECT * FROM ProjectB_WebJobHistory WHERE RunJobID=? AND ClientID=? ");) {
+        try(PreparedStatement pstmt = con.prepareStatement("SELECT RequestMessage FROM ProjectB_WebJobHistory WHERE RunJobID=? ");) {
             pstmt.setString(1, WebVersionJobConstants.runJobID);
-            pstmt.setString(2, WebVersionJobConstants.clientID);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                message = rs.getString("Message");
+                message = rs.getString("RequestMessage");
             }
         }
         // Handle any errors that may have occurred.

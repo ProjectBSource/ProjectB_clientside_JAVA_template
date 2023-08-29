@@ -184,6 +184,10 @@ public class WebVersionJobConstants {
         logger("stopWebVersionJob() completed");
 	}
 
+	public static void getRequestMessage() throws SQLException{
+		dbcommunication.getRequestMessage();
+    }
+	
 	public static void updateWebJobHistory(boolean testPass, StringBuilder testResultDetail, String predictRunTimeInSeconds, String predictTaskFee) throws SQLException{
 		dbcommunication.updateWebJobHistory(testPass, testResultDetail, predictRunTimeInSeconds, predictTaskFee);
     }

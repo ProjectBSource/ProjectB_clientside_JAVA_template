@@ -63,8 +63,8 @@ public class Future implements Runnable {
 			if(input.has("interval")==true) { 
 				this.interval_in_seconds = input.getInt("interval");
 			}
-			if(input.has("mitigateNoiseWithinPrecentage")==true) { 
-				this.mitigateNoiseWithPrecentage = input.getInt("mitigateNoiseWithinPrecentage");
+			if(input.has("mitigateNoiseWithPrecentage")==true) { 
+				this.mitigateNoiseWithPrecentage = input.getInt("mitigateNoiseWithPrecentage");
 			}
 			this.onlyIntervalData = onlyIntervalData;
 			this.dataSubscriptedOrNot = dataSubscriptedOrNot;

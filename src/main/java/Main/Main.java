@@ -79,10 +79,6 @@ public class Main {
         }
 
         if(requestValidationPass==true){
-
-            /* Setup the indicatories you need here */
-            @#indicatories_Initial#@
-
             //Generate the data request JSON object
             JSONObject dataStreamingRequest = new JSONObject();
             dataStreamingRequest.put("activity", "@#activity#@");

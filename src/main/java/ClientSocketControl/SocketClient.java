@@ -11,7 +11,7 @@ import java.net.HttpURLConnection;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
-import org.json.JSONObject;
+import org.json.simple.JSONObject;
 
 
 public class SocketClient implements Runnable {

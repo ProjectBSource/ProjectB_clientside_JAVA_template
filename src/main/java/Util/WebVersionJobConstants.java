@@ -198,7 +198,7 @@ public class WebVersionJobConstants {
 		dbcommunication.updateWebVersionJobInformation(cpuusage);
 	}
 
-	public static ArrayList<String> subscribedDataListValidation(JSONArray nodeDataArray) throws JSONException, ParseException{
+	public static ArrayList<String> subscribedDataListValidation(JSONArray nodeDataArray) throws Exception{
 		ArrayList<String> errorMessage = new ArrayList<String>();
 		int subscribedDataListCount = 0;
 		for(Object objectNode : nodeDataArray){
@@ -256,7 +256,7 @@ public class WebVersionJobConstants {
 		return errorMessage;
     }
 
-	public static ArrayList<String> commonIndicatorListValidation(JSONArray nodeDataArray) throws JSONException, ParseException{
+	public static ArrayList<String> commonIndicatorListValidation(JSONArray nodeDataArray) throws Exception{
 		ArrayList<String> errorMessage = new ArrayList<String>();
 		int commonIndicatorListCount = 0;
 		for(Object objectNode : nodeDataArray){
@@ -307,7 +307,7 @@ public class WebVersionJobConstants {
 		return errorMessage;
     }
 
-	public static ArrayList<String> indicatorOutputValidation(JSONArray nodeDataArray) throws JSONException, ParseException{
+	public static ArrayList<String> indicatorOutputValidation(JSONArray nodeDataArray) throws Exception{
 		ArrayList<String> errorMessage = new ArrayList<String>();
 		int indicatorOutputCount = 0;
 		for(Object objectNode : nodeDataArray){
@@ -335,7 +335,7 @@ public class WebVersionJobConstants {
 		return errorMessage;
 	}
 
-	public static ArrayList<String> tradeActionValidation(JSONArray nodeDataArray) throws JSONException, ParseException{
+	public static ArrayList<String> tradeActionValidation(JSONArray nodeDataArray) throws Exception{
 		ArrayList<String> errorMessage = new ArrayList<String>();
 		int tradeActionCount = 0;
 		for(Object objectNode : nodeDataArray){

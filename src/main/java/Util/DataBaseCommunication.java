@@ -38,7 +38,7 @@ public class DataBaseCommunication {
 		return renewConnectiontimeCount;
 	}
 
-    public static JSONObject getRequestMessage(){
+    public static JSONObject getRequestMessage() throws ParseException{
         String message = null;
         try(PreparedStatement pstmt = con.prepareStatement("SELECT RequestMessage FROM ProjectB_WebJobHistory WHERE RunJobID=? ");) {
             pstmt.setString(1, WebVersionJobConstants.runJobID);
@@ -52,9 +52,9 @@ public class DataBaseCommunication {
             e.printStackTrace();
         }
 	if(message!=null){
-		JSONParser parser = new JSONParser();  
-		JSONObject json = (JSONObject) parser.parse(message);  
-		return json;
+	    JSONParser parser = new JSONParser();  
+	    JSONObject json = (JSONObject) parser.parse(message);  
+	    return json;
 	}
         return null;
     }

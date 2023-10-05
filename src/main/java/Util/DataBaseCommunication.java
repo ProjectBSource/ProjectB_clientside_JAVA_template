@@ -47,7 +47,12 @@ public class DataBaseCommunication {
         catch (SQLException e) {
             e.printStackTrace();
         }
-        return message;
+	if(message!=null){
+		JSONParser parser = new JSONParser();  
+		JSONObject json = (JSONObject) parser.parse(message);  
+		return json
+	}
+        return null;
     }
 	
     public static void updateWebJobHistory(boolean testPass, StringBuilder testResultDetail, String predictRunTimeInSeconds, String predictTaskFee) throws SQLException{

@@ -66,22 +66,6 @@ public class DataBaseCommunication {
 		);
     }
 
-    public void initialIndicator(){
-        Exception packageToScan = "src.Indicators"; // Specify the package to scan
-
-        ReflectionException reflections = new ReflectionException(packageToScan);
-        Set<Class<? extends Indicator>> subTypes = reflections.getSubTypesOf(Indicator.class);
-
-        for (Class<? extends Indicator> clazz : subTypes) {
-            try {
-                Indicator instance = clazz.getDeclaredConstructor().newInstance();
-                WebVersionJobConstants.indicators.add(instance);
-            } catch (ReflectiveOperationException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     public void insertWebVersionJobInformation(String instanceID, String instanceIPaddress, int taskID, String runJobID, float CPUusage) throws SQLException, IOException, InterruptedException {
 		Statement stmt = con.createStatement();  
 		stmt.execute(

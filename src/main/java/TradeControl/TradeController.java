@@ -30,7 +30,7 @@ public class TradeController {
 	/**
      *A necessary method to check the order allow to trade or not, you should call this method every read the data streaming message.
      */
-	public JSONArray tradeCheckingAndBalanceUpdate(DataStructure ds) throws JSONException {
+	public JSONArray tradeCheckingAndBalanceUpdate(DataStructure ds) throws Exception {
 		//check and update the order
 		trade_notification_list = new JSONArray();
 		trade_notification = null;

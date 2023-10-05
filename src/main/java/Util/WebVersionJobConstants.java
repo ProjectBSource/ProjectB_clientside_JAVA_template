@@ -184,7 +184,7 @@ public class WebVersionJobConstants {
         logger("stopWebVersionJob() completed");
 	}
 
-	public static JSONObject getRequestMessage() throws SQLException{
+	public static JSONObject getRequestMessage() throws ParseException{
 		dbcommunication.getRequestMessage();
     }
 	

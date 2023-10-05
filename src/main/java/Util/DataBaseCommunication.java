@@ -38,7 +38,7 @@ public class DataBaseCommunication {
 		return renewConnectiontimeCount;
 	}
 
-    public static String getRequestMessage(){
+    public static JSONObject getRequestMessage(){
         String message = null;
         try(PreparedStatement pstmt = con.prepareStatement("SELECT RequestMessage FROM ProjectB_WebJobHistory WHERE RunJobID=? ");) {
             pstmt.setString(1, WebVersionJobConstants.runJobID);

@@ -86,7 +86,10 @@ public class Order {
 					//Update profle
 					if(action == Action.SELL) { temp_trade_amount *= -1; }
 					profile.update(symbol, temp_trade_amount, temp_trade_price);
-					return new JSONObject(this);
+
+					Gson gson = new Gson();
+				        String jsonString = gson.toJson(this);
+					return new JSONObject(jsonString)
 				}
 			}
 			return null;

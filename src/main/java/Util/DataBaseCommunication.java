@@ -50,7 +50,7 @@ public class DataBaseCommunication {
 	if(message!=null){
 		JSONParser parser = new JSONParser();  
 		JSONObject json = (JSONObject) parser.parse(message);  
-		return json
+		return json;
 	}
         return null;
     }

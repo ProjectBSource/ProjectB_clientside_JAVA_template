@@ -40,7 +40,7 @@ public class BollingerBands extends Indicator{
         return sma - (stdDev * multiplier);
     }
     
-    private double getSMA() {
+    public double getSMA() {
         if (prices.size() < period) {
             return 0;
         }
@@ -51,7 +51,7 @@ public class BollingerBands extends Indicator{
         return sum / period;
     }
     
-    private double getStdDev() {
+    public double getStdDev() {
         if (prices.size() < period) {
             return 0;
         }

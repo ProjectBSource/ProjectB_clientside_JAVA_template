@@ -185,7 +185,7 @@ public class WebVersionJobConstants {
 	}
 
 	public static JSONObject getRequestMessage() throws ParseException{
-		dbcommunication.getRequestMessage();
+		return dbcommunication.getRequestMessage();
     }
 	
 	public static void updateWebJobHistory(boolean testPass, StringBuilder testResultDetail, String predictRunTimeInSeconds, String predictTaskFee) throws SQLException{

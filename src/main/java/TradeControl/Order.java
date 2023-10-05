@@ -72,7 +72,7 @@ public class Order {
 		this.lastUpdateDateTime = market.lastUpdateDateTime;
 	}
 
-	public JSONObject trade(Profile profile, DataStructure data, double slippage) throws JSONException {
+	public JSONObject trade(Profile profile, DataStructure data, double slippage) throws Exception {
 		if(data.getType().equals("interval")==false) {
 			if(direction==null && sp==null && ed==null) {
 				if(remained>0) {

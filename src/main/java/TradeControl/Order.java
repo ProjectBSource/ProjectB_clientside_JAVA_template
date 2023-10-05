@@ -89,7 +89,7 @@ public class Order {
 
 					Gson gson = new Gson();
 				        String jsonString = gson.toJson(this);
-					return new JSONObject(jsonString)
+					return new JSONObject(jsonString);
 				}
 			}
 			return null;

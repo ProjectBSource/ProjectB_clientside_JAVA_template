@@ -64,9 +64,12 @@
 					    <artifactId>json-simple</artifactId>
 					    <version>1.1</version>
 					</dependency>
-
-										
-										
+					<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+					<dependency>
+					    <groupId>com.google.code.gson</groupId>
+					    <artifactId>gson</artifactId>
+					    <version>2.10.1</version>
+					</dependency>						
 				</dependencies>
 				<properties>
 			         <env.futuretickdatafilesparentpath>/Users/patrickfung/Desktop/ProjectB_notes/TickData/futuretickdatafiles/HKEX/HSI/formated_data_source/</env.futuretickdatafilesparentpath>
@@ -95,6 +98,12 @@
 					    <artifactId>json-simple</artifactId>
 					    <version>1.1</version>
 					</dependency>	
+					<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+					<dependency>
+					    <groupId>com.google.code.gson</groupId>
+					    <artifactId>gson</artifactId>
+					    <version>2.10.1</version>
+					</dependency>
 				</dependencies>
 				<properties>
 			         <env.futuretickdatafilesparentpath>//home//ec2-user//dataSource//TickData//futuretickdatafiles//</env.futuretickdatafilesparentpath>

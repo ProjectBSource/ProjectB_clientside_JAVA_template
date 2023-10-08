@@ -5,10 +5,9 @@ import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import org.json.JSONObject;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ClientSocketControl.DataStructure;
 import TradeControl.OrderActionConstants.Action;
@@ -87,9 +86,8 @@ public class Order {
 					if(action == Action.SELL) { temp_trade_amount *= -1; }
 					profile.update(symbol, temp_trade_amount, temp_trade_price);
 
-					Gson gson = new Gson();
-				        String jsonString = gson.toJson(this);
-					return new JSONObject(jsonString);
+					ObjectMapper mapper = new ObjectMapper();
+                    return new JSONObject(mapper.writeValueAsString(this));
 				}
 			}
 			return null;

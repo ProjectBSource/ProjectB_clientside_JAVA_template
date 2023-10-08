@@ -3,12 +3,12 @@ package TradeControl;
 import java.util.ArrayList;
 import java.util.Map;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import com.google.gson.Gson;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ClientSocketControl.DataStructure;
 import TradeControl.OrderActionConstants.Action;
@@ -17,14 +17,11 @@ import TradeControl.OrderActionConstants.ExpiryDate;
 import TradeControl.OrderActionConstants.StrikePrice;
 
 
-
-
 public class TradeController {
 	Profile profile = new Profile();
 	ArrayList<Order> orders = new ArrayList<>();
 	JSONArray trade_notification_list = null;
 	JSONObject trade_notification = null;
-	Gson gson = null;
 	Double slippage = 0D;
 	
 	/**
@@ -79,13 +76,15 @@ public class TradeController {
 	
 	/**
      *Get the Profile information in JSON
+	 * @throws JSONException
+	 * @throws JsonProcessingException
      */
-	public JSONObject getProfileInJSON() {
+	public JSONObject getProfileInJSON() throws JsonProcessingException, JSONException {
 		//return profile.toJSONObject();
-		gson = new Gson();
-		String jsonString = gson.toJson(profile);
-		if(jsonString!=null) {
-			return new JSONObject(jsonString);
+        ObjectMapper mapper = new ObjectMapper();
+		JSONObject p = new JSONObject(mapper.writeValueAsString(profile));
+		if(p!=null) {
+			return p;
 		}
 		return null;
 	}

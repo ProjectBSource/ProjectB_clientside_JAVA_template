@@ -111,7 +111,7 @@ public class Main {
         }
 	}
 
-    private static void mainLogicLevel1(ArrayList<JSONObject> dataList) throws JSONException, JsonParseException, JsonMappingException, IOException{
+    private static void mainLogicLevel1(ArrayList<JSONObject> dataList) throws Exception{
 		if(dataList.size()>0) {
             int tempDataListSize = dataList.size();
             for(int i=0; i<tempDataListSize; i++) {

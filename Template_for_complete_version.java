@@ -31,7 +31,7 @@ public class Main {
           dataStreamingRequest.put("starttime", "@#starttime#@");
           dataStreamingRequest.put("endtime", "@#endtime#@");
           dataStreamingRequest.put("interval", @#interval#@-1);
-          dataStreamingRequest.put("mitigateNoiseWithPrecentage", @#mitigateNoiseWithinPrecentage#@);
+          dataStreamingRequest.put("mitigateNoiseWithinPrecentage", @#mitigateNoiseWithinPrecentage#@);
           
           //Send the request to server
           dataStreaming.request(dataStreamingRequest);

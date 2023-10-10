@@ -1,21 +1,17 @@
 package Main;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ClientSocketControl.DataStructure;
 import DataController.Future;
 import Indicators.BollingerBands;
 import TradeControl.TradeController;
+import TradeControl.OrderActionConstants.Action;
 import Util.WebVersionJobConstants;
 
 public class Main {

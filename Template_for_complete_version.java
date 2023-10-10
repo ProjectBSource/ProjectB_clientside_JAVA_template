@@ -1,18 +1,11 @@
 package Main;
 
-import java.util.ArrayList;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import ClientSocketControl.DataStructure;
-import DataController.Future;
+import ClientSocketControl.SocketClient;
 import Indicators.BollingerBands;
 import TradeControl.TradeController;
-import TradeControl.OrderActionConstants.Action;
-import Util.WebVersionJobConstants;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.JSONObject;
 
 public class Main {
         

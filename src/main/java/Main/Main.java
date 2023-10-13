@@ -32,7 +32,7 @@ public class Main {
 	public static void main(String args[]) throws Exception {
 
         //get the input parameters
-        WebVersionJobConstants.clientID = args[0];
+        WebVersionJobConstants.runJobID = args[0];
         WebVersionJobConstants.logger("runJobID:"+WebVersionJobConstants.runJobID);
 
         try{

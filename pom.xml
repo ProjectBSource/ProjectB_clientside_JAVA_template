@@ -105,7 +105,7 @@
                </dependencies>
 				<properties>
 			         <env.futuretickdatafilesparentpath>//home//ec2-user//dataSource//TickData//futuretickdatafiles//</env.futuretickdatafilesparentpath>
-			         <env.loggerstoragepath>//home//ec2-user//dataSource//server//log//server.log</env.loggerstoragepath>
+			         <env.loggerstoragepath>//home//ec2-user//dataSource//webVersion//logs//ProjectB_Web_ReceiveAndProcessClientRequest.log</env.loggerstoragepath>
 			         <env.environment>prd</env.environment>
 				</properties>
 			</profile>

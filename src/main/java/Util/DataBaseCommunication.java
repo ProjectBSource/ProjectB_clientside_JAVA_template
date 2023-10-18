@@ -33,20 +33,20 @@ public class DataBaseCommunication {
 	}
 
     public static JSONObject getRequestMessage() throws ParseException{
-        String message = null;
-        try(PreparedStatement pstmt = con.prepareStatement("SELECT RequestMessage FROM ProjectB_WebJobHistory WHERE RunJobID=? ");) {
-            pstmt.setString(1, WebVersionJobConstants.runJobID);
-            ResultSet rs = pstmt.executeQuery();
-            while (rs.next()) {
-                message = rs.getString("RequestMessage");
-            }
-        }
-        // Handle any errors that may have occurred.
+	String message = null;
+        try{
+		Statement stmt = con.createStatement();  
+		ResultSet rs = stmt.executeQuery("SELECT RequestMessage FROM ProjectB_WebJobHistory WHERE RunJobID='"+WebVersionJobConstants.runJobID+"'");  
+		boolean result = false;
+		while (rs.next()) {
+			message = rs.getString("RequestMessage");
+		}
+	}
         catch (SQLException e) {
             e.printStackTrace();
         }
 	if(message!=null){
-        return new JSONObject(message);
+        	return new JSONObject(message);
 	}
         return null;
     }

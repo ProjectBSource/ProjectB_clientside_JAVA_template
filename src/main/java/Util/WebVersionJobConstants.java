@@ -114,7 +114,7 @@ public class WebVersionJobConstants {
 			serverInstanceID = "abcd1234";
 		}
 		else if(environment.equals("prd")) {
-			cmd[2] = "wget -q -O - http://169.254.169.254/latest/meta-data/instance-id | awk '{print $1}' ";
+			cmd[2] = "ec2-metadata -i | awk '{print $2}'";
 			p = Runtime.getRuntime().exec(cmd);
 			p.waitFor();
 	        br = new BufferedReader(new InputStreamReader(p.getInputStream()));
@@ -125,12 +125,12 @@ public class WebVersionJobConstants {
         logger("setWebVersionJobInstanceID() completed");
 	}
 	
-	public static void setWebVersionJobScreenTaskID() throws IOException, InterruptedException {
+	public static void setWebVersionJobScreenTaskID(String runJobID) throws IOException, InterruptedException {
 		if(environment.equals("dev")) {
 			serverScreenTaskID = "0000";
 		}
 		else if(environment.equals("prd")) {
-			cmd[2] = "ps -ef | grep 'SCREEN -d -m java -jar /home/ec2-user/dataSource/server/ProjectB_serverside-0.0.1-SNAPSHOT-jar-with-dependencies.jar "+serverPort+"' | awk '{print $2}'"; 
+			cmd[2] = "ps -ef | grep 'SCREEN -d -m java -jar /home/ec2-user/dataSource/webVersion/Jobs/"+runJobID+"/ProjectB_clientside_JAVA_template/ProjectB_clientside_JAVA_template-0.0.1-SNAPSHOT-jar-with-dependencies.jar "+runJobID+"' | awk '{print $2}'"; 
 			p = Runtime.getRuntime().exec(cmd);
 			p.waitFor();
 			br = new BufferedReader(new InputStreamReader(p.getInputStream()));
@@ -155,6 +155,22 @@ public class WebVersionJobConstants {
 	        p.destroy();
 		}
         logger("setWebVersionJobRunJobTaskID() completed, serverRunJobTaskID:"+serverRunJobTaskID);
+	}
+	
+	public static void setWebVersionJobCPUUsage() throws IOException, InterruptedException {
+		if(environment.equals("dev")) {
+			cpuusage = 0;
+		}
+		else if(environment.equals("prd")) {
+			cmd[2] = "ps -eo %cpu,pid | grep "+serverRunJobTaskID+" | awk '{print $1}'";
+			p = Runtime.getRuntime().exec(cmd);
+			p.waitFor();
+	        br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+	        cpuusage = Float.parseFloat(br.readLine());
+	        br.close();
+	        p.destroy();
+		}
+        logger("setWebVersionJobCPUUsage() completed, cpuusage:"+cpuusage);
 	}
 	
 	public static void stopWebVersionJob() throws IOException, InterruptedException {

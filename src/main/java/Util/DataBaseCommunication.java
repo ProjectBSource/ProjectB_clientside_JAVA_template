@@ -59,14 +59,14 @@ public class DataBaseCommunication {
         stmt.execute(
 			" UPDATE ProjectB_WebJobHistory SET " +
 			" EndDateTime=NOW(), " +
-			" Status='PendingForUserConfirmTestResult', " +
+			" Status=\"PendingForUserConfirmTestResult\", " +
             " UpdateDateTime=NOW(), " +
             " TestPass="+(testPass==false?"FALSE":"TRUE")+", " +
-            " TestResultDetail='"+(testResultDetail)+"', " +
+            " TestResultDetail=\""+(testResultDetail)+"\", " +
             " PredictRunTimeInSeconds="+predictRunTimeInSeconds+", " +
             " PredictTaskFee="+predictTaskFee+" " +
 			" WHERE " +
-			" RunJobID ='"+WebVersionJobConstants.runJobID+"' "
+			" RunJobID =\""+WebVersionJobConstants.runJobID+"\" "
 		);
     }
 

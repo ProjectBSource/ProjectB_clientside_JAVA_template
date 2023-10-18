@@ -50,7 +50,6 @@ public class WebVersionJobConstants {
 	private static Date lastWebVersionJobInformationUpdateDateTime = null;
     public static String clientID = "";
     public static String runJobID = "";
-	public static JSONParser jsonParser = new JSONParser(); 
 	public static ArrayList<Indicator> indicators = new ArrayList<>();
 	
 	public static void setupEnvironmentProperties() {

@@ -204,8 +204,7 @@ public class WebVersionJobConstants {
 			if(node.has("subscribedDataList")){
 				subscribedDataListCount++;
 				if(node.has("data")){
-					Object oj = jsonParser.parse(node.getString("data"));
-                    JSONObject data = (JSONObject) oj;
+					JSONObject data = node.getJSONObject("data");
 
 					if(data.has("activity")==false) { errorMessage.add("Error: Do not have the key 'activity'"); }
 					else if(data.isNull("activity") || data.get("activity").getClass()!=(String.class) || data.getString("activity").isEmpty()) { errorMessage.add("Error: Key 'activity' no value"); }
@@ -262,8 +261,7 @@ public class WebVersionJobConstants {
 			if(node.has("commonIndicatorList")){
 				commonIndicatorListCount++;
 				if(node.has("data")){
-					Object oj = jsonParser.parse(node.getString("data"));
-                    JSONObject data = (JSONObject) oj;
+					JSONObject data = node.getJSONObject("data");
 
 					if(data.has("indicatorName")==false) { errorMessage.add("Error: Do not have the key 'indicatorName'"); }
 					else if(data.isNull("indicatorName") || data.get("indicatorName").getClass()!=(String.class) || data.getString("indicatorName").isEmpty()) { errorMessage.add("Error: Key 'indicatorName' no value"); }
@@ -314,8 +312,8 @@ public class WebVersionJobConstants {
 				if(node.getString("category").equals("IndicatorOutput")){
 					indicatorOutputCount++;
 					if(node.has("data")){
-						Object oj = jsonParser.parse(node.getString("data"));
-                        JSONObject data = (JSONObject) oj;
+						JSONObject data = node.getJSONObject("data");
+						
 						if(data.has("outputParameter")==false) { errorMessage.add("Error: Do not have the key 'outputParameter' in 'IndicatorOutput'"); }
 						else if(data.isNull("outputParameter") || data.get("outputParameter").getClass()!=(String.class) || data.getString("outputParameter").isEmpty()) { errorMessage.add("Error: Key 'outputParameter' no value"); }
 						if(data.has("operator")==false) { errorMessage.add("Error: Do not have the key 'operator' in 'IndicatorOutput'"); }
@@ -342,8 +340,7 @@ public class WebVersionJobConstants {
                 if(node.getString("category").equals("SELL") || node.getString("category").equals("BUY")){
 					tradeActionCount++;
 					if(node.has("action")){
-						Object oj = jsonParser.parse(node.getString("data"));
-                        JSONObject data = (JSONObject) oj;
+						JSONObject data = node.getJSONObject("data");
 						if(data.has("action")==false) { errorMessage.add("Error: Do not have the key 'action' in Trade Action"); }
 						else if(data.isNull("action") || data.get("action").getClass()!=(String.class) || data.getString("action").isEmpty()) { errorMessage.add("Error: Key 'action' no value"); }
 						else if(data.getString("action")!="BUY" && data.getString("action")!="SELL") { errorMessage.add("Error: Key 'action' incorrect value"); }

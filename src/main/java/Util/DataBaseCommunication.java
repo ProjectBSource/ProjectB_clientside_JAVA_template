@@ -24,6 +24,8 @@ public class DataBaseCommunication {
 	public void createConnection() throws SQLException {
         String unicode="useSSL=false&autoReconnect=true&useUnicode=yes&characterEncoding=UTF-8";
 		con=DriverManager.getConnection("jdbc:mysql://151.106.124.51/u628315660_projectB?"+unicode,"u628315660_projectB","wtfWTF0506536");
+		boolean reachable = con.isValid(10);
+		System.out.println("reachable:"+(reachable)+", con==null?"+(con==null));
 	}
 	
 	public int renewConnection() throws SQLException {
@@ -35,19 +37,20 @@ public class DataBaseCommunication {
     public static JSONObject getRequestMessage() throws ParseException{
 	String message = null;
         try{
-		Statement stmt = con.createStatement();  
-		ResultSet rs = stmt.executeQuery("SELECT RequestMessage FROM ProjectB_WebJobHistory WHERE RunJobID='"+WebVersionJobConstants.runJobID+"'");  
-		boolean result = false;
-		while (rs.next()) {
-			message = rs.getString("RequestMessage");
+			Statement stmt = con.createStatement();  
+			ResultSet rs = stmt.executeQuery("SELECT RequestMessage FROM ProjectB_WebJobHistory WHERE RunJobID='"+WebVersionJobConstants.runJobID+"'");  
+			boolean result = false;
+			while (rs.next()) {
+				message = rs.getString("RequestMessage");
+			}
 		}
-	}
         catch (SQLException e) {
             e.printStackTrace();
         }
-	if(message!=null){
-        	return new JSONObject(message);
-	}
+		if(message!=null){
+			message = message.substring(1, message.length()-1);
+			return new JSONObject(message);
+		}
         return null;
     }
 	

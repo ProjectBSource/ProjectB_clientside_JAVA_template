@@ -62,11 +62,11 @@ public class DataBaseCommunication {
 			" Status='PendingForUserConfirmTestResult', " +
             " UpdateDateTime=NOW(), " +
             " TestPass="+(testPass==false?"FALSE":"TRUE")+", " +
-            " TestResultDetail="+(testResultDetail)+", " +
+            " TestResultDetail='"+(testResultDetail)+"', " +
             " PredictRunTimeInSeconds="+predictRunTimeInSeconds+", " +
-            " PredictTaskFee="+predictTaskFee+", " +
+            " PredictTaskFee="+predictTaskFee+" " +
 			" WHERE " +
-			" RunJobID ='"+WebVersionJobConstants.runJobID+"'' "
+			" RunJobID ='"+WebVersionJobConstants.runJobID+"' "
 		);
     }
 

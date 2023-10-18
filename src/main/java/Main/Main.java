@@ -43,7 +43,6 @@ public class Main {
             WebVersionJobConstants.setWebVersionJobIPaddress();
             WebVersionJobConstants.setWebVersionJobScreenTaskID();
             WebVersionJobConstants.setWebVersionJobRunJobTaskID();
-            WebVersionJobConstants.setWebVersionJobCPUUsage();
             //setup Database communication
             WebVersionJobConstants.setupDBconnection();
             WebVersionJobConstants.initialIndicator();

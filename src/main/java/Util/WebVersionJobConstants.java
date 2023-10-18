@@ -157,22 +157,6 @@ public class WebVersionJobConstants {
         logger("setWebVersionJobRunJobTaskID() completed, serverRunJobTaskID:"+serverRunJobTaskID);
 	}
 	
-	public static void setWebVersionJobCPUUsage() throws IOException, InterruptedException {
-		if(environment.equals("dev")) {
-			cpuusage = 0;
-		}
-		else if(environment.equals("prd")) {
-			cmd[2] = "ps -eo %cpu,pid | grep "+serverRunJobTaskID+" | awk '{print $1}'";
-			p = Runtime.getRuntime().exec(cmd);
-			p.waitFor();
-	        br = new BufferedReader(new InputStreamReader(p.getInputStream()));
-	        cpuusage = Float.parseFloat(br.readLine());
-	        br.close();
-	        p.destroy();
-		}
-        logger("setWebVersionJobCPUUsage() completed, cpuusage:"+cpuusage);
-	}
-	
 	public static void stopWebVersionJob() throws IOException, InterruptedException {
 		cmd[2] = "screen -X -S "+serverScreenTaskID+" quit"; 
 		p = Runtime.getRuntime().exec(cmd);

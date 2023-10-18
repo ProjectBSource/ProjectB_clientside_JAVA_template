@@ -125,7 +125,7 @@ public class WebVersionJobConstants {
         logger("setWebVersionJobInstanceID() completed");
 	}
 	
-	public static void setWebVersionJobScreenTaskID(String runJobID) throws IOException, InterruptedException {
+	public static void setWebVersionJobScreenTaskID() throws IOException, InterruptedException {
 		if(environment.equals("dev")) {
 			serverScreenTaskID = "0000";
 		}

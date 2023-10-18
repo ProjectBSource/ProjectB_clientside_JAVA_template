@@ -269,7 +269,7 @@ public class WebVersionJobConstants {
 						boolean indicatorFunctionExist = false;
 						Indicator tempIndicator = null;
 						for(Indicator i : indicators){
-							if(i.indicatorName.equals("BollingerBands")){
+							if(i.indicatorName.equals("Bollinger Bands")){
 								indicatorFunctionExist=true; 
 								tempIndicator = i;
 								break; 

@@ -377,4 +377,8 @@ public class WebVersionJobConstants {
     public static void insertWebVersionJobInformation() {
 		dbcommunication.insertWebVersionJobInformation(taskInstanceID, taskIPaddress, serverRunJobTaskID, runJobID, cpuusage);
     }
+
+	public static void updateWebVersionJobInformation(){
+		dbcommunication.updateWebVersionJobInformation(cpuusage);
+	}
 }

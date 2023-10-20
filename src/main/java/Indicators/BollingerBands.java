@@ -8,6 +8,8 @@ public class BollingerBands extends Indicator{
     private List<Double> prices;
     private int period;
     private double multiplier;
+
+    public BollingerBands(){}
     
     public BollingerBands(int period, double multiplier) {
         super.indicatorName  = "Bollinger Bands";

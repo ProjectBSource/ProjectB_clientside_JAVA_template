@@ -11,6 +11,7 @@ public class BollingerBands extends Indicator{
 
     public BollingerBands(){
         super.indicatorName  = "Bollinger Bands";
+        super.parametersAmount = 2;
     }
     
     public BollingerBands(int period, double multiplier) {

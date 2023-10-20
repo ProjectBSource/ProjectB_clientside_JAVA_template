@@ -25,6 +25,8 @@ import Main.LoggerFilter;
 import Main.LoggerFormatter;
 import Main.LoggerHandler;
 
+import Indicators.BollingerBands;
+
 public class WebVersionJobConstants {
 	
 	public static int serverPort = -1;

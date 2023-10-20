@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
+import Util.WebVersionJobConstants;
 
 import org.json.JSONObject;
 
@@ -25,7 +26,7 @@ public class DataBaseCommunication {
         String unicode="useSSL=false&autoReconnect=true&useUnicode=yes&characterEncoding=UTF-8";
 		con=DriverManager.getConnection("jdbc:mysql://151.106.124.51/u628315660_projectB?"+unicode,"u628315660_projectB","wtfWTF0506536");
 		boolean reachable = con.isValid(10);
-		System.out.println("reachable:"+(reachable)+", con==null?"+(con==null));
+		WebVersionJobConstants.logger("reachable:"+(reachable)+", con==null?"+(con==null));
 	}
 	
 	public int renewConnection() throws SQLException {
@@ -46,6 +47,7 @@ public class DataBaseCommunication {
 		}
         catch (SQLException e) {
             e.printStackTrace();
+			WebVersionJobConstants.logger("Exception in DataBaseCommunication.java : " + e.toString());
         }
 		if(message!=null){
 			message = message.substring(1, message.length()-1);
@@ -54,15 +56,15 @@ public class DataBaseCommunication {
         return null;
     }
 	
-    public static void updateWebJobHistory(boolean testPass, StringBuilder testResultDetail, String predictRunTimeInSeconds, String predictTaskFee) throws SQLException{
+    public static void updateWebJobHistory(boolean testPass, StringBuilder testResultDetail, String predictRunTimeInSeconds, String predictTaskFee, String status) throws SQLException{
         Statement stmt = con.createStatement();
         stmt.execute(
 			" UPDATE ProjectB_WebJobHistory SET " +
 			" EndDateTime=NOW(), " +
-			" Status=\"PendingForUserConfirmTestResult\", " +
+			" Status=\""+status+"\", " +
             " UpdateDateTime=NOW(), " +
             " TestPass="+(testPass==false?"FALSE":"TRUE")+", " +
-            " TestResultDetail=\""+(testResultDetail)+"\", " +
+            " TestResultDetail=\""+(testResultDetail==null?"":testResultDetail.toString())+"\", " +
             " PredictRunTimeInSeconds="+predictRunTimeInSeconds+", " +
             " PredictTaskFee="+predictTaskFee+" " +
 			" WHERE " +

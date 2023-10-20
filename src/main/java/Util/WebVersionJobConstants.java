@@ -73,6 +73,7 @@ public class WebVersionJobConstants {
 		} catch (Exception e) {
 			logger("Unable to setupDBconnection() : "+e);
 		}
+		logger("setupDBconnection() completed");
 	}
 	
 	public static int renewDBconnection() {
@@ -188,8 +189,8 @@ public class WebVersionJobConstants {
 		return dbcommunication.getRequestMessage();
     }
 	
-	public static void updateWebJobHistory(boolean testPass, StringBuilder testResultDetail, String predictRunTimeInSeconds, String predictTaskFee) throws SQLException{
-		dbcommunication.updateWebJobHistory(testPass, testResultDetail, predictRunTimeInSeconds, predictTaskFee);
+	public static void updateWebJobHistory(boolean testPass, StringBuilder testResultDetail, String predictRunTimeInSeconds, String predictTaskFee, String status) throws SQLException{
+		dbcommunication.updateWebJobHistory(testPass, testResultDetail, predictRunTimeInSeconds, predictTaskFee, status);
     }
 
 	public static void updateWebVersionJobInformation() throws IOException, SQLException, InterruptedException{		
@@ -370,6 +371,7 @@ public class WebVersionJobConstants {
 
     public static void initialIndicator() {
 		indicators.add(new BollingerBands());
+		logger("initialIndicator() completed");
     }
 
     public static void insertWebVersionJobInformation() {

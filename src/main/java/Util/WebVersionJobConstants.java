@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.NullPointerException;
 import java.net.Socket;
 import java.net.URL;
 import java.sql.SQLException;
@@ -284,9 +285,13 @@ public class WebVersionJobConstants {
 							for(int i=0; i<5; i++){
 								if(data.has("parameter"+i)==true){
 									if(data.isNull("parameter"+i)) { errorMessage.add("Error: Key 'parameter"+i+"' no value"); }
-									else if(data.get("parameter"+i).getClass()!=(Double.class)) { errorMessage.add("Error: Key 'parameter"+i+"' data type("+(data.get("parameter"+i).getClass())+") incorrect"); }
-									else if(data.getDouble("parameter"+i)<=0) { errorMessage.add("Error: Key 'parameter"+i+"' must bigger than 0"); }
-									else if(data.has("parameter"+i)==true){ parametersCount++; }
+									try{
+										double parameterDataTypeTest = Double.parseDouble(data.getString("parameter"+i));
+										if(parameterDataTypeTest<=0) { errorMessage.add("Error: Key 'parameter"+i+"' must bigger than 0"); }
+										else if(data.has("parameter"+i)==true){ parametersCount++; }
+									}catch(NumberFormatException e){
+										errorMessage.add("Error: Key 'parameter"+i+"' data type incorrect");
+									}
 								}
 							}
 							if(parametersCount != tempIndicator.parametersAmount){

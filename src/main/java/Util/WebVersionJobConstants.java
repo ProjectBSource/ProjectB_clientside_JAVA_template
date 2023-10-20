@@ -133,7 +133,7 @@ public class WebVersionJobConstants {
 			serverScreenTaskID = "0000";
 		}
 		else if(environment.equals("prd")) {
-			cmd[2] = "ps -ef | grep 'java -jar /home/ec2-user/dataSource/webVersion/Jobs/"+runJobID+"/ProjectB_clientside_JAVA_template/ProjectB_clientside_JAVA_template-0.0.1-SNAPSHOT-jar-with-dependencies.jar "+runJobID+"' | awk '{print $2}'"; 
+			cmd[2] = "ps -ef | grep 'SCREEN -d -m java -jar /home/ec2-user/dataSource/webVersion/Jobs/"+runJobID+"/ProjectB_clientside_JAVA_template-0.0.1-SNAPSHOT-jar-with-dependencies.jar "+runJobID+"' | awk '{print $2}'"; 
 			p = Runtime.getRuntime().exec(cmd);
 			p.waitFor();
 			br = new BufferedReader(new InputStreamReader(p.getInputStream()));

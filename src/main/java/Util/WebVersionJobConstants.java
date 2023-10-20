@@ -284,7 +284,7 @@ public class WebVersionJobConstants {
 							for(int i=0; i<5; i++){
 								if(data.has("parameter"+i)==true){
 									if(data.isNull("parameter"+i)) { errorMessage.add("Error: Key 'parameter"+i+"' no value"); }
-									else if(data.get("parameter"+i).getClass()!=(Double.class)) { errorMessage.add("Error: Key 'parameter"+i+"' data type incorrect"); }
+									else if(data.get("parameter"+i).getClass()!=(Double.class)) { errorMessage.add("Error: Key 'parameter"+i+"' data type("+(data.get("parameter"+i).getClass())+") incorrect"); }
 									else if(data.getDouble("parameter"+i)<=0) { errorMessage.add("Error: Key 'parameter"+i+"' must bigger than 0"); }
 									else if(data.has("parameter"+i)==true){ parametersCount++; }
 								}

@@ -1,6 +1,7 @@
 package Main;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -22,6 +23,9 @@ public class Main {
     public static DataStructure dataStructure = null;
     //Trade controller
     public static TradeController tradeController = null;
+
+    //Variables for update task real time information
+    private static Date lastUpdateTime = null;
 
     /* Setup the indicatories you need here */
     //############################################################################################################################
@@ -167,10 +171,23 @@ public class Main {
                     */
                 }
 			}
+
             //delete processed data
 			for(int i=0; i<tempDataListSize; i++) {
 				dataList.remove(0); 
 			}
+
+            //update task real time information
+            if(lastUpdateTime==null){
+                lastUpdateTime = new Date();
+            }
+            else{
+                long diff = (new Date()).getTime() - (lastUpdateTime).getTime();
+                long seconds = TimeUnit.MILLISECONDS.toSeconds(diff);
+                if(seconds >=60){
+                    WebVersionJobConstants.updateWebVersionJobInformation();
+                }
+            }
 		}
     }
 }

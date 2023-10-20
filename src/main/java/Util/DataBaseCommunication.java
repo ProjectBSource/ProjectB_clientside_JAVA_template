@@ -72,7 +72,7 @@ public class DataBaseCommunication {
 		);
     }
 
-    public void insertWebVersionJobInformation(String instanceID, String instanceIPaddress, int taskID, String runJobID, float CPUusage) throws SQLException, IOException, InterruptedException {
+    public void insertWebVersionJobInformation(String instanceID, String instanceIPaddress, String taskID, String runJobID, float CPUusage) throws SQLException, IOException, InterruptedException {
 		Statement stmt = con.createStatement();  
 		stmt.execute(
 			"INSERT INTO ProjectB_WebVersionJobsController VALUES ( "+
@@ -88,11 +88,11 @@ public class DataBaseCommunication {
 		);
 	}
 
-    public void updateWebVersionJobInformation(float CPUusage) throws IOException, SQLException, InterruptedException {	
+    public void updateWebVersionJobInformation() throws IOException, SQLException, InterruptedException {	
         Statement stmt = con.createStatement();
         stmt.execute(
 			" UPDATE ProjectB_WebVersionJobsController SET " +
-			" CPUusage="+CPUusage+", " +
+			" CPUusage="+WebVersionJobConstants.cpuusage+", " +
 			" UpdateDateTime=NOW() " +
 			" WHERE " +
 			" RunJobID ='"+WebVersionJobConstants.runJobID+"'' "

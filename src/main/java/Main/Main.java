@@ -103,7 +103,7 @@ public class Main {
 
 	    if(dataStreamingRequest.has("market")){ 
                 if (dataStreamingRequest.getString("market").equalsIgnoreCase(Constants.dataStreamingFutureRequest)) {
-                    Future future = new Future(input, onlyIntervalData);
+                    Future future = new Future(dataStreamingRequest, onlyIntervalData);
                     Thread thread = new Thread(future);
                     thread.start();
                     while(future.processDone == false || future.data.size()>0) {

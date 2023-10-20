@@ -23,6 +23,14 @@ public class BollingerBands extends Indicator{
             prices.remove(0);
         }
     }
+
+    public double getPrice(){
+        if(prices.size()>0){
+            return prices.get(prices.size()-1);
+        }else{
+            return 0;
+        }
+    }
     
     public double getUpperBand() {
         double sma = getSMA();

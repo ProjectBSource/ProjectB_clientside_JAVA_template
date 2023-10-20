@@ -49,70 +49,80 @@ public class Main {
             WebVersionJobConstants.initialIndicator();
             WebVersionJobConstants.insertWebVersionJobInformation();
             WebVersionJobConstants.logger("WebVersionJob(runJobID:"+WebVersionJobConstants.runJobID+") started up");
-        } catch (Exception e) {
-			WebVersionJobConstants.logger("Exception :" + e.toString());
-		}
 
-        //get task detail
-        JSONObject input = WebVersionJobConstants.getRequestMessage();
-        JSONArray nodeDataArray = input.has("nodeDataArray")==true?input.getJSONArray("nodeDataArray"):null;
-        JSONArray linkDataArray = input.has("linkDataArray")==true?input.getJSONArray("linkDataArray"):null;
+            //get task detail
+            JSONObject input = WebVersionJobConstants.getRequestMessage();
+            JSONArray nodeDataArray = input.has("nodeDataArray")==true?input.getJSONArray("nodeDataArray"):null;
+            JSONArray linkDataArray = input.has("linkDataArray")==true?input.getJSONArray("linkDataArray"):null;
 
-        //Request testing
-        ArrayList<String> errorMessage = new ArrayList<String>();
-        errorMessage.addAll(WebVersionJobConstants.subscribedDataListValidation(nodeDataArray));
-        errorMessage.addAll(WebVersionJobConstants.commonIndicatorListValidation(nodeDataArray));
-        errorMessage.addAll(WebVersionJobConstants.indicatorOutputValidation(nodeDataArray));
-        errorMessage.addAll(WebVersionJobConstants.tradeActionValidation(nodeDataArray));
+            //Request testing
+            ArrayList<String> errorMessage = new ArrayList<String>();
+            WebVersionJobConstants.updateWebJobHistory(false, null, "NULL", "NULL", "Program validating");
+            errorMessage.addAll(WebVersionJobConstants.subscribedDataListValidation(nodeDataArray));
+            errorMessage.addAll(WebVersionJobConstants.commonIndicatorListValidation(nodeDataArray));
+            errorMessage.addAll(WebVersionJobConstants.indicatorOutputValidation(nodeDataArray));
+            errorMessage.addAll(WebVersionJobConstants.tradeActionValidation(nodeDataArray));
 
-        boolean requestValidationPass = true;
-        if(errorMessage.size()>0){
-            requestValidationPass = false; 
-            StringBuilder testResultDetail = new StringBuilder();
-            for(String s : errorMessage){ 
-                testResultDetail.append(s); testResultDetail.append("\n"); 
-            }
-            WebVersionJobConstants.updateWebJobHistory(false, testResultDetail, "NULL", "NULL");
-        }
-
-        if(requestValidationPass==true){
-            //Generate the data request JSON object
-            JSONObject dataStreamingRequest = new JSONObject();
-            dataStreamingRequest.put("activity", "@#activity#@");
-            dataStreamingRequest.put("market", "@#market#@");
-            dataStreamingRequest.put("index", "@#index#@");
-            dataStreamingRequest.put("startdate", "@#startdate#@");
-            dataStreamingRequest.put("enddate", "@#enddate#@");
-            dataStreamingRequest.put("starttime", "@#starttime#@");
-            dataStreamingRequest.put("endtime", "@#endtime#@");
-            dataStreamingRequest.put("interval", @#interval#@-1);
-            dataStreamingRequest.put("mitigateNoiseWithinPrecentage", @#mitigateNoiseWithinPrecentage#@);
-            
-
-            if(dataStreamingRequest.has("slippagePrecentage")){ 
-                tradeController = new TradeController();
-                tradeController.setSlippage( dataStreamingRequest.getDouble("slippagePrecentage") );
-            }
-
-            boolean onlyIntervalData = false;
-	    if(dataStreamingRequest.has("activity")){ 
-                if (dataStreamingRequest.getString("activity").equalsIgnoreCase(Constants.intervaldataStreamingRequest)) {
-                    onlyIntervalData = true;
+            boolean requestValidationPass = true;
+            if(errorMessage.size()>0){
+                requestValidationPass = false; 
+                StringBuilder testResultDetail = new StringBuilder();
+                for(String s : errorMessage){ 
+                    testResultDetail.append(s); testResultDetail.append("\n"); 
                 }
-	    }
-
-	    if(dataStreamingRequest.has("market")){ 
-                if (dataStreamingRequest.getString("market").equalsIgnoreCase(Constants.dataStreamingFutureRequest)) {
-                    Future future = new Future(dataStreamingRequest, onlyIntervalData);
-                    Thread thread = new Thread(future);
-                    thread.start();
-                    while(future.processDone == false || future.data.size()>0) {
-                        System.out.print("");
-                        mainLogicLevel1(future.data);
-                    }
-		}
+                WebVersionJobConstants.updateWebJobHistory(false, testResultDetail, "NULL", "NULL", "Program encounter error, please read the Detail");
             }
-        }
+
+            if(requestValidationPass==true){
+                //Generate the data request JSON object
+                JSONObject dataStreamingRequest = new JSONObject();
+                dataStreamingRequest.put("activity", "@#activity#@");
+                dataStreamingRequest.put("market", "@#market#@");
+                dataStreamingRequest.put("index", "@#index#@");
+                dataStreamingRequest.put("startdate", "@#startdate#@");
+                dataStreamingRequest.put("enddate", "@#enddate#@");
+                dataStreamingRequest.put("starttime", "@#starttime#@");
+                dataStreamingRequest.put("endtime", "@#endtime#@");
+                dataStreamingRequest.put("interval", @#interval#@-1);
+                dataStreamingRequest.put("mitigateNoiseWithinPrecentage", @#mitigateNoiseWithinPrecentage#@);
+                WebVersionJobConstants.logger("dataStreamingRequest :" + dataStreamingRequest.toString());
+                
+
+                if(dataStreamingRequest.has("slippagePrecentage")){ 
+                    tradeController = new TradeController();
+                    tradeController.setSlippage( dataStreamingRequest.getDouble("slippagePrecentage") );
+                    WebVersionJobConstants.logger("slippagePrecentage :" + dataStreamingRequest.getDouble("slippagePrecentage"));
+                }
+
+                boolean onlyIntervalData = false;
+                if(dataStreamingRequest.has("activity")){ 
+                    if (dataStreamingRequest.getString("activity").equalsIgnoreCase(Constants.intervaldataStreamingRequest)) {
+                        onlyIntervalData = true;
+                        WebVersionJobConstants.logger("onlyIntervalData : true");
+                    }
+                }
+
+                if(dataStreamingRequest.has("market")){ 
+                    if (dataStreamingRequest.getString("market").equalsIgnoreCase(Constants.dataStreamingFutureRequest)) {
+                        WebVersionJobConstants.logger("market : FUTURE");
+                        Future future = new Future(dataStreamingRequest, onlyIntervalData);
+                        Thread thread = new Thread(future);
+                        thread.start();
+                        WebVersionJobConstants.updateWebJobHistory(false, null, "NULL", "NULL", "Program running");
+                        while(future.processDone == false || future.data.size()>0) {
+                            System.out.print("");
+                            mainLogicLevel1(future.data);
+                        }
+                        if(future.processDone == true && future.data.size()==0){
+                            WebVersionJobConstants.logger("mainLogicLevel1 completed");
+                            WebVersionJobConstants.updateWebJobHistory(false, null, "NULL", "NULL", "Program running completed");
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+			WebVersionJobConstants.logger("Exception in Main.java :" + e.toString());
+		}
     }
 
     private static void mainLogicLevel1(ArrayList<JSONObject> dataList) throws Exception{
@@ -131,7 +141,7 @@ public class Main {
                     }
                     //Check error caused or not
                     if(dataStructure.getError()!=null) {
-                        System.out.println(dataStructure.getError());
+                        WebVersionJobConstants.logger(dataStructure.getError());
                         break;
                     }
                     //check the order allow to trade or not

@@ -374,8 +374,8 @@ public class WebVersionJobConstants {
 		logger("initialIndicator() completed");
     }
 
-    public static void insertWebVersionJobInformation() {
+    public static void insertWebVersionJobInformation() throws SQLException{
 		dbcommunication.insertWebVersionJobInformation(taskInstanceID, taskIPaddress, serverRunJobTaskID, runJobID, cpuusage);
     }
-	
+
 }

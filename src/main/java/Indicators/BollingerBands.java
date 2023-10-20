@@ -9,7 +9,9 @@ public class BollingerBands extends Indicator{
     private int period;
     private double multiplier;
 
-    public BollingerBands(){}
+    public BollingerBands(){
+        super.indicatorName  = "Bollinger Bands";
+    }
     
     public BollingerBands(int period, double multiplier) {
         super.indicatorName  = "Bollinger Bands";

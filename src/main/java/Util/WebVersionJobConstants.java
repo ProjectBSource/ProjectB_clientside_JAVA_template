@@ -341,7 +341,7 @@ public class WebVersionJobConstants {
 					tradeActionCount++;
 					if(node.has("action")){
 						JSONObject data = new JSONObject(node.getString("data"));
-						
+
 						if(data.has("action")==false) { errorMessage.add("Error: Do not have the key 'action' in Trade Action"); }
 						else if(data.isNull("action") || data.get("action").getClass()!=(String.class) || data.getString("action").isEmpty()) { errorMessage.add("Error: Key 'action' no value"); }
 						else if(data.getString("action")!="BUY" && data.getString("action")!="SELL") { errorMessage.add("Error: Key 'action' incorrect value"); }
@@ -360,6 +360,7 @@ public class WebVersionJobConstants {
 	}
 
     public static void initialIndicator() {
+		indicators.add(new BollingerBands());
     }
 
     public static void insertWebVersionJobInformation() {

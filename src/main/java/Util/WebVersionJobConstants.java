@@ -44,8 +44,8 @@ public class WebVersionJobConstants {
 	private static Process p;
 	private static BufferedReader br;
 	private static String [] cmd ={"/bin/sh","-c",null};
-	public static String serverIPaddress;
-	public static String serverInstanceID;
+	public static String taskIPaddress;
+	public static String taskInstanceID;
 	public static String serverScreenTaskID;
 	public static String serverRunJobTaskID;
 	public static float cpuusage;
@@ -103,26 +103,26 @@ public class WebVersionJobConstants {
 	
 	public static void setWebVersionJobIPaddress() throws IOException {
 		if(environment.equals("dev")) {
-			serverIPaddress = "localhost";
+			taskIPaddress = "localhost";
 		}
 		else if(environment.equals("prd")) {
 			URL whatismyip = new URL("http://checkip.amazonaws.com");
 	  		BufferedReader in = new BufferedReader(new InputStreamReader(whatismyip.openStream()));
-	  		serverIPaddress = in.readLine();
+	  		taskIPaddress = in.readLine();
 		}
-  		logger("setWebVersionJobIPaddress() completed, serverIPaddress:"+serverIPaddress);
+  		logger("setWebVersionJobIPaddress() completed, taskIPaddress:"+taskIPaddress);
 	}
 	
 	public static void setWebVersionJobInstanceID() throws IOException, InterruptedException {
 		if(environment.equals("dev")) {
-			serverInstanceID = "abcd1234";
+			taskInstanceID = "abcd1234";
 		}
 		else if(environment.equals("prd")) {
 			cmd[2] = "ec2-metadata -i | awk '{print $2}'";
 			p = Runtime.getRuntime().exec(cmd);
 			p.waitFor();
 	        br = new BufferedReader(new InputStreamReader(p.getInputStream()));
-	        serverInstanceID = br.readLine();
+	        taskInstanceID = br.readLine();
 	        br.close();
 	        p.destroy();
 		}
@@ -375,5 +375,6 @@ public class WebVersionJobConstants {
     }
 
     public static void insertWebVersionJobInformation() {
+		dbcommunication.insertWebVersionJobInformation(taskInstanceID, taskIPaddress, serverRunJobTaskID, runJobID, cpuusage);
     }
 }

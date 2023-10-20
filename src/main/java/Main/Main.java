@@ -91,25 +91,29 @@ public class Main {
 
             if(dataStreamingRequest.has("slippagePrecentage")){ 
                 tradeController = new TradeController();
-                tradeController.setSlippage( input.getDouble("slippagePrecentage") );
+                tradeController.setSlippage( dataStreamingRequest.getDouble("slippagePrecentage") );
             }
 
             boolean onlyIntervalData = false;
-            if (input.getString("activity").equalsIgnoreCase(Constants.intervaldataStreamingRequest)) {
-                onlyIntervalData = true;
-            }
-
-            if (dataStreamingRequest.getString("market").equalsIgnoreCase(Constants.dataStreamingFutureRequest)) {
-                Future future = new Future(input, onlyIntervalData);
-                Thread thread = new Thread(future);
-                thread.start();
-                while(future.processDone == false || future.data.size()>0) {
-                    System.out.print("");
-                    mainLogicLevel1(future.data);
+	    if(dataStreamingRequest.has("activity")){ 
+                if (dataStreamingRequest.getString("activity").equalsIgnoreCase(Constants.intervaldataStreamingRequest)) {
+                    onlyIntervalData = true;
                 }
+	    }
+
+	    if(dataStreamingRequest.has("market")){ 
+                if (dataStreamingRequest.getString("market").equalsIgnoreCase(Constants.dataStreamingFutureRequest)) {
+                    Future future = new Future(input, onlyIntervalData);
+                    Thread thread = new Thread(future);
+                    thread.start();
+                    while(future.processDone == false || future.data.size()>0) {
+                        System.out.print("");
+                        mainLogicLevel1(future.data);
+                    }
+		}
             }
         }
-	}
+    }
 
     private static void mainLogicLevel1(ArrayList<JSONObject> dataList) throws Exception{
 		if(dataList.size()>0) {

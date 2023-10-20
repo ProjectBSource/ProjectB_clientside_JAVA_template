@@ -197,7 +197,7 @@ public class WebVersionJobConstants {
 		//refresh the CPU usage 
 		setWebVersionJobCPUUsage();
 		
-		dbcommunication.updateWebVersionJobInformation(cpuusage);
+		dbcommunication.updateWebVersionJobInformation();
 	}
 
 	public static ArrayList<String> subscribedDataListValidation(JSONArray nodeDataArray) throws Exception{
@@ -377,8 +377,5 @@ public class WebVersionJobConstants {
     public static void insertWebVersionJobInformation() {
 		dbcommunication.insertWebVersionJobInformation(taskInstanceID, taskIPaddress, serverRunJobTaskID, runJobID, cpuusage);
     }
-
-	public static void updateWebVersionJobInformation(){
-		dbcommunication.updateWebVersionJobInformation(cpuusage);
-	}
+	
 }

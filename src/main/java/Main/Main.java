@@ -47,8 +47,8 @@ public class Main {
             WebVersionJobConstants.setWebVersionJobInstanceID();
             WebVersionJobConstants.setWebVersionJobIPaddress();
             WebVersionJobConstants.setWebVersionJobScreenTaskID();
-            WebVersionJobConstants.setWebVersionJobRunJobTaskID();
-            WebVersionJobConstants.setWebVersionJobCPUUsage();
+            //WebVersionJobConstants.setWebVersionJobRunJobTaskID();
+            //WebVersionJobConstants.setWebVersionJobCPUUsage();
             //setup Database communication
             WebVersionJobConstants.setupDBconnection();
             WebVersionJobConstants.initialIndicator();
@@ -186,7 +186,7 @@ public class Main {
                 long diff = (new Date()).getTime() - (lastUpdateTime).getTime();
                 long seconds = TimeUnit.MILLISECONDS.toSeconds(diff);
                 if(seconds >=60){
-                    WebVersionJobConstants.updateWebVersionJobInformation();
+                    //WebVersionJobConstants.updateWebVersionJobInformation();
                     lastUpdateTime = new Date();
                 }
             }

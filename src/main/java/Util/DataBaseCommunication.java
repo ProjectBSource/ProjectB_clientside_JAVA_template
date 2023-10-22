@@ -92,7 +92,8 @@ public class DataBaseCommunication {
         Statement stmt = con.createStatement();
         stmt.execute(
 			" UPDATE ProjectB_WebVersionJobsController SET " +
-			" CPUusage="+WebVersionJobConstants.cpuusage+", " +
+			//" CPUusage="+WebVersionJobConstants.cpuusage+", " +
+            " CPUusage=0, " +
 			" UpdateDateTime=NOW() " +
 			" WHERE " +
 			" RunJobID ='"+WebVersionJobConstants.runJobID+"'' "

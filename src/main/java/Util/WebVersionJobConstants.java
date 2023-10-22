@@ -195,7 +195,7 @@ public class WebVersionJobConstants {
 
 	public static void updateWebVersionJobInformation() throws IOException, SQLException, InterruptedException{		
 		//refresh the CPU usage 
-		setWebVersionJobCPUUsage();
+		//setWebVersionJobCPUUsage();
 		
 		dbcommunication.updateWebVersionJobInformation();
 	}

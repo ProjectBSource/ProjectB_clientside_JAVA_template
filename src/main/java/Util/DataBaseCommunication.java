@@ -96,7 +96,7 @@ public class DataBaseCommunication {
             " CPUusage=0, " +
 			" UpdateDateTime=NOW() " +
 			" WHERE " +
-			" RunJobID ='"+WebVersionJobConstants.runJobID+"'' "
+			" RunJobID ="+WebVersionJobConstants.runJobID+" "
 		);
 	}
 	

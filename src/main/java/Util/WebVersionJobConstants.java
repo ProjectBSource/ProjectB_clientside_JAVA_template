@@ -97,7 +97,7 @@ public class WebVersionJobConstants {
 	}
 	
 	public static void logger(String content) {
-		logger.log(Level.WARNING, content);
+		logger.log(Level.WARNING, "::"+runJobID+"::"+content);
 	}
 	
 	public static void setWebVersionJobIPaddress() throws IOException {

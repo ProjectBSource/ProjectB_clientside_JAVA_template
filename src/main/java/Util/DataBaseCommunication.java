@@ -93,7 +93,6 @@ public class DataBaseCommunication {
         stmt.execute(
 			" UPDATE ProjectB_WebVersionJobsController SET " +
 			" CPUusage="+WebVersionJobConstants.cpuusage+", " +
-            " CPUusage=0, " +
 			" UpdateDateTime=NOW() " +
 			" WHERE " +
 			" RunJobID = '"+WebVersionJobConstants.runJobID+"' "

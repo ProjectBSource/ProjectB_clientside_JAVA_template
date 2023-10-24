@@ -47,7 +47,6 @@ public class WebVersionJobConstants {
 	public static String taskIPaddress;
 	public static String taskInstanceID;
 	public static String serverScreenTaskID;
-	public static String serverRunJobTaskID;
 	public static float cpuusage;
 	private static DataBaseCommunication dbcommunication;
 	private static Date lastWebVersionJobInformationUpdateDateTime = null;
@@ -145,28 +144,14 @@ public class WebVersionJobConstants {
         logger("setWebVersionJobScreenTaskID() completed, serverScreenTaskID:"+serverScreenTaskID);
 	}
 	
-	public static void setWebVersionJobRunJobTaskID() throws IOException, InterruptedException {
-		if(environment.equals("dev")) {
-			serverScreenTaskID = "1111";
-		}
-		else if(environment.equals("prd")) {
-			cmd[2] = "ps --no-headers --ppid "+serverScreenTaskID+" | awk '{print $1}'"; 
-			p = Runtime.getRuntime().exec(cmd);
-			p.waitFor();
-			br = new BufferedReader(new InputStreamReader(p.getInputStream()));
-			serverRunJobTaskID = br.readLine();
-	        br.close();
-	        p.destroy();
-		}
-        logger("setWebVersionJobRunJobTaskID() completed, serverRunJobTaskID:"+serverRunJobTaskID);
-	}
-	
 	public static void setWebVersionJobCPUUsage() throws IOException, InterruptedException {
 		if(environment.equals("dev")) {
 			cpuusage = 0;
 		}
 		else if(environment.equals("prd")) {
-			cmd[2] = "ps -eo %cpu,pid | grep "+serverScreenTaskID+" | awk '{print $1}'";
+			String command = "ps -eo %cpu,pid | grep "+serverScreenTaskID+" | awk '{print $1}'";
+			logger(command);
+			cmd[2] = command;
 			p = Runtime.getRuntime().exec(cmd);
 			p.waitFor();
 	        br = new BufferedReader(new InputStreamReader(p.getInputStream()));
@@ -378,7 +363,7 @@ public class WebVersionJobConstants {
     }
 
     public static void insertWebVersionJobInformation() throws Exception{
-		dbcommunication.insertWebVersionJobInformation(taskInstanceID, taskIPaddress, serverRunJobTaskID, runJobID, cpuusage);
+		dbcommunication.insertWebVersionJobInformation(taskInstanceID, taskIPaddress, serverScreenTaskID, runJobID, cpuusage);
     }
 
 }

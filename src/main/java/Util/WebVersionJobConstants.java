@@ -170,7 +170,10 @@ public class WebVersionJobConstants {
 			p = Runtime.getRuntime().exec(cmd);
 			p.waitFor();
 	        br = new BufferedReader(new InputStreamReader(p.getInputStream()));
-	        cpuusage = Float.parseFloat(br.readLine());
+			String result = br.readLine();
+			if(result!=null && result.length()>0){
+	        	cpuusage = Float.parseFloat(br.readLine());
+			}
 	        br.close();
 	        p.destroy();
 		}

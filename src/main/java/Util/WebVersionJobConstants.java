@@ -166,7 +166,7 @@ public class WebVersionJobConstants {
 			cpuusage = 0;
 		}
 		else if(environment.equals("prd")) {
-			cmd[2] = "ps -eo %cpu,pid | grep "+serverRunJobTaskID+" | awk '{print $1}'";
+			cmd[2] = "ps -eo %cpu,pid | grep "+serverScreenTaskID+" | awk '{print $1}'";
 			p = Runtime.getRuntime().exec(cmd);
 			p.waitFor();
 	        br = new BufferedReader(new InputStreamReader(p.getInputStream()));

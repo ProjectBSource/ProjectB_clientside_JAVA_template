@@ -185,7 +185,7 @@ public class Main {
             else{
                 long diff = (new Date()).getTime() - (lastUpdateTime).getTime();
                 long seconds = TimeUnit.MILLISECONDS.toSeconds(diff);
-                if(seconds >=60){
+                if(seconds >=10){
                     WebVersionJobConstants.updateWebVersionJobInformation();
                     lastUpdateTime = new Date();
                 }

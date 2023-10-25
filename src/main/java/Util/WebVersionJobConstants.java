@@ -155,7 +155,7 @@ public class WebVersionJobConstants {
 			p.waitFor();
 	        br = new BufferedReader(new InputStreamReader(p.getInputStream()));
 			String result = br.readLine();
-			logger("result:"+result);
+			logger("WebVersionJobCPUUsage:"+result);
 			if(result!=null && result.length()>0){
 	        	cpuusage = Float.parseFloat(result);
 			}

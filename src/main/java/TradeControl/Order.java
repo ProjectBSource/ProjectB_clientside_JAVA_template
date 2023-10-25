@@ -15,6 +15,8 @@ import TradeControl.OrderActionConstants.Direction;
 import TradeControl.OrderActionConstants.ExpiryDate;
 import TradeControl.OrderActionConstants.StrikePrice;
 
+import DataController.Constants;
+
 public class Order {
 	private Random random = new Random();
 	private String orderid;
@@ -31,10 +33,10 @@ public class Order {
 	private Date lastUpdateDateTime;
 	private ArrayList<Order> history = new ArrayList<>();
 
-	public Order(String symbol, Action action, int quantity) {
-		this.symbol = symbol;
+	public Order(DataStructure dataStructure, Action action, int quantity) {
+		this.symbol = dataStructure.symbol;
 		this.orderid = UUID.randomUUID().toString();
-		this.orderDateTime = new Date();
+		this.orderDateTime = Constants.df_yyyyMMddkkmmss.parse(dataStructure.datetime);
 		this.action = action;
 		this.quantity = quantity;
 		this.remained = quantity;

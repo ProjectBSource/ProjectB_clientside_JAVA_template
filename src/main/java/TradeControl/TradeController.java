@@ -81,7 +81,7 @@ public class TradeController {
      */
 	public JSONArray getOrderHistoryInJSON() throws JsonProcessingException, JSONException {
 		JSONArray history = new JSONArray();
-		for(Order order : orders)[
+		for(Order order : orders){
 			ObjectMapper mapper = new ObjectMapper();
 			JSONObject p = new JSONObject(mapper.writeValueAsString(order));
 			history.add(p);

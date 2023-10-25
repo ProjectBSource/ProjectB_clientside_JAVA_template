@@ -63,8 +63,8 @@ public class TradeController {
 	/**
      *For Stock and Future trading
      */
-	public void placeOrder(String symbol, Action action, int quantity) {
-		orders.add(new Order(symbol, action, quantity));
+	public void placeOrder(DataStructure dataStructure, Action action, int quantity) {
+		orders.add(new Order(dataStructure, action, quantity));
 	}
     
 	/**
@@ -72,6 +72,21 @@ public class TradeController {
      */
 	public void placeOrder(String symbol, Action action, Direction direction, StrikePrice sp, ExpiryDate ed, int quantity) {
 		orders.add(new Order(symbol, action, direction, sp, ed, quantity));
+	}
+
+	/**
+     *Get the order history in JSON
+	 * @throws JSONException
+	 * @throws JsonProcessingException
+     */
+	public JSONArray getOrderHistoryInJSON() throws JsonProcessingException, JSONException {
+		JSONArray history = new JSONArray();
+		for(Order order : orders)[
+			ObjectMapper mapper = new ObjectMapper();
+			JSONObject p = new JSONObject(mapper.writeValueAsString(order));
+			history.add(p);
+		}
+		return history;
 	}
 	
 	/**

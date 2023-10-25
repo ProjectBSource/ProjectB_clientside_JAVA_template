@@ -79,14 +79,16 @@ public class TradeController {
 	 * @throws JSONException
 	 * @throws JsonProcessingException
      */
-	public JSONArray getOrderHistoryInJSON() throws JsonProcessingException, JSONException {
+	public JSONObject getOrderHistoryInJSON() throws JsonProcessingException, JSONException {
 		JSONArray history = new JSONArray();
 		for(Order order : orders){
 			ObjectMapper mapper = new ObjectMapper();
 			JSONObject p = new JSONObject(mapper.writeValueAsString(order));
 			history.add(p);
 		}
-		return history;
+		JSONObject result = new JSONObject();
+		result.put("orderHistory", history);
+		return result;
 	}
 	
 	/**

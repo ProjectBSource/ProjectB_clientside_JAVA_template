@@ -152,14 +152,20 @@ public class WebVersionJobConstants {
 			String command = "ps -eo %cpu,pid | grep "+serverScreenTaskID+" | awk '{print $1}'";
 			cmd[2] = command;
 			p = Runtime.getRuntime().exec(cmd);
+			logger("p==null:"+(p==null));
 			p.waitFor();
 			if(p.getInputStream()!=null){
-				br = new BufferedReader(new InputStreamReader(p.getInputStream()));
-				String result = br.readLine();
-				if(result!=null && result.length()>0){
-					cpuusage = Float.parseFloat(br.readLine());
+				InputStreamReader inputStream = new InputStreamReader(p.getInputStream());
+				logger("inputStream==null:"+(inputStream==null));
+				if(inputStream!=null){
+					br = new BufferedReader(inputStream);
+					logger("p==null:"+(br==null));
+					String result = br.readLine();
+					if(result!=null && result.length()>0){
+						cpuusage = Float.parseFloat(br.readLine());
+					}
+					br.close();
 				}
-				br.close();
 			}
 	        p.destroy();
 		}

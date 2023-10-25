@@ -119,7 +119,7 @@ public class Main {
                         }
                         if(future.processDone == true && future.data.size()==0){
                             WebVersionJobConstants.logger("mainLogicLevel1 completed");
-                            WebVersionJobConstants.updateWebJobHistory(false, null, "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime))", "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime)*0.00003)", "Program running completed");
+                            WebVersionJobConstants.updateWebJobHistory(true, tradeController.getOrderHistoryInJSON(), "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime))", "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime)*0.00003)", "Program running completed");
                         }
                     }
                 }

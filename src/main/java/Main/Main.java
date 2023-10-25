@@ -74,7 +74,7 @@ public class Main {
                 for(String s : errorMessage){ 
                     testResultDetail.append(s); testResultDetail.append("\n"); 
                 }
-                WebVersionJobConstants.updateWebJobHistory(false, testResultDetail, "NULL", "NULL", "Program encounter error, please read the Detail");
+                WebVersionJobConstants.updateWebJobHistory(false, testResultDetail.toString(), "NULL", "NULL", "Program encounter error, please read the Detail");
             }
 
             if(requestValidationPass==true){
@@ -119,7 +119,7 @@ public class Main {
                         }
                         if(future.processDone == true && future.data.size()==0){
                             WebVersionJobConstants.logger("mainLogicLevel1 completed");
-                            WebVersionJobConstants.updateWebJobHistory(true, tradeController.getOrderHistoryInJSON(), "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime))", "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime)*0.00003)", "Program running completed");
+                            WebVersionJobConstants.updateWebJobHistory(true, tradeController.getOrderHistoryInJSON().toString(), "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime))", "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime)*0.00003)", "Program running completed");
                         }
                     }
                 }

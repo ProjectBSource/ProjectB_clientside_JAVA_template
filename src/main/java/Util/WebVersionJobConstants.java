@@ -150,16 +150,17 @@ public class WebVersionJobConstants {
 		}
 		else if(environment.equals("prd")) {
 			String command = "ps -eo %cpu,pid | grep "+serverScreenTaskID+" | awk '{print $1}'";
-			logger(command);
 			cmd[2] = command;
 			p = Runtime.getRuntime().exec(cmd);
 			p.waitFor();
-	        br = new BufferedReader(new InputStreamReader(p.getInputStream()));
-			String result = br.readLine();
-			if(result!=null && result.length()>0){
-	        	cpuusage = Float.parseFloat(br.readLine());
+			if(p.getInputStream()!=null){
+				br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+				String result = br.readLine();
+				if(result!=null && result.length()>0){
+					cpuusage = Float.parseFloat(br.readLine());
+				}
+				br.close();
 			}
-	        br.close();
 	        p.destroy();
 		}
         logger("setWebVersionJobCPUUsage() completed, cpuusage:"+cpuusage);

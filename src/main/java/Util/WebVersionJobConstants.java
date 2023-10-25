@@ -177,7 +177,7 @@ public class WebVersionJobConstants {
 		return dbcommunication.getRequestMessage();
     }
 	
-	public static void updateWebJobHistory(boolean testPass, StringBuilder testResultDetail, String predictRunTimeInSeconds, String predictTaskFee, String status) throws SQLException{
+	public static void updateWebJobHistory(boolean testPass, String testResultDetail, String predictRunTimeInSeconds, String predictTaskFee, String status) throws SQLException{
 		dbcommunication.updateWebJobHistory(testPass, testResultDetail, predictRunTimeInSeconds, predictTaskFee, status);
     }
 

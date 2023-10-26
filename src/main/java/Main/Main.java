@@ -91,11 +91,13 @@ public class Main {
                 dataStreamingRequest.put("mitigateNoiseWithinPrecentage", @#mitigateNoiseWithinPrecentage#@);
                 WebVersionJobConstants.logger("dataStreamingRequest :" + dataStreamingRequest.toString());
                 
-
-                if(dataStreamingRequest.has("slippagePrecentage")){ 
-                    tradeController = new TradeController();
-                    tradeController.setSlippage( dataStreamingRequest.getDouble("slippagePrecentage") );
-                    WebVersionJobConstants.logger("slippagePrecentage :" + dataStreamingRequest.getDouble("slippagePrecentage"));
+                if(nodeDataArray.has("data")){
+					JSONObject data = new JSONObject(node.getString("data"));
+                    if(data.has("slippagePrecentage")==true) { 
+                        tradeController = new TradeController();
+                        tradeController.setSlippage( Double.parseDouble(data.getString("slippagePrecentage")) );
+                        WebVersionJobConstants.logger("slippagePrecentage :" + dataStreamingRequest.getDouble("slippagePrecentage"));
+                    }
                 }
 
                 boolean onlyIntervalData = false;

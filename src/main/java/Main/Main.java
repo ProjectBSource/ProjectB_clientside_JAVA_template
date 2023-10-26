@@ -96,7 +96,7 @@ public class Main {
                     if(node.has("subscribedDataList")){
                         if(node.has("data")){
                             JSONObject data = new JSONObject(node.getString("data"));
-                            if(data.has("slippagePrecentage")==false) { 
+                            if(data.has("slippagePrecentage")==true) { 
                                 tradeController = new TradeController();
                                 tradeController.setSlippage( Double.parseDouble(data.getString("slippagePrecentage")) );
                                 WebVersionJobConstants.logger("slippagePrecentage :" + dataStreamingRequest.getDouble("slippagePrecentage"));

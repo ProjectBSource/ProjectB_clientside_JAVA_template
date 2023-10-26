@@ -84,7 +84,7 @@ public class TradeController {
 		for(Order order : orders){
 			ObjectMapper mapper = new ObjectMapper();
 			JSONObject p = new JSONObject(mapper.writeValueAsString(order));
-			history.add(p);
+			history.put(p);
 		}
 		JSONObject result = new JSONObject();
 		result.put("orderHistory", history);

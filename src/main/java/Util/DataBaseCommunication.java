@@ -56,7 +56,7 @@ public class DataBaseCommunication {
         return null;
     }
 	
-    public static void updateWebJobHistory(boolean testPass, StringBuilder testResultDetail, String predictRunTimeInSeconds, String predictTaskFee, String status) throws SQLException{
+    public static void updateWebJobHistory(boolean testPass, String testResultDetail, String predictRunTimeInSeconds, String predictTaskFee, String status) throws SQLException{
         Statement stmt = con.createStatement();
         stmt.execute(
 			" UPDATE ProjectB_WebJobHistory SET " +

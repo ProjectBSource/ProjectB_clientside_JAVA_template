@@ -99,7 +99,7 @@ public class Main {
                             if(data.has("slippagePrecentage")==true) { 
                                 tradeController = new TradeController();
                                 tradeController.setSlippage( Double.parseDouble(data.getString("slippagePrecentage")) );
-                                WebVersionJobConstants.logger("slippagePrecentage :" + dataStreamingRequest.getDouble("slippagePrecentage"));
+                                WebVersionJobConstants.logger("slippagePrecentage :" + data.getString("slippagePrecentage") );
                                 break;
                             }
                         }

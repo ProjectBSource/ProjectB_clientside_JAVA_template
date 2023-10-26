@@ -91,12 +91,19 @@ public class Main {
                 dataStreamingRequest.put("mitigateNoiseWithinPrecentage", @#mitigateNoiseWithinPrecentage#@);
                 WebVersionJobConstants.logger("dataStreamingRequest :" + dataStreamingRequest.toString());
                 
-                if(nodeDataArray.has("data")){
-					JSONObject data = new JSONObject(nodeDataArray.getString("data"));
-                    if(data.has("slippagePrecentage")==true) { 
-                        tradeController = new TradeController();
-                        tradeController.setSlippage( Double.parseDouble(data.getString("slippagePrecentage")) );
-                        WebVersionJobConstants.logger("slippagePrecentage :" + dataStreamingRequest.getDouble("slippagePrecentage"));
+                for(Object objectNode : nodeDataArray){
+                    JSONObject node = (JSONObject) objectNode;
+                    if(node.has("subscribedDataList")){
+                        subscribedDataListCount++;
+                        if(node.has("data")){
+                            JSONObject data = new JSONObject(node.getString("data"));
+                            if(data.has("slippagePrecentage")==false) { 
+                                tradeController = new TradeController();
+                                tradeController.setSlippage( Double.parseDouble(data.getString("slippagePrecentage")) );
+                                WebVersionJobConstants.logger("slippagePrecentage :" + dataStreamingRequest.getDouble("slippagePrecentage"));
+                                break;
+                            }
+                        }
                     }
                 }
 

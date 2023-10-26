@@ -33,7 +33,7 @@ public class Order {
 	private Date lastUpdateDateTime;
 	private ArrayList<Order> history = new ArrayList<>();
 
-	public Order(DataStructure dataStructure, Action action, int quantity) {
+	public Order(DataStructure dataStructure, Action action, int quantity) throws Exception {
 		this.symbol = dataStructure.getSymbol();
 		this.orderid = UUID.randomUUID().toString();
 		this.orderDateTime = Constants.df_yyyyMMddkkmmss.parse(dataStructure.getDatetime());

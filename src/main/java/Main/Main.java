@@ -94,7 +94,6 @@ public class Main {
                 for(Object objectNode : nodeDataArray){
                     JSONObject node = (JSONObject) objectNode;
                     if(node.has("subscribedDataList")){
-                        subscribedDataListCount++;
                         if(node.has("data")){
                             JSONObject data = new JSONObject(node.getString("data"));
                             if(data.has("slippagePrecentage")==false) { 

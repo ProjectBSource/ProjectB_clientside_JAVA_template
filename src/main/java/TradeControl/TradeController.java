@@ -63,7 +63,7 @@ public class TradeController {
 	/**
      *For Stock and Future trading
      */
-	public void placeOrder(DataStructure dataStructure, Action action, int quantity) {
+	public void placeOrder(DataStructure dataStructure, Action action, int quantity) throws Exception {
 		orders.add(new Order(dataStructure, action, quantity));
 	}
     

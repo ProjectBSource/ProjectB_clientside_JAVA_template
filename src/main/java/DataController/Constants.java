@@ -12,6 +12,7 @@ import java.util.Properties;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import Util.WebVersionJobConstants;
 
 public class Constants {
 	public static String futuretickdatafilesparentpath = "";
@@ -142,6 +143,6 @@ public class Constants {
 	}
 	
 	public static void logger(String content) {
-		logger.log(Level.WARNING, content);
+		logger.log(Level.WARNING, "::"+WebVersionJobConstants.runJobID+"::"+content);
 	}
 }

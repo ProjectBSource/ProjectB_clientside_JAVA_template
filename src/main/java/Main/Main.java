@@ -92,7 +92,7 @@ public class Main {
                 WebVersionJobConstants.logger("dataStreamingRequest :" + dataStreamingRequest.toString());
                 
                 if(nodeDataArray.has("data")){
-					JSONObject data = new JSONObject(node.getString("data"));
+					JSONObject data = new JSONObject(nodeDataArray.getString("data"));
                     if(data.has("slippagePrecentage")==true) { 
                         tradeController = new TradeController();
                         tradeController.setSlippage( Double.parseDouble(data.getString("slippagePrecentage")) );

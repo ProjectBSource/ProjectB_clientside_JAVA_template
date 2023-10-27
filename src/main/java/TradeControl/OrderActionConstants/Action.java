@@ -3,7 +3,7 @@ package TradeControl.OrderActionConstants;
 public enum Action {
 	BUY("BUY"),
     SELL("SELL"),
-	CLOSE("CLOSE");
+	OFF("OFF");
 
     private String action;
 

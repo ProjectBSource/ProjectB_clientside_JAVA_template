@@ -71,7 +71,8 @@ public class TradeController {
      *For Stock and Future off trade
      */
 	public void placeOrder(DataStructure dataStructure, Action action) throws Exception {
-		orders.add(new Order(dataStructure, action, (profile.holding.get(dataStructure.getSymbol())*-1) ));
+		int tempOffQuantity = (profile.holding.get(dataStructure.getSymbol())*-1);
+		orders.add(new Order(dataStructure, action, tempOffQuantity ));
 	}
     
 	/**

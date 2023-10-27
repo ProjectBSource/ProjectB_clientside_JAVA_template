@@ -33,7 +33,7 @@ public class TradeController {
 		trade_notification = null;
 		for(Order order : orders) {
 			trade_notification = order.trade(profile, ds, slippage);
-			if(trade_notification==null) {
+			if(trade_notification!=null) {
 				trade_notification_list.put(trade_notification);
 			}
 		}
@@ -65,6 +65,13 @@ public class TradeController {
      */
 	public void placeOrder(String symbol, Action action, int quantity) {
 		orders.add(new Order(symbol, action, quantity));
+	}
+
+     /**
+     *For Stock and Future off trade
+     */
+	public void placeOrder(DataStructure dataStructure, Action action) throws Exception {
+		orders.add(new Order(dataStructure, action, (profile.holding.get(dataStructure.getSymbol())*-1) ));
 	}
     
 	/**

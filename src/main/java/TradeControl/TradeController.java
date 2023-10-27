@@ -72,7 +72,9 @@ public class TradeController {
      */
 	public void placeOrder(DataStructure dataStructure, Action action) throws Exception {
 		int tempOffQuantity = (profile.holding.get(dataStructure.getSymbol())*-1);
-		orders.add(new Order(dataStructure, action, tempOffQuantity ));
+		if(tempOffQuantity!=0){
+			orders.add(new Order(dataStructure, action, tempOffQuantity ));
+		}
 	}
 	
 	/**

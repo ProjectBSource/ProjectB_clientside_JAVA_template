@@ -15,6 +15,9 @@
       </plugin>
     </plugins>
   </build>
+  <properties>
+    <exec.mainClass>Main</exec.mainClass>
+</properties>
   <dependencies>
   	<dependency>
     	<groupId>click.projectb</groupId>

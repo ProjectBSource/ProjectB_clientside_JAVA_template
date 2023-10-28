@@ -39,7 +39,7 @@ public class WebVersionJobConstants {
 	public final static String dataStreamingFutureRequest = "Future";
 	private static ClassLoader loader = Thread.currentThread().getContextClassLoader();
 	private static String loggerstoragepath;
-	private static String environment;
+	public static String environment;
 	public static Logger logger = Logger.getLogger(new WebVersionJobConstants().getClass().getName());
 	private static Process p;
 	private static BufferedReader br;

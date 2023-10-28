@@ -51,7 +51,9 @@ public class Main {
             //setup Database communication
             WebVersionJobConstants.setupDBconnection();
             WebVersionJobConstants.initialIndicator();
-            WebVersionJobConstants.insertWebVersionJobInformation();
+            if(WebVersionJobConstants.environment.equals("prd")){
+                WebVersionJobConstants.insertWebVersionJobInformation();
+            }
             WebVersionJobConstants.logger("WebVersionJob(runJobID:"+WebVersionJobConstants.runJobID+") started up");
 
             //get task detail
@@ -186,15 +188,17 @@ public class Main {
 			}
 
             //update task real time information
-            if(lastUpdateTime==null){
-                lastUpdateTime = new Date();
-            }
-            else{
-                long diff = (new Date()).getTime() - (lastUpdateTime).getTime();
-                long seconds = TimeUnit.MILLISECONDS.toSeconds(diff);
-                if(seconds >=10){
-                    WebVersionJobConstants.updateWebVersionJobInformation();
+            if(WebVersionJobConstants.environment.equals("prd")){
+                if(lastUpdateTime==null){
                     lastUpdateTime = new Date();
+                }
+                else{
+                    long diff = (new Date()).getTime() - (lastUpdateTime).getTime();
+                    long seconds = TimeUnit.MILLISECONDS.toSeconds(diff);
+                    if(seconds >=10){
+                        WebVersionJobConstants.updateWebVersionJobInformation();
+                        lastUpdateTime = new Date();
+                    }
                 }
             }
 		}

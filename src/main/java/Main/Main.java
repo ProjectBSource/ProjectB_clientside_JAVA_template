@@ -85,7 +85,7 @@ public class Main {
 					) 
 				);
 				
-				tradeController.placeOrder(dataStructure.getSymbol(), Action.BUY, 1);
+				tradeController.placeOrder(dataStructure, Action.BUY, 1);
 				
 				System.out.println( tradeController.getProfile() );
 				

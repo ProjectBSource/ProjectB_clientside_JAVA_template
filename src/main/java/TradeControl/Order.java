@@ -32,8 +32,8 @@ public class Order {
 	private Date lastUpdateDateTime;
 	private ArrayList<Order> history = new ArrayList<>();
 
-	public Order(String symbol, Action action, int quantity) {
-		this.symbol = symbol;
+	public Order(DataStructure dataStructure, Action action, int quantity) {
+		this.symbol = dataStructure.getSymbol();
 		this.orderid = UUID.randomUUID().toString();
 		this.orderDateTime = new Date();
 		this.action = action;
@@ -43,8 +43,8 @@ public class Order {
 		this.history.add(new Order(this));
 	}
 	
-	public Order(String symbol, Action action, Direction direction, StrikePrice sp, ExpiryDate ed,  int quantity) {
-		this.symbol = symbol;
+	public Order(DataStructure dataStructure, Action action, Direction direction, StrikePrice sp, ExpiryDate ed,  int quantity) {
+		this.symbol = dataStructure.getSymbol();
 		this.orderid = UUID.randomUUID().toString();
 		this.orderDateTime = new Date();
 		this.action = action;

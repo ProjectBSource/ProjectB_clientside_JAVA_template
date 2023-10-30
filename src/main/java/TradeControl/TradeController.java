@@ -1,19 +1,20 @@
 package TradeControl;
 
+import java.util.ArrayList;
+import java.util.Map;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import ClientSocketControl.DataStructure;
 import TradeControl.OrderActionConstants.Action;
 import TradeControl.OrderActionConstants.Direction;
 import TradeControl.OrderActionConstants.ExpiryDate;
 import TradeControl.OrderActionConstants.StrikePrice;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.gson.Gson;
-import java.util.ArrayList;
-import java.util.Map;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-
 
 
 public class TradeController {
@@ -21,13 +22,12 @@ public class TradeController {
 	ArrayList<Order> orders = new ArrayList<>();
 	JSONArray trade_notification_list = null;
 	JSONObject trade_notification = null;
-	Gson gson = null;
 	Double slippage = 0D;
 	
 	/**
      *A necessary method to check the order allow to trade or not, you should call this method every read the data streaming message.
      */
-	public JSONArray tradeCheckingAndBalanceUpdate(DataStructure ds) throws JsonProcessingException, JSONException {
+	public JSONArray tradeCheckingAndBalanceUpdate(DataStructure ds) throws Exception {
 		//check and update the order
 		trade_notification_list = new JSONArray();
 		trade_notification = null;
@@ -63,44 +63,63 @@ public class TradeController {
 	/**
      *For Stock and Future trading
      */
-	public void placeOrder(DataStructure dataStructure, Action action, int quantity) {
+	public void placeOrder(DataStructure dataStructure, Action action, int quantity) throws Exception {
 		orders.add(new Order(dataStructure, action, quantity));
 	}
 
-     /**
+    /**
      *For Stock and Future off trade
      */
 	public void placeOrder(DataStructure dataStructure, Action action) throws Exception {
-		int tempOffQuantity = (profile.holding.get(dataStructure.getSymbol())*-1);
-		if(tempOffQuantity!=0){
-			orders.add(new Order(dataStructure, action, tempOffQuantity ));
+		if(profile.holding.size()>0){
+			int tempOffQuantity = (profile.holding.get(dataStructure.getSymbol())*-1);
+			if(tempOffQuantity!=0){
+				orders.add(new Order(dataStructure, action, tempOffQuantity ));
+			}
 		}
 	}
-	
+    
 	/**
      *For Option trading
      */
-	public void placeOrder(DataStructure dataStructure, Action action, Direction direction, StrikePrice sp, ExpiryDate ed, int quantity) {
-		orders.add(new Order(dataStructure, action, direction, sp, ed, quantity));
+	public void placeOrder(String symbol, Action action, Direction direction, StrikePrice sp, ExpiryDate ed, int quantity) {
+		orders.add(new Order(symbol, action, direction, sp, ed, quantity));
+	}
+
+	/**
+     *Get the order history in JSON
+	 * @throws JSONException
+	 * @throws JsonProcessingException
+     */
+	public JSONObject getOrderHistoryInJSON() throws JsonProcessingException, JSONException {
+		JSONArray history = new JSONArray();
+		for(Order order : orders){
+			history.put(order.orderDetailInJSON);
+		}
+		JSONObject result = new JSONObject();
+		result.put("orderHistory", history);
+		return result;
 	}
 	
 	/**
-    *Get the Profile information in JSON
-    */
-   public JSONObject getProfileInJSON() {
-       //return profile.toJSONObject();
-       gson = new Gson();
-       String jsonString = gson.toJson(profile);
-       if(jsonString!=null) {
-           return new JSONObject(jsonString);
-       }
-       return null;
-   }
+     *Get the Profile information in JSON
+	 * @throws JSONException
+	 * @throws JsonProcessingException
+     */
+	public JSONObject getProfileInJSON() throws JsonProcessingException, JSONException {
+		//return profile.toJSONObject();
+        ObjectMapper mapper = new ObjectMapper();
+		JSONObject p = new JSONObject(mapper.writeValueAsString(profile));
+		if(p!=null) {
+			return p;
+		}
+		return null;
+	}
 
-   /**
-    *Get the Profile information
-    */
-   public Profile getProfile() {
-       return profile;
-   }
+    /**
+     *Get the Profile information
+     */
+	public Profile getProfile() {
+		return profile;
+	}
 }

@@ -31,6 +31,7 @@ public class Order {
 	private int remained;
 	private double averageTradePrice;
 	private Date lastUpdateDateTime;
+	public JSONObject orderDetailInJSON;
 	private ArrayList<Order> history = new ArrayList<>();
 
 	public Order(DataStructure dataStructure, Action action, int quantity) throws Exception {
@@ -41,6 +42,14 @@ public class Order {
 		this.quantity = quantity;
 		this.remained = quantity;
 		this.lastUpdateDateTime = this.orderDateTime;
+		orderDetailInJSON = new JSONObject();
+		orderDetailInJSON.put("symbol", this.symbol);
+		orderDetailInJSON.put("orderid", this.orderid);
+		orderDetailInJSON.put("orderDateTime", this.orderDateTime);
+		orderDetailInJSON.put("action", this.action.getAction());
+		orderDetailInJSON.put("quantity", this.quantity);
+		orderDetailInJSON.put("remained", this.remained);
+		orderDetailInJSON.put("lastUpdateDateTime", this.lastUpdateDateTime);
 		this.history.add(new Order(this));
 	}
 	
@@ -55,22 +64,34 @@ public class Order {
 		this.quantity = quantity;
 		this.remained = quantity;
 		this.lastUpdateDateTime = this.orderDateTime;
+		orderDetailInJSON = new JSONObject();
+		orderDetailInJSON.put("symbol", this.symbol);
+		orderDetailInJSON.put("orderid", this.orderid);
+		orderDetailInJSON.put("orderDateTime", this.orderDateTime);
+		orderDetailInJSON.put("action", this.action.getAction());
+		orderDetailInJSON.put("direction", this.direction.getDirection());
+		orderDetailInJSON.put("sp", this.sp.getStrikePrice());
+		orderDetailInJSON.put("ed", this.ed.getExpiryDate());
+		orderDetailInJSON.put("quantity", this.quantity);
+		orderDetailInJSON.put("remained", this.remained);
+		orderDetailInJSON.put("lastUpdateDateTime", this.lastUpdateDateTime);
 		this.history.add(new Order(this));
 	}
 	
-	private Order(Order market) {
-		this.symbol = market.symbol;
-		this.orderid = market.orderid;
-		this.orderDateTime = market.orderDateTime;
-		this.action = market.action;
-		this.direction = market.direction;
-		this.sp = market.sp;
-		this.ed = market.ed;
-		this.quantity = market.quantity;
-		this.traded = market.traded;
-		this.remained = market.remained;
-		this.averageTradePrice = market.averageTradePrice;
-		this.lastUpdateDateTime = market.lastUpdateDateTime;
+	private Order(Order order) {
+		this.symbol = order.symbol;
+		this.orderid = order.orderid;
+		this.orderDateTime = order.orderDateTime;
+		this.action = order.action;
+		this.direction = order.direction;
+		this.sp = order.sp;
+		this.ed = order.ed;
+		this.quantity = order.quantity;
+		this.traded = order.traded;
+		this.remained = order.remained;
+		this.averageTradePrice = order.averageTradePrice;
+		this.lastUpdateDateTime = order.lastUpdateDateTime;
+		this.orderDetailInJSON = order.orderDetailInJSON;
 	}
 
 	public JSONObject trade(Profile profile, DataStructure data, double slippage) throws Exception {
@@ -82,14 +103,13 @@ public class Order {
 					remained -= temp_trade_amount;
 					double temp_trade_price = data.getIndex() + ( (data.getIndex() *  slippage) * (random.nextInt(2)==0?1:-1) );
 					averageTradePrice = (averageTradePrice + (temp_trade_amount * temp_trade_price)) / traded;
-					Order temp_maket = new Order(this);
-					history.add(temp_maket);
+					Order temp_market = new Order(this);
+					history.add(temp_market);
 					//Update profle
 					if(action == Action.SELL) { temp_trade_amount *= -1; }
 					profile.update(symbol, temp_trade_amount, temp_trade_price);
 
-					ObjectMapper mapper = new ObjectMapper();
-                    return new JSONObject(mapper.writeValueAsString(this));
+                    return orderDetailInJSON;
 				}
 			}
 			return null;

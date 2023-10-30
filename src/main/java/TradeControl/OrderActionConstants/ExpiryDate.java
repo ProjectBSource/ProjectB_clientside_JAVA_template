@@ -6,11 +6,11 @@ public enum ExpiryDate {
 
     public String expirtyDate;
 
-    private ExpiryDate(String expirtyDate) {
+    private ExpiryDate(String expiryDate) {
         this.expirtyDate = expirtyDate;
     }
     
-    public String getDirection() {
+    public String getExpiryDate() {
     	return expirtyDate;
     }
 }

@@ -71,9 +71,11 @@ public class TradeController {
      *For Stock and Future off trade
      */
 	public void placeOrder(DataStructure dataStructure, Action action) throws Exception {
-		int tempOffQuantity = (profile.holding.get(dataStructure.getSymbol())*-1);
-		if(tempOffQuantity!=0){
-			orders.add(new Order(dataStructure, action, tempOffQuantity ));
+		if(profile.holding.size()>0){
+			int tempOffQuantity = (profile.holding.get(dataStructure.getSymbol())*-1);
+			if(tempOffQuantity!=0){
+				orders.add(new Order(dataStructure, action, tempOffQuantity ));
+			}
 		}
 	}
     
@@ -92,9 +94,7 @@ public class TradeController {
 	public JSONObject getOrderHistoryInJSON() throws JsonProcessingException, JSONException {
 		JSONArray history = new JSONArray();
 		for(Order order : orders){
-			ObjectMapper mapper = new ObjectMapper();
-			JSONObject p = new JSONObject(mapper.writeValueAsString(order));
-			history.put(p);
+			history.add(order.orderDetailInJSON);
 		}
 		JSONObject result = new JSONObject();
 		result.put("orderHistory", history);

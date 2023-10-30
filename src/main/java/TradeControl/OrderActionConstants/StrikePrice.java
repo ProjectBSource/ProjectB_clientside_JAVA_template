@@ -10,7 +10,7 @@ public enum StrikePrice {
         this.strikePrice = strikePrice;
     }
     
-    public int getDirection() {
+    public int getStrikePrice() {
     	return strikePrice;
     }
 }

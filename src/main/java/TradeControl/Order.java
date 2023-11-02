@@ -31,16 +31,18 @@ public class Order {
 	public int remained;
 	public double averageTradePrice;
 	public Date lastUpdateDateTime;
+	public boolean oneTimeTradeCheck;
 	public JSONObject orderDetailInJSON;
 	public ArrayList<Order> history = new ArrayList<>();
 
-	public Order(DataStructure dataStructure, Action action, int quantity) throws Exception {
+	public Order(DataStructure dataStructure, Action action, int quantity, boolean oneTimeTradeCheck) throws Exception {
 		this.symbol = dataStructure.getSymbol();
 		this.orderid = UUID.randomUUID().toString();
 		this.orderDateTime = Constants.df_yyyyMMddkkmmss.parse(dataStructure.getDatetime());
 		this.action = action;
 		this.quantity = quantity;
 		this.remained = quantity;
+		this.oneTimeTradeCheck = oneTimeTradeCheck;
 		this.lastUpdateDateTime = this.orderDateTime;
 		orderDetailInJSON = new JSONObject();
 		orderDetailInJSON.put("symbol", this.symbol);
@@ -49,11 +51,12 @@ public class Order {
 		orderDetailInJSON.put("action", this.action.getAction());
 		orderDetailInJSON.put("quantity", this.quantity);
 		orderDetailInJSON.put("remained", this.remained);
+		orderDetailInJSON.put("oneTimeTradeCheck", this.oneTimeTradeCheck);
 		orderDetailInJSON.put("lastUpdateDateTime", this.lastUpdateDateTime);
 		this.history.add(new Order(this));
 	}
 	
-	public Order(String symbol, Action action, Direction direction, StrikePrice sp, ExpiryDate ed,  int quantity) {
+	public Order(String symbol, Action action, Direction direction, StrikePrice sp, ExpiryDate ed,  int quantity, boolean oneTimeTradeCheck) {
 		this.symbol = symbol;
 		this.orderid = UUID.randomUUID().toString();
 		this.orderDateTime = new Date();
@@ -63,6 +66,7 @@ public class Order {
 		this.ed = ed;
 		this.quantity = quantity;
 		this.remained = quantity;
+		this.oneTimeTradeCheck = oneTimeTradeCheck;
 		this.lastUpdateDateTime = this.orderDateTime;
 		orderDetailInJSON = new JSONObject();
 		orderDetailInJSON.put("symbol", this.symbol);
@@ -74,6 +78,7 @@ public class Order {
 		orderDetailInJSON.put("ed", this.ed.getExpiryDate());
 		orderDetailInJSON.put("quantity", this.quantity);
 		orderDetailInJSON.put("remained", this.remained);
+		orderDetailInJSON.put("oneTimeTradeCheck", this.oneTimeTradeCheck);
 		orderDetailInJSON.put("lastUpdateDateTime", this.lastUpdateDateTime);
 		this.history.add(new Order(this));
 	}
@@ -89,6 +94,7 @@ public class Order {
 		this.quantity = order.quantity;
 		this.traded = order.traded;
 		this.remained = order.remained;
+		this.oneTimeTradeCheck = order.oneTimeTradeCheck;
 		this.averageTradePrice = order.averageTradePrice;
 		this.lastUpdateDateTime = order.lastUpdateDateTime;
 		this.orderDetailInJSON = order.orderDetailInJSON;

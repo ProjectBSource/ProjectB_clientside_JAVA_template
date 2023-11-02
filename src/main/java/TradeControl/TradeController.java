@@ -19,7 +19,8 @@ import TradeControl.OrderActionConstants.StrikePrice;
 
 public class TradeController {
 	Profile profile = new Profile();
-	ArrayList<Order> orders = new ArrayList<>();
+	HashMap<String, Order> orders = new HashMap<>();
+
 	JSONArray trade_notification_list = null;
 	JSONObject trade_notification = null;
 	Double slippage = 0D;
@@ -63,27 +64,55 @@ public class TradeController {
 	/**
      *For Stock and Future trading
      */
-	public void placeOrder(DataStructure dataStructure, Action action, int quantity) throws Exception {
-		orders.add(new Order(dataStructure, action, quantity));
-	}
-
-    /**
-     *For Stock and Future off trade
-     */
-	public void placeOrder(DataStructure dataStructure, Action action) throws Exception {
-		if(profile.holding.size()>0){
-			int tempOffQuantity = (profile.holding.get(dataStructure.getSymbol())*-1);
-			if(tempOffQuantity!=0){
-				orders.add(new Order(dataStructure, action, tempOffQuantity ));
-			}
+	public boolean placeOrder(String id, DataStructure dataStructure, Action action, int quantity) throws Exception {
+		if(orders.get(id)==null){
+			orders.put(id, new Order(dataStructure, action, quantity));
+			return true;
 		}
+		return false;
 	}
     
 	/**
      *For Option trading
      */
-	public void placeOrder(String symbol, Action action, Direction direction, StrikePrice sp, ExpiryDate ed, int quantity) {
-		orders.add(new Order(symbol, action, direction, sp, ed, quantity));
+	public boolean placeOrder(String id, String symbol, Action action, Direction direction, StrikePrice sp, ExpiryDate ed, int quantity) {
+		if(orders.get(id)==null){
+			orders.put(id, new Order(symbol, action, direction, sp, ed, quantity));
+			return true;
+		}
+		return false;
+	}
+
+	public boolean placeOFFOrder(String id, DataStructure dataStructure) throws Exception {
+		Order order = orders.get(id);
+		if(order!=null){
+			if(profile.holding.size() > 0){
+				if(profile.holding.get(order.symbol)!=null){
+					if(profile.holding.get(order.symbol) >= order.traded){
+						//For non option trade off
+						if(order.direction==null){
+							if(order.action==Action.BUY){
+								orders.put(id+"_OFF", new Order(dataStructure, Action.SELL, order.traded));
+							}
+							else if(order.action==Action.SELL){
+								orders.put(id+"_OFF", new Order(dataStructure, Action.BUY, order.traded));
+							}
+						}
+						//For option trade off
+						if(order.direction!=null){
+							if(order.action==Action.BUY){
+								orders.put(id+"_OFF", new Order(order.symbol, Action.SELL, order.direction, order.sp, order.ed, order.traded));
+							}
+							else if(order.action==Action.SELL){
+								orders.put(id+"_OFF", new Order(order.symbol, Action.BUY, order.direction, order.sp, order.ed, order.traded));
+							}
+						}
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -94,7 +123,7 @@ public class TradeController {
 	public JSONObject getOrderHistoryInJSON() throws JsonProcessingException, JSONException {
 		JSONArray history = new JSONArray();
 		for(Order order : orders){
-			history.add(order.orderDetailInJSON);
+			history.put(order.orderDetailInJSON);
 		}
 		JSONObject result = new JSONObject();
 		result.put("orderHistory", history);

@@ -64,9 +64,9 @@ public class TradeController {
 	/**
      *For Stock and Future trading
      */
-	public boolean placeOrder(String id, DataStructure dataStructure, Action action, int quantity) throws Exception {
+	public boolean placeOrder(String id, DataStructure dataStructure, Action action, int quantity, boolean oneTimeTradeCheck) throws Exception {
 		if(orders.get(id)==null){
-			orders.put(id, new Order(dataStructure, action, quantity));
+			orders.put(id, new Order(dataStructure, action, quantity, oneTimeTradeCheck));
 			return true;
 		}
 		return false;
@@ -75,9 +75,9 @@ public class TradeController {
 	/**
      *For Option trading
      */
-	public boolean placeOrder(String id, String symbol, Action action, Direction direction, StrikePrice sp, ExpiryDate ed, int quantity) {
+	public boolean placeOrder(String id, String symbol, Action action, Direction direction, StrikePrice sp, ExpiryDate ed, int quantity, boolean oneTimeTradeCheck) {
 		if(orders.get(id)==null){
-			orders.put(id, new Order(symbol, action, direction, sp, ed, quantity));
+			orders.put(id, new Order(symbol, action, direction, sp, ed, quantity, oneTimeTradeCheck));
 			return true;
 		}
 		return false;
@@ -106,6 +106,9 @@ public class TradeController {
 							else if(order.action==Action.SELL){
 								orders.put(targetId+"_OFF", new Order(order.symbol, Action.BUY, order.direction, order.sp, order.ed, order.traded));
 							}
+						}
+						if(order.oneTimeTradeCheck==false){
+							orders.delete(targetId);
 						}
 						return true;
 					}

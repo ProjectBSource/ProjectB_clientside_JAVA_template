@@ -18,21 +18,21 @@ import TradeControl.OrderActionConstants.StrikePrice;
 import DataController.Constants;
 
 public class Order {
-	private Random random = new Random();
-	private String orderid;
-	private Date orderDateTime;
-	private String symbol;
-	private Action action;
-	private Direction direction;
-	private StrikePrice sp;
-	private ExpiryDate ed;
-	private int quantity;
-	private int traded;
-	private int remained;
-	private double averageTradePrice;
-	private Date lastUpdateDateTime;
+	public Random random = new Random();
+	public String orderid;
+	public Date orderDateTime;
+	public String symbol;
+	public Action action;
+	public Direction direction;
+	public StrikePrice sp;
+	public ExpiryDate ed;
+	public int quantity;
+	public int traded;
+	public int remained;
+	public double averageTradePrice;
+	public Date lastUpdateDateTime;
 	public JSONObject orderDetailInJSON;
-	private ArrayList<Order> history = new ArrayList<>();
+	public ArrayList<Order> history = new ArrayList<>();
 
 	public Order(DataStructure dataStructure, Action action, int quantity) throws Exception {
 		this.symbol = dataStructure.getSymbol();
@@ -78,7 +78,7 @@ public class Order {
 		this.history.add(new Order(this));
 	}
 	
-	private Order(Order order) {
+	public Order(Order order) {
 		this.symbol = order.symbol;
 		this.orderid = order.orderid;
 		this.orderDateTime = order.orderDateTime;

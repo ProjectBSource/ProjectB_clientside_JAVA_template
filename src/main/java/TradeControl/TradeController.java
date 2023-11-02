@@ -83,8 +83,8 @@ public class TradeController {
 		return false;
 	}
 
-	public boolean placeOFFOrder(String id, DataStructure dataStructure) throws Exception {
-		Order order = orders.get(id);
+	public boolean placeOFFOrder(String targetId, DataStructure dataStructure) throws Exception {
+		Order order = orders.get(targetId);
 		if(order!=null){
 			if(profile.holding.size() > 0){
 				if(profile.holding.get(order.symbol)!=null){
@@ -92,19 +92,19 @@ public class TradeController {
 						//For non option trade off
 						if(order.direction==null){
 							if(order.action==Action.BUY){
-								orders.put(id+"_OFF", new Order(dataStructure, Action.SELL, order.traded));
+								orders.put(targetId+"_OFF", new Order(dataStructure, Action.SELL, order.traded));
 							}
 							else if(order.action==Action.SELL){
-								orders.put(id+"_OFF", new Order(dataStructure, Action.BUY, order.traded));
+								orders.put(targetId+"_OFF", new Order(dataStructure, Action.BUY, order.traded));
 							}
 						}
 						//For option trade off
 						if(order.direction!=null){
 							if(order.action==Action.BUY){
-								orders.put(id+"_OFF", new Order(order.symbol, Action.SELL, order.direction, order.sp, order.ed, order.traded));
+								orders.put(targetId+"_OFF", new Order(order.symbol, Action.SELL, order.direction, order.sp, order.ed, order.traded));
 							}
 							else if(order.action==Action.SELL){
-								orders.put(id+"_OFF", new Order(order.symbol, Action.BUY, order.direction, order.sp, order.ed, order.traded));
+								orders.put(targetId+"_OFF", new Order(order.symbol, Action.BUY, order.direction, order.sp, order.ed, order.traded));
 							}
 						}
 						return true;

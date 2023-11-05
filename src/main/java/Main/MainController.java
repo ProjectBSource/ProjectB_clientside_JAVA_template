@@ -40,7 +40,7 @@ public abstract class MainController {
 
     public abstract void logicHandler(DataStructure datastructure);
 
-    public void run() throws JsonMappingException, JsonProcessingException{
+    public void run() throws Exception{
         while(true) {
 			//get the response
 			response = dataStreaming.getResponse();

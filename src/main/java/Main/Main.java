@@ -4,6 +4,8 @@ import ClientSocketControl.DataStructure;
 import ClientSocketControl.SocketClient;
 import Indicators.BollingerBands;
 import TradeControl.TradeController;
+import TradeControl.OrderActionConstants.Action;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONObject;
 
@@ -23,15 +25,15 @@ public class Main {
 		
 		//Form JSON object message for data streaming request
 		JSONObject dataStreamingRequest = new JSONObject();
-		dataStreamingRequest.put("activity", "IntervalDataStreaming");
-		dataStreamingRequest.put("market", "Future");
-		dataStreamingRequest.put("index", "HSI");
-		dataStreamingRequest.put("startdate", "20230101");
-		dataStreamingRequest.put("enddate", "20230531");
-		dataStreamingRequest.put("starttime", "000000");
-		dataStreamingRequest.put("endtime", "235959");
-		dataStreamingRequest.put("interval", 60-1);
-        dataStreamingRequest.put("mitigateNoiseWithPrecentage", 200);
+        dataStreamingRequest.put("activity", "TickDataStreaming");
+        dataStreamingRequest.put("market", "FUTURE");
+        dataStreamingRequest.put("index", "HSI");
+        dataStreamingRequest.put("startdate", "20230103");
+        dataStreamingRequest.put("enddate", "20230103");
+        dataStreamingRequest.put("starttime", "091500");
+        dataStreamingRequest.put("endtime", "091600");
+        dataStreamingRequest.put("interval", 60-1);
+        dataStreamingRequest.put("mitigateNoiseWithinPrecentage", 100);
 		
 		//Send the request to server
 		dataStreaming.request(dataStreamingRequest);
@@ -44,7 +46,7 @@ public class Main {
 		tradeController.setSlippage(0.0005);
 		
         //Setup the indicatories you need here
-        BollingerBands bollingerBands = new BollingerBands(20,2);
+        BollingerBands indicator0 = new BollingerBands(20,2);
 		
 		while(true) {
 			//get the response
@@ -70,7 +72,6 @@ public class Main {
 				 * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 				 */
 
-                bollingerBands.addPrice(dataStructure.getIndex());
 
 				System.out.println( 
 					String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
@@ -83,25 +84,42 @@ public class Main {
 						dataStructure.getLow(),
 						dataStructure.getClose(),
 						dataStructure.getTotal_volumn(),
-                        bollingerBands.getUpperBand(),
-                        bollingerBands.getMiddleBand(),
-                        bollingerBands.getLowerBand()
+                        indicator0.getUpperBand(),
+                        indicator0.getMiddleBand(),
+                        indicator0.getLowerBand()
 					) 
 				);
-				
+
+                if(dataStructure.getType().equals("tick")){ indicator0.addPrice(dataStructure.getIndex()); }
 
 
-                /*
-                if(tradeController.getProfile().holding.size()==0){
-				    tradeController.placeOrder(dataStructure.getSymbol(), Action.BUY, 1);
+                boolean baseLogicResult0 = ( indicator0.getPrice()>0 && indicator0.getUpperBand() > 0 && indicator0.getPrice() > indicator0.getUpperBand()  );
+                boolean baseLogicResult1 = ( indicator0.getPrice()>0 && indicator0.getLowerBand() > 0 && indicator0.getPrice() < indicator0.getLowerBand()  );
+                boolean baseLogicResult2 = ( indicator0.getPrice()>0 && indicator0.getMiddleBand() > 0 && indicator0.getPrice() == indicator0.getMiddleBand()  );
+
+
+                
+                if(dataStructure.getType().equals("tick")){ 
+                    if(baseLogicResult0==true){ 
+                        tradeController.placeOrder("#1", dataStructure, Action.BUY, 1, false); 
+                    }
+                    if(baseLogicResult1==true){ 
+                        tradeController.placeOrder("#2", dataStructure, Action.SELL, 1, false); 
+                    }
+                    if(baseLogicResult2==true){ 
+                        tradeController.placeOFFOrder("#1", dataStructure); 
+                    }
+                    if(baseLogicResult2==true){ 
+                        tradeController.placeOFFOrder("#2", dataStructure); 
+                    }
                 }
-				*/
-				//System.out.println( tradeController.getProfile() );
-				
+                                
 				/*
 				 * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 				 */
 			}
 		}
+        
+        System.out.println(tradeController.getOrderHistoryInJSON());
 	}
 }

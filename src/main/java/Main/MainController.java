@@ -33,9 +33,17 @@ public abstract class MainController {
         }
     }
 
-    public void projectBTradeController(double slippageRangeInPercentage){
+    public void setSlippage(double slippageRangeInPercentage){
         tradeController = new TradeController();
         tradeController.setSlippage(slippageRangeInPercentage);
+    }
+
+    public void placeOrder(String id, DataStructure datastructure, Action action, int quality, boolean oneTimeTrade){
+	tradeController.placeOrder(id, dataStructure, action.BUY, quality, oneTimeTrade); 
+    }
+
+    public void placeOFFOrder(String id, DataStructure datastructure){
+	tradeController.placeOFFOrder(id, dataStructure); 
     }
 
     public abstract void logicHandler(DataStructure datastructure);

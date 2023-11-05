@@ -7,6 +7,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONObject;
+import TradeControl.OrderActionConstants.Action;
+import TradeControl.OrderActionConstants.Direction;
+import TradeControl.OrderActionConstants.ExpiryDate;
+import TradeControl.OrderActionConstants.StrikePrice;
 
 public abstract class MainController {
 
@@ -15,6 +19,11 @@ public abstract class MainController {
     private static TradeController tradeController = null;
     private static ObjectMapper mapper = new ObjectMapper();
     private static JSONObject response = null;
+
+    public Action action;
+    public Direction direction;
+    public ExpiryDate expiryDate;
+    public StrikePrice strikePrice;
 
     public void login(String loginname, String password) throws Exception{
         try{

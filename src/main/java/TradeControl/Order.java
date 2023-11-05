@@ -53,7 +53,6 @@ public class Order {
 		orderDetailInJSON.put("remained", this.remained);
 		orderDetailInJSON.put("oneTimeTradeCheck", this.oneTimeTradeCheck);
 		orderDetailInJSON.put("lastUpdateDateTime", this.lastUpdateDateTime);
-		this.history.add(new Order(this));
 	}
 	
 	public Order(String symbol, Action action, Direction direction, StrikePrice sp, ExpiryDate ed,  int quantity, boolean oneTimeTradeCheck) {
@@ -80,7 +79,6 @@ public class Order {
 		orderDetailInJSON.put("remained", this.remained);
 		orderDetailInJSON.put("oneTimeTradeCheck", this.oneTimeTradeCheck);
 		orderDetailInJSON.put("lastUpdateDateTime", this.lastUpdateDateTime);
-		this.history.add(new Order(this));
 	}
 	
 	public Order(Order order) {
@@ -109,7 +107,12 @@ public class Order {
 					remained -= temp_trade_amount;
 					double temp_trade_price = data.getIndex() + ( (data.getIndex() *  slippage) * (random.nextInt(2)==0?1:-1) );
 					averageTradePrice = (averageTradePrice + (temp_trade_amount * temp_trade_price)) / traded;
-					Order temp_market = new Order(this);
+                    orderDetailInJSON.put("traded", traded);
+                    orderDetailInJSON.put("remained", remained);
+                    orderDetailInJSON.put("trade price", temp_trade_price);
+                    orderDetailInJSON.put("average trade price", averageTradePrice);
+					//update order history node
+                    Order temp_market = new Order(this);
 					history.add(temp_market);
 					//Update profle
 					if(action == Action.SELL) { temp_trade_amount *= -1; }

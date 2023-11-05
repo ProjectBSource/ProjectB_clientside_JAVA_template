@@ -59,6 +59,14 @@ public abstract class MainController {
 	    tradeController.placeOFFOrder(id, datastructure); 
     }
 
+    public JSONObject getOrderHistoryInJSON() throws JsonProcessingException, JSONException {
+	return tradeController.getOrderHistoryInJSON();
+    }
+
+    public JSONObject getProfileInJSON() throws JsonProcessingException, JSONException {
+	return tradeController.getProfileInJSON();
+    }
+
     public abstract void logicHandler(DataStructure datastructure);
 
     public void run() throws Exception{

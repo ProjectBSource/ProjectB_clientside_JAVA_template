@@ -48,7 +48,11 @@ public abstract class MainController {
     }
 
     public void placeOrder(String id, DataStructure datastructure, Action action, int quality, boolean oneTimeTrade) throws Exception{
-	    tradeController.placeOrder(id, datastructure, action.BUY, quality, oneTimeTrade); 
+	    tradeController.placeOrder(id, datastructure, action, quality, oneTimeTrade); 
+    }
+
+    public void placeOrder(String id, String symbol, Action action, Direction direction, StrikePrice sp, ExpiryDate ed, int quantity, boolean oneTimeTradeCheck) {
+	    tradeController.placeOrder(id, symbol, action, direction, sp, ed, quantity, oneTimeTradeCheck); 
     }
 
     public void placeOFFOrder(String id, DataStructure datastructure) throws Exception{

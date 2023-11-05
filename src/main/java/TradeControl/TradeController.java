@@ -1,6 +1,7 @@
 package TradeControl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.json.JSONArray;
@@ -20,6 +21,7 @@ import TradeControl.OrderActionConstants.StrikePrice;
 public class TradeController {
 	Profile profile = new Profile();
 	HashMap<String, Order> orders = new HashMap<>();
+    ArrayList<Order> completedOrders = new ArrayList();
 
 	JSONArray trade_notification_list = null;
 	JSONObject trade_notification = null;
@@ -32,12 +34,13 @@ public class TradeController {
 		//check and update the order
 		trade_notification_list = new JSONArray();
 		trade_notification = null;
-		for(Order order : orders) {
-			trade_notification = order.trade(profile, ds, slippage);
+
+        for (Map.Entry<String, Order> order : orders.entrySet()) {
+            trade_notification = order.getValue().trade(profile, ds, slippage);
 			if(trade_notification!=null) {
 				trade_notification_list.put(trade_notification);
 			}
-		}
+        }
 		
 		//update profile balance
 		profile.balance = 0;
@@ -92,23 +95,24 @@ public class TradeController {
 						//For non option trade off
 						if(order.direction==null){
 							if(order.action==Action.BUY){
-								orders.put(targetId+"_OFF", new Order(dataStructure, Action.SELL, order.traded));
+								orders.put(targetId+"_OFF", new Order(dataStructure, Action.SELL, order.traded, order.oneTimeTradeCheck));
 							}
 							else if(order.action==Action.SELL){
-								orders.put(targetId+"_OFF", new Order(dataStructure, Action.BUY, order.traded));
+								orders.put(targetId+"_OFF", new Order(dataStructure, Action.BUY, order.traded, order.oneTimeTradeCheck));
 							}
 						}
 						//For option trade off
 						if(order.direction!=null){
 							if(order.action==Action.BUY){
-								orders.put(targetId+"_OFF", new Order(order.symbol, Action.SELL, order.direction, order.sp, order.ed, order.traded));
+								orders.put(targetId+"_OFF", new Order(order.symbol, Action.SELL, order.direction, order.sp, order.ed, order.traded, order.oneTimeTradeCheck));
 							}
 							else if(order.action==Action.SELL){
-								orders.put(targetId+"_OFF", new Order(order.symbol, Action.BUY, order.direction, order.sp, order.ed, order.traded));
+								orders.put(targetId+"_OFF", new Order(order.symbol, Action.BUY, order.direction, order.sp, order.ed, order.traded, order.oneTimeTradeCheck));
 							}
 						}
 						if(order.oneTimeTradeCheck==false){
-							orders.delete(targetId);
+                            completedOrders.add(order);
+                            orders.remove(targetId);
 						}
 						return true;
 					}
@@ -125,9 +129,12 @@ public class TradeController {
      */
 	public JSONObject getOrderHistoryInJSON() throws JsonProcessingException, JSONException {
 		JSONArray history = new JSONArray();
-		for(Order order : orders){
-			history.put(order.orderDetailInJSON);
-		}
+        for(Order order : completedOrders){
+            history.put(order.orderDetailInJSON);
+        }
+        for (Map.Entry<String, Order> order : orders.entrySet()) {
+            history.put(order.getValue().orderDetailInJSON);
+        }
 		JSONObject result = new JSONObject();
 		result.put("orderHistory", history);
 		return result;

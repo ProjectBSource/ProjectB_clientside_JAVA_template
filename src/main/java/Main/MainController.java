@@ -47,12 +47,12 @@ public abstract class MainController {
         tradeController.setSlippage(slippageRangeInPercentage);
     }
 
-    public void placeOrder(String id, DataStructure datastructure, Action action, int quality, boolean oneTimeTrade){
-	tradeController.placeOrder(id, dataStructure, action.BUY, quality, oneTimeTrade); 
+    public void placeOrder(String id, DataStructure datastructure, Action action, int quality, boolean oneTimeTrade) throws Exception{
+	    tradeController.placeOrder(id, datastructure, action.BUY, quality, oneTimeTrade); 
     }
 
-    public void placeOFFOrder(String id, DataStructure datastructure){
-	tradeController.placeOFFOrder(id, dataStructure); 
+    public void placeOFFOrder(String id, DataStructure datastructure) throws Exception{
+	    tradeController.placeOFFOrder(id, datastructure); 
     }
 
     public abstract void logicHandler(DataStructure datastructure);

@@ -1,11 +1,13 @@
 package Main;
 
 import ClientSocketControl.DataStructure;
-import ClientSocketControl.SocketClient;
+import DataController.Future;
 import Indicators.BollingerBands;
 import TradeControl.TradeController;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.json.JSONObject;
+import TradeControl.OrderActionConstants.Action;
+import TradeControl.OrderActionConstants.Direction, 
+import TradeControl.OrderActionConstants.StrikePrice,
+import Util.WebVersionJobConstants;
 
 public class Main {
         

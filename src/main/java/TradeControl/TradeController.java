@@ -41,6 +41,18 @@ public class TradeController {
 				trade_notification_list.put(trade_notification);
 			}
         }
+
+		//Move the completed OFF trade to completedOrders arraylist
+		HashMap<String, Order> tempNewOrders = new HashMap<>(orders);
+		for(Map.Entry<String, Order> order : orders.entrySet()){
+			if(order.getKey().contains("_OFF")){
+				if(order.getValue().remained==0){
+					completedOrders.add(order.getValue());
+					tempNewOrders.remove(order.getKey());
+				}
+			}
+		}
+		orders = tempNewOrders;
 		
 		//update profile balance
 		profile.balance = 0;

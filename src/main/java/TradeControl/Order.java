@@ -17,9 +17,12 @@ import TradeControl.OrderActionConstants.StrikePrice;
 
 import DataController.Constants;
 
+import Util.WebVersionJobConstants;
+
 public class Order {
 	public Random random = new Random();
 	public String orderid;
+	public String orderAlias;
 	public Date orderDateTime;
 	public String symbol;
 	public Action action;
@@ -35,9 +38,10 @@ public class Order {
 	public JSONObject orderDetailInJSON;
 	public ArrayList<Order> history = new ArrayList<>();
 
-	public Order(DataStructure dataStructure, Action action, int quantity, boolean oneTimeTradeCheck) throws Exception {
+	public Order(String orderAlias, DataStructure dataStructure, Action action, int quantity, boolean oneTimeTradeCheck) throws Exception {
 		this.symbol = dataStructure.getSymbol();
 		this.orderid = UUID.randomUUID().toString();
+		this.orderAlias = orderAlias;
 		this.orderDateTime = Constants.df_yyyyMMddkkmmss.parse(dataStructure.getDatetime());
 		this.action = action;
 		this.quantity = quantity;
@@ -47,6 +51,7 @@ public class Order {
 		orderDetailInJSON = new JSONObject();
 		orderDetailInJSON.put("symbol", this.symbol);
 		orderDetailInJSON.put("orderid", this.orderid);
+		orderDetailInJSON.put("orderAlias", this.orderAlias);
 		orderDetailInJSON.put("orderDateTime", this.orderDateTime);
 		orderDetailInJSON.put("action", this.action.getAction());
 		orderDetailInJSON.put("quantity", this.quantity);
@@ -55,9 +60,10 @@ public class Order {
 		orderDetailInJSON.put("lastUpdateDateTime", this.lastUpdateDateTime);
 	}
 	
-	public Order(String symbol, Action action, Direction direction, StrikePrice sp, ExpiryDate ed,  int quantity, boolean oneTimeTradeCheck) {
+	public Order(String orderAlias, String symbol, Action action, Direction direction, StrikePrice sp, ExpiryDate ed,  int quantity, boolean oneTimeTradeCheck) {
 		this.symbol = symbol;
 		this.orderid = UUID.randomUUID().toString();
+		this.orderAlias = orderAlias;
 		this.orderDateTime = new Date();
 		this.action = action;
 		this.direction = direction;
@@ -70,6 +76,7 @@ public class Order {
 		orderDetailInJSON = new JSONObject();
 		orderDetailInJSON.put("symbol", this.symbol);
 		orderDetailInJSON.put("orderid", this.orderid);
+		orderDetailInJSON.put("orderAlias", this.orderAlias);
 		orderDetailInJSON.put("orderDateTime", this.orderDateTime);
 		orderDetailInJSON.put("action", this.action.getAction());
 		orderDetailInJSON.put("direction", this.direction.getDirection());
@@ -84,6 +91,7 @@ public class Order {
 	public Order(Order order) {
 		this.symbol = order.symbol;
 		this.orderid = order.orderid;
+		this.orderAlias = order.orderAlias;
 		this.orderDateTime = order.orderDateTime;
 		this.action = order.action;
 		this.direction = order.direction;

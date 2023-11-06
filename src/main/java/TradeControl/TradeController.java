@@ -81,7 +81,7 @@ public class TradeController {
      */
 	public boolean placeOrder(String id, DataStructure dataStructure, Action action, int quantity, boolean oneTimeTradeCheck) throws Exception {
 		if(orders.get(id)==null){
-			orders.put(id, new Order(dataStructure, action, quantity, oneTimeTradeCheck));
+			orders.put(id, new Order(id, dataStructure, action, quantity, oneTimeTradeCheck));
 			return true;
 		}
 		return false;
@@ -92,7 +92,7 @@ public class TradeController {
      */
 	public boolean placeOrder(String id, String symbol, Action action, Direction direction, StrikePrice sp, ExpiryDate ed, int quantity, boolean oneTimeTradeCheck) {
 		if(orders.get(id)==null){
-			orders.put(id, new Order(symbol, action, direction, sp, ed, quantity, oneTimeTradeCheck));
+			orders.put(id, new Order(id, symbol, action, direction, sp, ed, quantity, oneTimeTradeCheck));
 			return true;
 		}
 		return false;
@@ -107,19 +107,19 @@ public class TradeController {
 						//For non option trade off
 						if(order.direction==null){
 							if(order.action==Action.BUY){
-								orders.put(targetId+"_OFF", new Order(dataStructure, Action.SELL, order.traded, order.oneTimeTradeCheck));
+								orders.put(targetId+"_OFF", new Order(targetId+"_OFF", dataStructure, Action.SELL, order.traded, order.oneTimeTradeCheck));
 							}
 							else if(order.action==Action.SELL){
-								orders.put(targetId+"_OFF", new Order(dataStructure, Action.BUY, order.traded, order.oneTimeTradeCheck));
+								orders.put(targetId+"_OFF", new Order(targetId+"_OFF", dataStructure, Action.BUY, order.traded, order.oneTimeTradeCheck));
 							}
 						}
 						//For option trade off
 						if(order.direction!=null){
 							if(order.action==Action.BUY){
-								orders.put(targetId+"_OFF", new Order(order.symbol, Action.SELL, order.direction, order.sp, order.ed, order.traded, order.oneTimeTradeCheck));
+								orders.put(targetId+"_OFF", new Order(targetId+"_OFF", order.symbol, Action.SELL, order.direction, order.sp, order.ed, order.traded, order.oneTimeTradeCheck));
 							}
 							else if(order.action==Action.SELL){
-								orders.put(targetId+"_OFF", new Order(order.symbol, Action.BUY, order.direction, order.sp, order.ed, order.traded, order.oneTimeTradeCheck));
+								orders.put(targetId+"_OFF", new Order(targetId+"_OFF", order.symbol, Action.BUY, order.direction, order.sp, order.ed, order.traded, order.oneTimeTradeCheck));
 							}
 						}
 						if(order.oneTimeTradeCheck==false){

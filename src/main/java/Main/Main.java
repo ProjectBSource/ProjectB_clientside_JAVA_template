@@ -137,7 +137,7 @@ public class Main {
                             WebVersionJobConstants.logger("mainLogicLevel1 completed");
 			    generateOrderHistoryInJSON();
 			    generateProfileInJSON();
-                            WebVersionJobConstants.updateWebJobHistory(true, tradeController.getOrderHistoryInJSON().toString(), "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime))", "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime)*0.00003)", "Program running completed");
+                            WebVersionJobConstants.updateWebJobHistory(true, "", "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime))", "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime)*0.00003)", "Program running completed");
                         }
                     }
                 }

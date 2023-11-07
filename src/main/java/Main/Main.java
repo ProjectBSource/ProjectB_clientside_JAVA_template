@@ -211,9 +211,8 @@ public class Main {
             }
 		}
     }
-}
 
-public static void generateOrderHistoryInJSON(){
+    private static void generateOrderHistoryInJSON(){
 	try{
 		FileWriter fw = new FileWriter("/home/ec2-user/dataSource/webVersion/Jobs/"+WebVersionJobConstants.runJobID+"/OrderHistoryInJSON.json");
 		BufferedWriter bw = new BufferedWriter(fw);
@@ -221,9 +220,9 @@ public static void generateOrderHistoryInJSON(){
 		bw.close();
 		fw.close();
 	}catch(Exception e){}
-}
-
-public static void generateProfileInJSON(){
+    }
+	
+    private static void generateProfileInJSON(){
 	try{
 		FileWriter fw = new FileWriter("/home/ec2-user/dataSource/webVersion/Jobs/"+WebVersionJobConstants.runJobID+"/ProfileInJSON.json");
 		BufferedWriter bw = new BufferedWriter(fw);
@@ -231,4 +230,5 @@ public static void generateProfileInJSON(){
 		bw.close();
 		fw.close();
 	}catch(Exception e){}
+    }
 }

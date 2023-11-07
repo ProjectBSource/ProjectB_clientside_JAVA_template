@@ -35,8 +35,8 @@ public class Main {
     private static Date lastUpdateTime = null;
 
     //Manual operation variables
-    boolean restartAndGenerateData = false;
-    Arraylist<String> restartAndGenerateDataArrayList = null;
+    public static boolean restartAndGenerateData = false;
+    public static Arraylist<String> restartAndGenerateDataArrayList = null;
 
     /* Setup the indicatories you need here */
     //############################################################################################################################

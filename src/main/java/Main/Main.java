@@ -131,7 +131,12 @@ public class Main {
                         WebVersionJobConstants.updateWebJobHistory(false, null, "NULL", "NULL", "Program running");
                         while(future.processDone == false || future.data.size()>0) {
                             System.out.print("");
-                            mainLogicLevel1(future.data);
+			    try{
+                            	mainLogicLevel1(future.data);
+			    }catch(Exception e){
+				WebVersionJobConstants.logger("mainLogicLevel1 error :" + e);
+				break;
+			    }
                         }
                         if(future.processDone == true && future.data.size()==0){
                             WebVersionJobConstants.logger("mainLogicLevel1 completed");

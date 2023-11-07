@@ -131,6 +131,8 @@ public class Main {
                         }
                         if(future.processDone == true && future.data.size()==0){
                             WebVersionJobConstants.logger("mainLogicLevel1 completed");
+			    generateOrderHistoryInJSON();
+			    generateProfileInJSON();
                             WebVersionJobConstants.updateWebJobHistory(true, tradeController.getOrderHistoryInJSON().toString(), "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime))", "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime)*0.00003)", "Program running completed");
                         }
                     }
@@ -205,4 +207,26 @@ public class Main {
             }
 		}
     }
+}
+
+public static void generateOrderHistoryInJSON(){
+	try{
+		FileWriter fw = new FileWriter("/home/ec2-user/dataSource/webVersion/Jobs/"+WebVersionJobConstants.runJobID+"/OrderHistoryInJSON.json");
+		BufferedWriter bw = new BufferedWriter(fw);
+		bw.write(tradeController.getOrderHistoryInJSON().toString());
+		bw.close();
+		fw.close();
+		dataContent = new ArrayList<String>();
+	}catch(Exception e){}
+}
+
+public static void generateProfileInJSON(){
+	try{
+		FileWriter fw = new FileWriter("/home/ec2-user/dataSource/webVersion/Jobs/"+WebVersionJobConstants.runJobID+"/ProfileInJSON.json");
+		BufferedWriter bw = new BufferedWriter(fw);
+		bw.write(tradeController.getProfileInJSON().toString());
+		bw.close();
+		fw.close();
+		dataContent = new ArrayList<String>();
+	}catch(Exception e){}
 }

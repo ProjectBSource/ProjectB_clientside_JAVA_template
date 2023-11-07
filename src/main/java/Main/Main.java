@@ -36,7 +36,7 @@ public class Main {
 
     //Manual operation variables
     public static boolean restartAndGenerateData = false;
-    public static Arraylist<String> restartAndGenerateDataArrayList = null;
+    public static ArrayList<String> restartAndGenerateDataArrayList = null;
 
     /* Setup the indicatories you need here */
     //############################################################################################################################

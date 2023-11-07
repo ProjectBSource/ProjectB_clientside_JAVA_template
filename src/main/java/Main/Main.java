@@ -61,11 +61,6 @@ public class Main {
             //setup Database communication
             WebVersionJobConstants.setupDBconnection();
             WebVersionJobConstants.initialIndicator();
-            if(WebVersionJobConstants.environment.equals("prd")){
-                WebVersionJobConstants.insertWebVersionJobInformation();
-            }
-            WebVersionJobConstants.logger("WebVersionJob(runJobID:"+WebVersionJobConstants.runJobID+") started up");
-
 	    //manual restart for checking / testing / bugfix...
 	    if(args.length > 1){
 		if(args[1].equals("restartAndGenerateData")){
@@ -74,6 +69,10 @@ public class Main {
 			WebVersionJobConstants.deleteWebVersionJobInformation();
 		}
     	    }
+	    if(WebVersionJobConstants.environment.equals("prd")){
+                WebVersionJobConstants.insertWebVersionJobInformation();
+            }
+            WebVersionJobConstants.logger("WebVersionJob(runJobID:"+WebVersionJobConstants.runJobID+") started up");
 
             //get task detail
             JSONObject input = WebVersionJobConstants.getRequestMessage();

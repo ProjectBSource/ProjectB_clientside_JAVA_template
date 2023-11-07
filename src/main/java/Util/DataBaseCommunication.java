@@ -88,6 +88,13 @@ public class DataBaseCommunication {
 		);
 	}
 
+	public void deleteWebVersionJobInformation(String runJobID) throws SQLException, IOException, InterruptedException {
+		Statement stmt = con.createStatement();  
+		stmt.execute(
+			"DELETE FROM ProjectB_WebVersionJobsController WHERE RunJobID = '"+runJobID+"' "
+		);
+	}
+
     public void updateWebVersionJobInformation() throws IOException, SQLException, InterruptedException {	
         Statement stmt = con.createStatement();
         stmt.execute(

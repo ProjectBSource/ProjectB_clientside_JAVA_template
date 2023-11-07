@@ -34,6 +34,7 @@ public class Order {
 	public int remained;
 	public double averageTradePrice;
 	public Date lastUpdateDateTime;
+	public Date orderFillDateTime;
 	public boolean oneTimeTradeCheck;
 	public JSONObject orderDetailInJSON;
 	public ArrayList<Order> history = new ArrayList<>();
@@ -115,10 +116,12 @@ public class Order {
 					remained -= temp_trade_amount;
 					double temp_trade_price = data.getIndex() + ( (data.getIndex() *  slippage) * (random.nextInt(2)==0?1:-1) );
 					averageTradePrice = (averageTradePrice + (temp_trade_amount * temp_trade_price)) / traded;
+					orderFillDateTime = Constants.df_yyyyMMddkkmmss.parse(data.getDatetime());
                     orderDetailInJSON.put("traded", traded);
                     orderDetailInJSON.put("remained", remained);
-                    orderDetailInJSON.put("trade price", temp_trade_price);
-                    orderDetailInJSON.put("average trade price", averageTradePrice);
+                    orderDetailInJSON.put("temp_trade_price", temp_trade_price);
+                    orderDetailInJSON.put("averageTradePrice", averageTradePrice);
+					orderDetailInJSON.put("orderFillDateTime", orderFillDateTime);
 					//update order history node
                     Order temp_market = new Order(this);
 					history.add(temp_market);

@@ -366,4 +366,8 @@ public class WebVersionJobConstants {
 		dbcommunication.insertWebVersionJobInformation(taskInstanceID, taskIPaddress, serverScreenTaskID, runJobID, cpuusage);
     }
 
+	public static void deleteWebVersionJobInformation() throws Exception{
+		dbcommunication.deleteWebVersionJobInformation(runJobID);
+    }
+
 }

@@ -234,7 +234,7 @@ public class Main {
 					indicator0.getMiddleBand(),
 					indicator0.getLowerBand()
 				) 
-			)
+			);
 			if(restartAndGenerateDataArrayList.size()>=1000){
 				manualOperation_generateRestartAndGenerateData();
 			}

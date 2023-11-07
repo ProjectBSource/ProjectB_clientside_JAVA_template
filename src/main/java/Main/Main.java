@@ -50,15 +50,6 @@ public class Main {
         WebVersionJobConstants.runJobID = args[0];
         WebVersionJobConstants.logger("runJobID:"+WebVersionJobConstants.runJobID);
 
-	//manual restart for checking / testing / bugfix...
-	if(args.length > 1){
-		if(args[1].equals("restartAndGenerateData")){
-			restartAndGenerateData = true;
-			restartAndGenerateDataArrayList = new ArrayList<String>();
-			WebVersionJobConstants.deleteWebVersionJobInformation();
-		}
-	}
-
         try{
             //initial
             WebVersionJobConstants.setupEnvironmentProperties();
@@ -74,6 +65,15 @@ public class Main {
                 WebVersionJobConstants.insertWebVersionJobInformation();
             }
             WebVersionJobConstants.logger("WebVersionJob(runJobID:"+WebVersionJobConstants.runJobID+") started up");
+
+	    //manual restart for checking / testing / bugfix...
+	    if(args.length > 1){
+		if(args[1].equals("restartAndGenerateData")){
+			restartAndGenerateData = true;
+			restartAndGenerateDataArrayList = new ArrayList<String>();
+			WebVersionJobConstants.deleteWebVersionJobInformation();
+		}
+    	    }
 
             //get task detail
             JSONObject input = WebVersionJobConstants.getRequestMessage();

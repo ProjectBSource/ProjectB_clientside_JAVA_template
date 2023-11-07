@@ -216,7 +216,6 @@ public static void generateOrderHistoryInJSON(){
 		bw.write(tradeController.getOrderHistoryInJSON().toString());
 		bw.close();
 		fw.close();
-		dataContent = new ArrayList<String>();
 	}catch(Exception e){}
 }
 
@@ -227,6 +226,5 @@ public static void generateProfileInJSON(){
 		bw.write(tradeController.getProfileInJSON().toString());
 		bw.close();
 		fw.close();
-		dataContent = new ArrayList<String>();
 	}catch(Exception e){}
 }

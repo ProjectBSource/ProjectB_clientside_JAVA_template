@@ -23,7 +23,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class Main {
-		
+
     //Initial the ObjectMapper
     public static ObjectMapper mapper = new ObjectMapper();
     //Initial the DataStructure
@@ -40,11 +40,12 @@ public class Main {
 
     /* Setup the indicatories you need here */
     //############################################################################################################################
-    @#indicatories#@
+              private static BollingerBands indicator0 = new BollingerBands(20, 2);
+
     //############################################################################################################################
 
 
-	public static void main(String args[]) throws Exception {
+        public static void main(String args[]) throws Exception {
 
         //get the input parameters
         WebVersionJobConstants.runJobID = args[0];
@@ -61,15 +62,15 @@ public class Main {
             //setup Database communication
             WebVersionJobConstants.setupDBconnection();
             WebVersionJobConstants.initialIndicator();
-	    //manual restart for checking / testing / bugfix...
-	    if(args.length > 1){
-		if(args[1].equals("restartAndGenerateData")){
-			restartAndGenerateData = true;
-			restartAndGenerateDataArrayList = new ArrayList<String>();
-			WebVersionJobConstants.deleteWebVersionJobInformation();
-		}
-    	    }
-	    if(WebVersionJobConstants.environment.equals("prd")){
+            //manual restart for checking / testing / bugfix...
+            if(args.length > 1){
+                if(args[1].equals("restartAndGenerateData")){
+                        restartAndGenerateData = true;
+                        restartAndGenerateDataArrayList = new ArrayList<String>();
+                        WebVersionJobConstants.deleteWebVersionJobInformation();
+                }
+            }
+            if(WebVersionJobConstants.environment.equals("prd")){
                 WebVersionJobConstants.insertWebVersionJobInformation();
             }
             WebVersionJobConstants.logger("WebVersionJob(runJobID:"+WebVersionJobConstants.runJobID+") started up");
@@ -100,15 +101,15 @@ public class Main {
             if(requestValidationPass==true){
                 //Generate the data request JSON object
                 JSONObject dataStreamingRequest = new JSONObject();
-                dataStreamingRequest.put("activity", "@#activity#@");
-                dataStreamingRequest.put("market", "@#market#@");
-                dataStreamingRequest.put("index", "@#index#@");
-                dataStreamingRequest.put("startdate", "@#startdate#@");
-                dataStreamingRequest.put("enddate", "@#enddate#@");
-                dataStreamingRequest.put("starttime", "@#starttime#@");
-                dataStreamingRequest.put("endtime", "@#endtime#@");
-                dataStreamingRequest.put("interval", @#interval#@-1);
-                dataStreamingRequest.put("mitigateNoiseWithinPrecentage", @#mitigateNoiseWithinPrecentage#@);
+                dataStreamingRequest.put("activity", "TickDataStreaming");
+                dataStreamingRequest.put("market", "FUTURE");
+                dataStreamingRequest.put("index", "HSI");
+                dataStreamingRequest.put("startdate", "20230101");
+                dataStreamingRequest.put("enddate", "20230107");
+                dataStreamingRequest.put("starttime", "000000");
+                dataStreamingRequest.put("endtime", "235900");
+                dataStreamingRequest.put("interval", 60-1);
+                dataStreamingRequest.put("mitigateNoiseWithinPrecentage", 200);
                 WebVersionJobConstants.logger("dataStreamingRequest :" + dataStreamingRequest.toString());
                 
                 for(Object objectNode : nodeDataArray){
@@ -143,40 +144,40 @@ public class Main {
                         WebVersionJobConstants.updateWebJobHistory(false, null, "NULL", "NULL", "Program running");
                         while(future.processDone == false || future.data.size()>0) {
                             System.out.print("");
-			    try{
-                            	mainLogicLevel1(future.data);
-			    }catch(Exception e){
-				WebVersionJobConstants.logger("mainLogicLevel1 error :" + e);
-				break;
-			    }
+                            try{
+                                mainLogicLevel1(future.data);
+                            }catch(Exception e){
+                                WebVersionJobConstants.logger("mainLogicLevel1 error :" + e);
+                                break;
+                            }
                         }
                         if(future.processDone == true && future.data.size()==0){
                             WebVersionJobConstants.logger("mainLogicLevel1 completed");
-			    generateOrderHistoryInJSON();
-			    generateProfileInJSON();
-			    /*
-	                    * Manual operation
-	                    * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-	                    */
-			    if(restartAndGenerateData==true){ manualOperation_generateRestartAndGenerateData(); }
-			    /*
-	                    * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-	                    */
+                            generateOrderHistoryInJSON();
+                            generateProfileInJSON();
+                            /*
+                            * Manual operation
+                            * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+                            */
+                            if(restartAndGenerateData==true){ manualOperation_generateRestartAndGenerateData(); }
+                            /*
+                            * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                            */
                             WebVersionJobConstants.updateWebJobHistory(true, "", "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime))", "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime)*0.00003)", "Program running completed");
                         }
                     }
                 }
             }
         } catch (Exception e) {
-			WebVersionJobConstants.logger("Exception in Main.java :" + e.toString());
-		}
+                        WebVersionJobConstants.logger("Exception in Main.java :" + e.toString());
+                }
     }
 
     private static void mainLogicLevel1(ArrayList<JSONObject> dataList) throws Exception{
-		if(dataList.size()>0) {
+                if(dataList.size()>0) {
             int tempDataListSize = dataList.size();
             for(int i=0; i<tempDataListSize; i++) {
-			    JSONObject data = dataList.get(i);
+                            JSONObject data = dataList.get(i);
                 //get the response
                 if(data!=null && !data.isEmpty()) {
                     System.out.flush();
@@ -184,11 +185,17 @@ public class Main {
                     DataStructure dataStructure = mapper.readValue(data.toString(), DataStructure.class);
                     //Check response finished or not
                     if(dataStructure.getDone()!=null) {
+                        if(restartAndGenerateData==true){
+                            restartAndGenerateDataArrayList.add("dataStructure.getDone():"+dataStructure.getDone()+", i="+i+", dataList.size()="+tempDataListSize);
+                        }
                         break;
                     }
                     //Check error caused or not
                     if(dataStructure.getError()!=null) {
                         WebVersionJobConstants.logger(dataStructure.getError());
+                        if(restartAndGenerateData==true){
+                            restartAndGenerateDataArrayList.add("dataStructure.getDone():"+dataStructure.getDone()+", i="+i+", dataList.size()="+tempDataListSize);
+                        }
                         break;
                     }
                     //check the order allow to trade or not
@@ -201,54 +208,64 @@ public class Main {
                     * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
                     */
 
-                    @#indicatoriesUpdateLogic#@
+                                         if(dataStructure.getType().equals("interval")){ indicator0.addPrice(dataStructure.getIndex()); }
 
-                    @#baseLogicResult#@
 
-                    @#logicGatewayResult#@
+                                         boolean baseLogicResult0 = (indicator0.getPrice() > 0 && indicator0.getUpperBand()  > 0 && indicator0.getPrice() > indicator0.getUpperBand()  );
+                     boolean baseLogicResult1 = (indicator0.getPrice() > 0 && indicator0.getLowerBand()  > 0 && indicator0.getPrice() < indicator0.getLowerBand()  );
+                     boolean baseLogicResult2 = (indicator0.getPrice() > 0 && indicator0.getMiddleBand()  > 0 && indicator0.getPrice() <= indicator0.getMiddleBand()  );
+                     boolean baseLogicResult3 = (indicator0.getPrice() > 0 && indicator0.getMiddleBand()  > 0 && indicator0.getPrice() >= indicator0.getMiddleBand()  );
 
-                    @#actionAndTradeLogic#@
+
+                    
+
+                    if(dataStructure.getType().equals("tick")){                      if(baseLogicResult0==true){ tradeController.placeOrder("#8953", dataStructure, Action.BUY, 1, false); }
+                     if(baseLogicResult1==true){ tradeController.placeOrder("#7727", dataStructure, Action.SELL, 1, false); }
+                     if(baseLogicResult2==true){ tradeController.placeOFFOrder("#8953", dataStructure); }
+                     if(baseLogicResult3==true){ tradeController.placeOFFOrder("#7727", dataStructure); }
+ }
+
                     
                     /*
                     * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                     */
 
-		    /*
+                    /*
                     * Manual operation
                     * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
                     */
-		    if(restartAndGenerateData==true){
-			restartAndGenerateDataArrayList.add(
-				String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
-					dataStructure.getType(),
-					dataStructure.getDatetime(),
-					dataStructure.getIndex(),
-					dataStructure.getVolumn(),
-					dataStructure.getOpen(),
-					dataStructure.getHigh(),
-					dataStructure.getLow(),
-					dataStructure.getClose(),
-					dataStructure.getTotal_volumn(),
-					indicator0.getUpperBand(),
-					indicator0.getMiddleBand(),
-					indicator0.getLowerBand()
-				) 
-			);
-			if(restartAndGenerateDataArrayList.size()>=1000){
-				manualOperation_generateRestartAndGenerateData();
-			}
-		    }
-		    /*
+                    if(restartAndGenerateData==true){
+                        restartAndGenerateDataArrayList.add(
+                                String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
+                                        dataStructure.getType(),
+                                        dataStructure.getDatetime(),
+                                        dataStructure.getIndex(),
+                                        dataStructure.getVolumn(),
+                                        dataStructure.getOpen(),
+                                        dataStructure.getHigh(),
+                                        dataStructure.getLow(),
+                                        dataStructure.getClose(),
+                                        dataStructure.getTotal_volumn(),
+                                        indicator0.getUpperBand(),
+                                        indicator0.getMiddleBand(),
+                                        indicator0.getLowerBand()
+                                ) 
+                        );
+                        if(restartAndGenerateDataArrayList.size()>=1000){
+                                manualOperation_generateRestartAndGenerateData();
+                        }
+                    }
+                    /*
                     * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                     */
-			    
+                            
                 }
-			}
+                        }
 
             //delete processed data
-			for(int i=0; i<tempDataListSize; i++) {
-				dataList.remove(0); 
-			}
+                        for(int i=0; i<tempDataListSize; i++) {
+                                dataList.remove(0); 
+                        }
 
             //update task real time information
             if(WebVersionJobConstants.environment.equals("prd")){
@@ -264,40 +281,40 @@ public class Main {
                     }
                 }
             }
-		}
+                }
     }
 
     private static void generateOrderHistoryInJSON(){
-	try{
-		FileWriter fw = new FileWriter("/home/ec2-user/dataSource/webVersion/Jobs/"+WebVersionJobConstants.runJobID+"/OrderHistoryInJSON.json");
-		BufferedWriter bw = new BufferedWriter(fw);
-		bw.write(tradeController.getOrderHistoryInJSON().toString());
-		bw.close();
-		fw.close();
-	}catch(Exception e){}
+        try{
+                FileWriter fw = new FileWriter("/home/ec2-user/dataSource/webVersion/Jobs/"+WebVersionJobConstants.runJobID+"/OrderHistoryInJSON.json");
+                BufferedWriter bw = new BufferedWriter(fw);
+                bw.write(tradeController.getOrderHistoryInJSON().toString());
+                bw.close();
+                fw.close();
+        }catch(Exception e){}
     }
-	
+
     private static void generateProfileInJSON(){
-	try{
-		FileWriter fw = new FileWriter("/home/ec2-user/dataSource/webVersion/Jobs/"+WebVersionJobConstants.runJobID+"/ProfileInJSON.json");
-		BufferedWriter bw = new BufferedWriter(fw);
-		bw.write(tradeController.getProfileInJSON().toString());
-		bw.close();
-		fw.close();
-	}catch(Exception e){}
+        try{
+                FileWriter fw = new FileWriter("/home/ec2-user/dataSource/webVersion/Jobs/"+WebVersionJobConstants.runJobID+"/ProfileInJSON.json");
+                BufferedWriter bw = new BufferedWriter(fw);
+                bw.write(tradeController.getProfileInJSON().toString());
+                bw.close();
+                fw.close();
+        }catch(Exception e){}
     }
 
     private static void manualOperation_generateRestartAndGenerateData(){
-	try{
-		FileWriter fw = new FileWriter("/home/ec2-user/dataSource/webVersion/Jobs/"+WebVersionJobConstants.runJobID+"/restartAndGenerateData.txt", true);
-		BufferedWriter bw = new BufferedWriter(fw);
-		for(String s : restartAndGenerateDataArrayList){
-			bw.write(s);
-			bw.write("\n");
-		}
-		bw.close();
-		fw.close();
-		restartAndGenerateDataArrayList = new ArrayList<String>();
-	}catch(Exception e){}
+        try{
+                FileWriter fw = new FileWriter("/home/ec2-user/dataSource/webVersion/Jobs/"+WebVersionJobConstants.runJobID+"/restartAndGenerateData.txt", true);
+                BufferedWriter bw = new BufferedWriter(fw);
+                for(String s : restartAndGenerateDataArrayList){
+                        bw.write(s);
+                        bw.write("\n");
+                }
+                bw.close();
+                fw.close();
+                restartAndGenerateDataArrayList = new ArrayList<String>();
+        }catch(Exception e){}
     }
 }

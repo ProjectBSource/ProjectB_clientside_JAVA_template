@@ -251,7 +251,7 @@ public class Main {
                                         indicator0.getLowerBand()
                                 ) 
                         );
-                        if(restartAndGenerateDataArrayList.size()>=1000){
+                        if(restartAndGenerateDataArrayList.size()%10000==0){
                                 manualOperation_generateRestartAndGenerateData();
                         }
                     }
@@ -308,12 +308,15 @@ public class Main {
         try{
                 FileWriter fw = new FileWriter("/home/ec2-user/dataSource/webVersion/Jobs/"+WebVersionJobConstants.runJobID+"/restartAndGenerateData.txt", true);
                 BufferedWriter bw = new BufferedWriter(fw);
-                for(String s : restartAndGenerateDataArrayList){
-                        bw.write(s);
-                        bw.write("\n");
+                for(int i=0; i<10000; i++){
+                    bw.write( restartAndGenerateDataArrayList[i] );
+                    bw.write("\n");
                 }
                 bw.close();
                 fw.close();
+                for(int i=0; i<10000; i++){
+                    restartAndGenerateDataArrayList.remove(0);
+                }
                 restartAndGenerateDataArrayList = new ArrayList<String>();
         }catch(Exception e){}
     }

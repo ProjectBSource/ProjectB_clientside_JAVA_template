@@ -180,7 +180,7 @@ public class Main {
                             JSONObject data = dataList.get(i);
                 //get the response
                 if(data!=null && !data.isEmpty()) {
-                    System.out.flush();
+                    //System.out.flush();
                     //Convert response JSON message to Java class object
                     DataStructure dataStructure = mapper.readValue(data.toString(), DataStructure.class);
                     //Check response finished or not

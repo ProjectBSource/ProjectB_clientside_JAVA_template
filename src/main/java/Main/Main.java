@@ -184,11 +184,17 @@ public class Main {
                     DataStructure dataStructure = mapper.readValue(data.toString(), DataStructure.class);
                     //Check response finished or not
                     if(dataStructure.getDone()!=null) {
+                        if(restartAndGenerateData==true){
+                            restartAndGenerateDataArrayList.add("dataStructure.getDone():"+dataStructure.getDone()+", i="+i+", dataList.size()="+tempDataListSize);
+                        }
                         break;
                     }
                     //Check error caused or not
                     if(dataStructure.getError()!=null) {
                         WebVersionJobConstants.logger(dataStructure.getError());
+                        if(restartAndGenerateData==true){
+                            restartAndGenerateDataArrayList.add("dataStructure.getDone():"+dataStructure.getDone()+", i="+i+", dataList.size()="+tempDataListSize);
+                        }
                         break;
                     }
                     //check the order allow to trade or not

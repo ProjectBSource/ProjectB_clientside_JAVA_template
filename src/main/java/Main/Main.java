@@ -309,7 +309,7 @@ public class Main {
                 FileWriter fw = new FileWriter("/home/ec2-user/dataSource/webVersion/Jobs/"+WebVersionJobConstants.runJobID+"/restartAndGenerateData.txt", true);
                 BufferedWriter bw = new BufferedWriter(fw);
                 for(int i=0; i<10000; i++){
-                    bw.write( restartAndGenerateDataArrayList[i] );
+                    bw.write( restartAndGenerateDataArrayList.get(i) );
                     bw.write("\n");
                 }
                 bw.close();

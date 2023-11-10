@@ -143,9 +143,11 @@ public class Main {
                         while(future.processDone == false) {
                             System.out.print("");
 			                try{
-                                mainLogicLevel1(future.dataForReading);
-                                //delete processed data
-                                future.dataForReading = new ArrayList<JSONObject>();
+                                if(future.dataForReading.size()>0){
+                                    mainLogicLevel1(future.dataForReading);
+                                    //delete processed data
+                                    future.dataForReading = new ArrayList<JSONObject>();
+                                }
                             }catch(Exception e){
                                 WebVersionJobConstants.logger("mainLogicLevel1 error :" + e);
                                 break;

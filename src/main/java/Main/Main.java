@@ -315,15 +315,12 @@ public class Main {
         try{
                 FileWriter fw = new FileWriter("/home/ec2-user/dataSource/webVersion/Jobs/"+WebVersionJobConstants.runJobID+"/restartAndGenerateData.txt", true);
                 BufferedWriter bw = new BufferedWriter(fw);
-                for(int i=0; i<10000; i++){
-                    bw.write( restartAndGenerateDataArrayList.get(i) );
+                for(String s : restartAndGenerateDataArrayList){
+                    bw.write( s );
                     bw.write("\n");
                 }
                 bw.close();
                 fw.close();
-                for(int i=0; i<10000; i++){
-                    restartAndGenerateDataArrayList.remove(0);
-                }
                 restartAndGenerateDataArrayList = new ArrayList<String>();
         }catch(Exception e){}
     }

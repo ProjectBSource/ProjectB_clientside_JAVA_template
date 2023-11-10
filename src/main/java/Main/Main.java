@@ -147,7 +147,7 @@ public class Main {
                                 //delete processed data
                                 thread.wait();
                                 future.data = new ArrayList<JSONObject>();
-                                thread.notify();
+                                synchronized (thread) { thread.notify(); }
                             }catch(Exception e){
                                 WebVersionJobConstants.logger("mainLogicLevel1 error :" + e);
                                 break;
@@ -167,7 +167,7 @@ public class Main {
 		}
     }
 
-    private synchronized static void mainLogicLevel1(ArrayList<JSONObject> dataList) throws Exception{
+    private static void mainLogicLevel1(ArrayList<JSONObject> dataList) throws Exception{
 		if(dataList.size()>0) {
             for(int i=0; i<dataList.size(); i++) {
 			    JSONObject data = dataList.get(i);

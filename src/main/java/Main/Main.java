@@ -167,7 +167,7 @@ public class Main {
 		}
     }
 
-    private static void mainLogicLevel1(ArrayList<JSONObject> dataList) throws Exception{
+    private synchronized static void mainLogicLevel1(ArrayList<JSONObject> dataList) throws Exception{
 		if(dataList.size()>0) {
             for(int i=0; i<dataList.size(); i++) {
 			    JSONObject data = dataList.get(i);

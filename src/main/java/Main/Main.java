@@ -144,6 +144,8 @@ public class Main {
                             System.out.print("");
 			                try{
                             	mainLogicLevel1(future.data);
+                                //delete processed data
+                                for(int i=0; i<future.data; i++) { future.data.remove(0); }
                             }catch(Exception e){
                                 WebVersionJobConstants.logger("mainLogicLevel1 error :" + e);
                                 break;
@@ -165,7 +167,7 @@ public class Main {
 
     private static void mainLogicLevel1(ArrayList<JSONObject> dataList) throws Exception{
 		if(dataList.size()>0) {
-            int tempDataListSize = dataList.size()>=1000?1000:dataList.size();
+            int tempDataListSize = dataList.size();
             for(int i=0; i<tempDataListSize; i++) {
 			    JSONObject data = dataList.get(i);
                 //get the response
@@ -225,11 +227,6 @@ public class Main {
             /*
             * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
             */
-
-            //delete processed data
-			for(int i=0; i<tempDataListSize; i++) {
-				dataList.remove(0); 
-			}
 
             //update task real time information
             if(WebVersionJobConstants.environment.equals("prd")){

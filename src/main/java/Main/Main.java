@@ -140,7 +140,7 @@ public class Main {
                         Thread thread = new Thread(future);
                         thread.start();
                         WebVersionJobConstants.updateWebJobHistory(false, null, "NULL", "NULL", "Program running");
-                        while(future.processDone == false || future.data.size()>0) {
+                        while(future.processDone == false) {
                             System.out.print("");
 			                try{
                                 mainLogicLevel1(future.dataForReading);
@@ -151,7 +151,7 @@ public class Main {
                                 break;
                             }
                         }
-                        if(future.processDone == true && future.data.size()==0){
+                        if(future.processDone == true){
                             WebVersionJobConstants.logger("mainLogicLevel1 completed");
                             generateOrderHistoryInJSON();
                             generateProfileInJSON();

@@ -154,7 +154,7 @@ public class Main {
 
     private static void mainLogicLevel1(ArrayList<JSONObject> dataList) throws Exception{
 		if(dataList.size()>0) {
-            int tempDataListSize = dataList.size();
+            int tempDataListSize = dataList.size()>=1000?1000:dataList.size();
             for(int i=0; i<tempDataListSize; i++) {
 			    JSONObject data = dataList.get(i);
                 //get the response

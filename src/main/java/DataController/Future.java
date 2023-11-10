@@ -50,6 +50,10 @@ public class Future implements Runnable {
 	private String data_sumupvolumn_within_interval = null;
 	private JSONObject dataDetail = null;
 	private boolean without_time_reset_interval_startendtime = false;
+
+	//Manual operation variables
+    public static boolean restartAndGenerateData = true;
+    public static ArrayList<String> restartAndGenerateDataArrayList = null;
 	
 	public Future(JSONObject input, boolean onlyIntervalData) {
 		try {
@@ -99,6 +103,19 @@ public class Future implements Runnable {
 						else {
 							//wait for data clean
 							if(data.size()>=30000) {
+								/*
+								* Manual operation
+								* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+								*/
+								if(restartAndGenerateData==true){
+									for(JSONObject d : data){
+										restartAndGenerateDataArrayList.add( d.toString() );
+									}
+									manualOperation_generateRestartAndGenerateData();
+								}
+								/*
+								* <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+								*/
 								Thread.sleep(3500);
 							}
 							
@@ -184,10 +201,10 @@ public class Future implements Runnable {
 										
 										//skip if the index defined as noise
 										boolean noise = false;
-										if(mitigateNoiseWithPrecentage>0) {
+										if(mitigateNoiseWithPrecentage>-1) {
 											if(previousDataDetail!=null) {
 												Double prevIndex = previousDataDetail.getDouble("index");
-												if( Math.abs((newIndex - prevIndex) / prevIndex * 100) > mitigateNoiseWithPrecentage) 
+												if( Math.abs((newIndex - prevIndex) / prevIndex * 100) < mitigateNoiseWithPrecentage) 
 													noise = true;
 											}
 										}
@@ -271,4 +288,18 @@ public class Future implements Runnable {
 		interval_starttime = Constants.addSeconds(interval_endtime, 1);
 		interval_endtime = Constants.addSeconds(interval_starttime, interval_in_seconds);
 	}
+
+	private static void manualOperation_generateRestartAndGenerateData(){
+        try{
+                FileWriter fw = new FileWriter("/home/ec2-user/dataSource/webVersion/Jobs/"+WebVersionJobConstants.runJobID+"/"+WebVersionJobConstants.runJobID+"_restartAndGenerateData.txt", true);
+                BufferedWriter bw = new BufferedWriter(fw);
+                for(String s : restartAndGenerateDataArrayList){
+                    bw.write( s );
+                    bw.write("\n");
+                }
+                bw.close();
+                fw.close();
+                restartAndGenerateDataArrayList = new ArrayList<String>();
+        }catch(Exception e){}
+    }
 }

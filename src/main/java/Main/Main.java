@@ -146,7 +146,7 @@ public class Main {
                                 int tempDataListSize = future.data.size();
                             	mainLogicLevel1(future.data, tempDataListSize);
                                 //delete processed data
-                                future.sleep(500);
+                                thread.sleep(500);
                                 for(int i=0; i<tempDataListSize; i++) { future.data.remove(0); }
                             }catch(Exception e){
                                 WebVersionJobConstants.logger("mainLogicLevel1 error :" + e);

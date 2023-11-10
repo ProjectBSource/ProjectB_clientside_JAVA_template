@@ -1,4 +1,4 @@
-package DataController;
+package DataStreaming;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -8,10 +8,6 @@ import java.util.Date;
 
 import org.json.JSONObject;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import Util.WebVersionJobConstants;
 
 
 public class Future implements Runnable {
@@ -20,10 +16,10 @@ public class Future implements Runnable {
 	private BufferedReader br;
 	private String linedata;
 	private String[] sbArray;
-    private static Constants constants = new Constants();
+	private static Constants constants = new Constants();
 	public boolean processDone = false;
 	private JSONObject previousDataDetail = null;
-	public ArrayList<JSONObject> data = new ArrayList<JSONObject>();
+	public ArrayList<String> data = new ArrayList<String>();
 	private String symbol = null;
 	private Date startdate = null;
 	private Date enddate = null;
@@ -38,7 +34,7 @@ public class Future implements Runnable {
 	private int data_volumn = -1;
 	private int interval_in_seconds = 0;
 	private double mitigateNoiseWithPrecentage = -1;
-	private boolean onlyIntervalData = true;
+	private boolean tickdata = true;
 	private boolean dataSubscriptedOrNot = true;
 	private Date interval_starttime = null;
 	private Date interval_endtime = null;
@@ -53,34 +49,30 @@ public class Future implements Runnable {
 	private String data_sumupvolumn_within_interval = null;
 	private JSONObject dataDetail = null;
 	private boolean without_time_reset_interval_startendtime = false;
-
-	//Manual operation variables
-    public static boolean restartAndGenerateData = true;
-    public static ArrayList<String> restartAndGenerateDataArrayList = new ArrayList<String>();
 	
-	public Future(JSONObject input, boolean onlyIntervalData) {
+	public Future(String runJobID, JSONObject input, boolean tickdata, boolean dataSubscriptedOrNot) {
 		try {
 			this.runJobID = runJobID;
 			this.symbol = input.getString("index");
-			this.startdate = Constants.df_yyyyMMdd.parse(input.getString("startdate"));
-			this.enddate = Constants.df_yyyyMMdd.parse(input.getString("enddate"));
-			this.starttime = Constants.df_kkmmss.parse(input.getString("starttime"));
-			this.endtime = Constants.df_kkmmss.parse(input.getString("endtime"));
-			this.startdatetime = Constants.df_yyyyMMddkkmmss.parse(input.getString("startdate") + input.getString("starttime"));
-			this.enddatetime = Constants.df_yyyyMMddkkmmss.parse(input.getString("enddate") + input.getString("endtime"));
+			this.startdate = constants.df_yyyyMMdd.parse(input.getString("startdate"));
+			this.enddate = constants.df_yyyyMMdd.parse(input.getString("enddate"));
+			this.starttime = constants.df_kkmmss.parse(input.getString("starttime"));
+			this.endtime = constants.df_kkmmss.parse(input.getString("endtime"));
+			this.startdatetime = constants.df_yyyyMMddkkmmss.parse(input.getString("startdate") + input.getString("starttime"));
+			this.enddatetime = constants.df_yyyyMMddkkmmss.parse(input.getString("enddate") + input.getString("endtime"));
 			if(input.has("interval")==true) { 
 				this.interval_in_seconds = input.getInt("interval");
 			}
 			if(input.has("mitigateNoiseWithPrecentage")==true) { 
 				this.mitigateNoiseWithPrecentage = input.getInt("mitigateNoiseWithPrecentage");
 			}
-			this.onlyIntervalData = onlyIntervalData;
+			this.tickdata = tickdata;
 			this.dataSubscriptedOrNot = dataSubscriptedOrNot;
 		} catch (Exception e) {
 			Constants.logger("System error ["+this.getClass().getName()+":"+e.getMessage()+"], please contact admin");
 			dataDetail = new JSONObject();
 			dataDetail.put("error", "System error ["+this.getClass().getName()+":"+e.getMessage()+"], please contact admin");
-			data.add(dataDetail);
+			data.add(dataDetail.toString());
 			processDone = true;
 		}
 	}
@@ -89,11 +81,11 @@ public class Future implements Runnable {
 	public void run() {
 		try {
 			if(dataSubscriptedOrNot==false) {
-				this.startdate = Constants.randomStartEndDateRangeForFreeTrail(startdate, enddate);
-				this.enddate = Constants.addDates(this.startdate, 1);
+				this.startdate = constants.randomStartEndDateRangeForFreeTrail(startdate, enddate);
+				this.enddate = constants.addDates(this.startdate, 1);
 			}
 			
-			ArrayList<File> fileslist = Constants.requiredFileLiet(symbol, "future", startdate, enddate);
+			ArrayList<File> fileslist = constants.requiredFileLiet(symbol, "future", startdate, enddate);
 			if(fileslist!=null) {
 				for(File f : fileslist) {
 					fr = new FileReader(f.getAbsolutePath());
@@ -112,21 +104,21 @@ public class Future implements Runnable {
 							//Read data
 							linedata = (((char)firstchar)+br.readLine());
 							sbArray = linedata.toString().split(",");
-							data_date = Constants.df_yyyyMMdd.parse(sbArray[0]);
-							data_time = Constants.df_kkmmss.parse(sbArray[1]);
-							data_datetime = Constants.df_yyyyMMddkkmmss.parse(sbArray[0]+sbArray[1]);
+							data_date = constants.df_yyyyMMdd.parse(sbArray[0]);
+							data_time = constants.df_kkmmss.parse(sbArray[1]);
+							data_datetime = constants.df_yyyyMMddkkmmss.parse(sbArray[0]+sbArray[1]);
 							data_price = Integer.parseInt(sbArray[2]);
 							data_volumn = Integer.parseInt(sbArray[3]);
 							
 							//check data read finished or not
-							if(Constants.outOfEndDateOrNot(enddatetime, data_datetime)==true) {
+							if(constants.outOfEndDateOrNot(enddatetime, data_datetime)==true) {
 								break;
 							}
 							
 							//select data
-							if(Constants.withinDateOrNot(startdatetime, enddatetime, data_datetime)==true) {
+							if(constants.withinDateOrNot(startdatetime, enddatetime, data_datetime)==true) {
 								//check within time or not
-								if(Constants.withinDateOrNot(starttime, endtime, data_time)==false) {
+								if(constants.withinDateOrNot(starttime, endtime, data_time)==false) {
 									without_time_reset_interval_startendtime = true;
 									continue; 
 								}
@@ -134,22 +126,22 @@ public class Future implements Runnable {
 								//initial the interval time range
 								if(interval_starttime==null) {
 									interval_starttime = (data_datetime.after(startdatetime)?data_datetime:startdatetime);
-									interval_endtime = Constants.addSeconds(interval_starttime, interval_in_seconds);
+									interval_endtime = constants.addSeconds(interval_starttime, interval_in_seconds);
 								}
 								if(without_time_reset_interval_startendtime==true) {
 									interval_starttime = data_datetime;
-									interval_endtime = Constants.addSeconds(interval_starttime, interval_in_seconds);
+									interval_endtime = constants.addSeconds(interval_starttime, interval_in_seconds);
 									without_time_reset_interval_startendtime = false;
 								}
 								
 								//reset the interval time range
-								if(Constants.withinDateOrNot(interval_starttime, interval_endtime, data_datetime)==false) {
+								if(constants.withinDateOrNot(interval_starttime, interval_endtime, data_datetime)==false) {
 									//sum up data
 									sumData();
 								}
 								
 								//select data within the interval
-								if(Constants.withinDateOrNot(interval_starttime, interval_endtime, data_datetime)==true) {
+								if(constants.withinDateOrNot(interval_starttime, interval_endtime, data_datetime)==true) {
 									//setup date
 									if(data_date_within_interval==null) { 
 										data_date_within_interval = sbArray[0]; 
@@ -186,15 +178,15 @@ public class Future implements Runnable {
 									if(true) { 
 										data_sumupvolumn_within_interval = (data_sumupvolumn_within_interval==null?0:Integer.parseInt(data_sumupvolumn_within_interval)) + Integer.parseInt(sbArray[3]) + ""; 
 									}
-									if(onlyIntervalData==false) {
+									if(tickdata==true) {
 										Double newIndex = Double.parseDouble(sbArray[2]);
 										
 										//skip if the index defined as noise
 										boolean noise = false;
-										if(mitigateNoiseWithPrecentage>-1) {
+										if(mitigateNoiseWithPrecentage>0) {
 											if(previousDataDetail!=null) {
 												Double prevIndex = previousDataDetail.getDouble("index");
-												if( Math.abs((newIndex - prevIndex) / prevIndex * 100) < mitigateNoiseWithPrecentage) 
+												if( Math.abs((newIndex - prevIndex) / prevIndex * 100) > mitigateNoiseWithPrecentage) 
 													noise = true;
 											}
 										}
@@ -217,23 +209,8 @@ public class Future implements Runnable {
 											dataDetail.put("total_volumn", Integer.parseInt(data_sumupvolumn_within_interval));
 											
 											//insert into data
-											data.add(dataDetail);
+											data.add(dataDetail.toString());
 											previousDataDetail = dataDetail;
-
-
-											/*
-											* Manual operation
-											* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-											*/
-											if(restartAndGenerateData==true){
-												restartAndGenerateDataArrayList.add( dataDetail.toString() );
-												if(restartAndGenerateDataArrayList.size()>= 10000){
-													manualOperation_generateRestartAndGenerateData();
-												}
-											}
-											/*
-											* <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-											*/
 										}
 									}
 								}
@@ -254,7 +231,7 @@ public class Future implements Runnable {
 			Constants.logger("System error ["+this.getClass().getName()+":"+e.getMessage()+"], please contact admin");
 			dataDetail = new JSONObject();
 			dataDetail.put("error", "System error ["+this.getClass().getName()+":"+e.getMessage()+"], please contact admin");
-			data.add(dataDetail);
+			data.add(dataDetail.toString());
 			processDone = true;
 		}
 		processDone = true;
@@ -278,7 +255,7 @@ public class Future implements Runnable {
 			dataDetail.put("close", Double.parseDouble(data_close_within_interval));
 			dataDetail.put("total_volumn", Integer.parseInt(data_sumupvolumn_within_interval));
 			//insert into data
-			data.add(dataDetail);
+			data.add(dataDetail.toString());
 		}
 		//rest
 		data_date_within_interval = null;
@@ -290,21 +267,7 @@ public class Future implements Runnable {
 		data_low_within_interval = null;
 		data_close_within_interval = null;
 		data_sumupvolumn_within_interval = null;
-		interval_starttime = Constants.addSeconds(interval_endtime, 1);
-		interval_endtime = Constants.addSeconds(interval_starttime, interval_in_seconds);
+		interval_starttime = constants.addSeconds(interval_endtime, 1);
+		interval_endtime = constants.addSeconds(interval_starttime, interval_in_seconds);
 	}
-
-	private static void manualOperation_generateRestartAndGenerateData(){
-        try{
-                FileWriter fw = new FileWriter("/home/ec2-user/dataSource/webVersion/Jobs/"+WebVersionJobConstants.runJobID+"/"+WebVersionJobConstants.runJobID+"_restartAndGenerateData.txt", true);
-                BufferedWriter bw = new BufferedWriter(fw);
-                for(String s : restartAndGenerateDataArrayList){
-                    bw.write( s );
-                    bw.write("\n");
-                }
-                bw.close();
-                fw.close();
-                restartAndGenerateDataArrayList = new ArrayList<String>();
-        }catch(Exception e){}
-    }
 }

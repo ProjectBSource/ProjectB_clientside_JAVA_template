@@ -56,7 +56,7 @@ public class Future implements Runnable {
 
 	//Manual operation variables
     public static boolean restartAndGenerateData = true;
-    public static ArrayList<String> restartAndGenerateDataArrayList = null;
+    public static ArrayList<String> restartAndGenerateDataArrayList = new ArrayList<String>;
 	
 	public Future(JSONObject input, boolean onlyIntervalData) {
 		try {

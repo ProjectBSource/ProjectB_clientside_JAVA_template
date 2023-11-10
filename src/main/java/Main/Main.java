@@ -143,11 +143,11 @@ public class Main {
                         while(future.processDone == false || future.data.size()>0) {
                             System.out.print("");
 			                try{
-                                int tempDataListSize = future.data.size();
-                            	mainLogicLevel1(future.data, tempDataListSize);
+                            	mainLogicLevel1(future.data);
                                 //delete processed data
-                                thread.sleep(500);
-                                for(int i=0; i<tempDataListSize; i++) { future.data.remove(0); }
+                                thread.wait();
+                                future.data = new ArrayList<JSONObject>();
+                                thread.notify();
                             }catch(Exception e){
                                 WebVersionJobConstants.logger("mainLogicLevel1 error :" + e);
                                 break;
@@ -167,9 +167,9 @@ public class Main {
 		}
     }
 
-    private static void mainLogicLevel1(ArrayList<JSONObject> dataList, int tempDataListSize) throws Exception{
-		if(tempDataListSize>0) {
-            for(int i=0; i<tempDataListSize; i++) {
+    private static void mainLogicLevel1(ArrayList<JSONObject> dataList) throws Exception{
+		if(dataList.size()>0) {
+            for(int i=0; i<dataList.size(); i++) {
 			    JSONObject data = dataList.get(i);
                 //get the response
                 if(data!=null && !data.isEmpty()) {

@@ -143,7 +143,7 @@ public class Main {
                         while(future.processDone == false || future.data.size()>0) {
                             System.out.print("");
 			                try{
-                                int tempDataListSize = dataList.size();
+                                int tempDataListSize = future.data.size();
                             	mainLogicLevel1(future.data, tempDataListSize);
                                 //delete processed data
                                 for(int i=0; i<tempDataListSize; i++) { future.data.remove(0); }

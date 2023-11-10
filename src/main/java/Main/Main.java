@@ -174,10 +174,10 @@ public class Main {
     }
 
     private static void mainLogicLevel1(ArrayList<JSONObject> dataList) throws Exception{
-                if(dataList.size()>0) {
+        if(dataList.size()>0) {
             int tempDataListSize = dataList.size();
             for(int i=0; i<tempDataListSize; i++) {
-                            JSONObject data = dataList.get(i);
+                JSONObject data = dataList.get(i);
                 //get the response
                 if(data!=null && !data.isEmpty()) {
                     //System.out.flush();
@@ -208,22 +208,23 @@ public class Main {
                     * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
                     */
 
-                                         if(dataStructure.getType().equals("interval")){ indicator0.addPrice(dataStructure.getIndex()); }
+                    if(dataStructure.getType().equals("interval")){ indicator0.addPrice(dataStructure.getIndex()); }
 
 
-                                         boolean baseLogicResult0 = (indicator0.getPrice() > 0 && indicator0.getUpperBand()  > 0 && indicator0.getPrice() > indicator0.getUpperBand()  );
-                     boolean baseLogicResult1 = (indicator0.getPrice() > 0 && indicator0.getLowerBand()  > 0 && indicator0.getPrice() < indicator0.getLowerBand()  );
-                     boolean baseLogicResult2 = (indicator0.getPrice() > 0 && indicator0.getMiddleBand()  > 0 && indicator0.getPrice() <= indicator0.getMiddleBand()  );
-                     boolean baseLogicResult3 = (indicator0.getPrice() > 0 && indicator0.getMiddleBand()  > 0 && indicator0.getPrice() >= indicator0.getMiddleBand()  );
+                    boolean baseLogicResult0 = (indicator0.getPrice() > 0 && indicator0.getUpperBand()  > 0 && indicator0.getPrice() > indicator0.getUpperBand()  );
+                    boolean baseLogicResult1 = (indicator0.getPrice() > 0 && indicator0.getLowerBand()  > 0 && indicator0.getPrice() < indicator0.getLowerBand()  );
+                    boolean baseLogicResult2 = (indicator0.getPrice() > 0 && indicator0.getMiddleBand()  > 0 && indicator0.getPrice() <= indicator0.getMiddleBand()  );
+                    boolean baseLogicResult3 = (indicator0.getPrice() > 0 && indicator0.getMiddleBand()  > 0 && indicator0.getPrice() >= indicator0.getMiddleBand()  );
 
 
                     
 
-                    if(dataStructure.getType().equals("tick")){                      if(baseLogicResult0==true){ tradeController.placeOrder("#8953", dataStructure, Action.BUY, 1, false); }
-                     if(baseLogicResult1==true){ tradeController.placeOrder("#7727", dataStructure, Action.SELL, 1, false); }
-                     if(baseLogicResult2==true){ tradeController.placeOFFOrder("#8953", dataStructure); }
-                     if(baseLogicResult3==true){ tradeController.placeOFFOrder("#7727", dataStructure); }
- }
+                    if(dataStructure.getType().equals("tick")){                      
+                        if(baseLogicResult0==true){ tradeController.placeOrder("#8953", dataStructure, Action.BUY, 1, false); }
+                        if(baseLogicResult1==true){ tradeController.placeOrder("#7727", dataStructure, Action.SELL, 1, false); }
+                        if(baseLogicResult2==true){ tradeController.placeOFFOrder("#8953", dataStructure); }
+                        if(baseLogicResult3==true){ tradeController.placeOFFOrder("#7727", dataStructure); }
+                    }
 
                     
                     /*
@@ -251,21 +252,27 @@ public class Main {
                                         indicator0.getLowerBand()
                                 ) 
                         );
-                        if(restartAndGenerateDataArrayList.size()%10000==0){
-                                manualOperation_generateRestartAndGenerateData();
-                        }
                     }
                     /*
                     * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                     */
                             
                 }
-                        }
+            }
+            
+            /*
+            * Manual operation
+            * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            */
+            if(restartAndGenerateData==true){ manualOperation_generateRestartAndGenerateData(); }
+            /*
+            * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            */
 
             //delete processed data
-                        for(int i=0; i<tempDataListSize; i++) {
-                                dataList.remove(0); 
-                        }
+            for(int i=0; i<tempDataListSize; i++) {
+                dataList.remove(0); 
+            }
 
             //update task real time information
             if(WebVersionJobConstants.environment.equals("prd")){
@@ -281,7 +288,7 @@ public class Main {
                     }
                 }
             }
-                }
+        }
     }
 
     private static void generateOrderHistoryInJSON(){

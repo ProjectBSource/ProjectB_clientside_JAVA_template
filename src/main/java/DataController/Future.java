@@ -18,6 +18,7 @@ public class Future implements Runnable {
 	public boolean processDone = false;
 	private JSONObject previousDataDetail = null;
 	public ArrayList<JSONObject> data = new ArrayList<JSONObject>();
+	public ArrayList<JSONObject> dataForReading = new ArrayList<JSONObject>();
 	private String symbol = null;
 	private Date startdate = null;
 	private Date enddate = null;
@@ -95,8 +96,10 @@ public class Future implements Runnable {
 						}
 						else {
 							//wait for data clean
-							if(data.size()>=30000) {
-								Thread.sleep(3500);
+							if(data.size()>=30000 && dataForReading.size==0) {
+								dataForReading = new ArrayList<JSONObject>(data);
+								data = new ArrayList<JSONObject>();
+								Thread.sleep(3000);
 							}
 							
 							//Read data
@@ -225,6 +228,7 @@ public class Future implements Runnable {
 					sumData();
 				}
 			}
+			dataForReading = new ArrayList<JSONObject>(data);
 		}catch(Exception e) {
 			Constants.logger("System error ["+this.getClass().getName()+":"+e.getMessage()+"], please contact admin");
 			dataDetail = new JSONObject();

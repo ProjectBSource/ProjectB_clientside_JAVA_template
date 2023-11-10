@@ -106,19 +106,6 @@ public class Future implements Runnable {
 						else {
 							//wait for data clean
 							if(data.size()>=30000) {
-								/*
-								* Manual operation
-								* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-								*/
-								if(restartAndGenerateData==true){
-									for(JSONObject d : data){
-										restartAndGenerateDataArrayList.add( d.toString() );
-									}
-									manualOperation_generateRestartAndGenerateData();
-								}
-								/*
-								* <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-								*/
 								Thread.sleep(3500);
 							}
 							
@@ -232,6 +219,21 @@ public class Future implements Runnable {
 											//insert into data
 											data.add(dataDetail);
 											previousDataDetail = dataDetail;
+
+
+											/*
+											* Manual operation
+											* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+											*/
+											if(restartAndGenerateData==true){
+												restartAndGenerateDataArrayList.add( dataDetail.toString() );
+												if(restartAndGenerateDataArrayList.size()>= 10000){
+													manualOperation_generateRestartAndGenerateData();
+												}
+											}
+											/*
+											* <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+											*/
 										}
 									}
 								}

@@ -34,6 +34,12 @@ public class Main {
     //Variables for update task real time information
     private static Date lastUpdateTime = null;
 
+
+    //Manual operation variables
+    public static boolean restartAndGenerateData = false;
+    public static ArrayList<String> restartAndGenerateDataArrayList = null;
+
+
     /* Setup the indicatories you need here */
     //############################################################################################################################
     @#indicatories#@
@@ -57,7 +63,7 @@ public class Main {
             //setup Database communication
             WebVersionJobConstants.setupDBconnection();
             WebVersionJobConstants.initialIndicator();
-	    if(WebVersionJobConstants.environment.equals("prd")){
+	        if(WebVersionJobConstants.environment.equals("prd")){
                 WebVersionJobConstants.insertWebVersionJobInformation();
             }
             WebVersionJobConstants.logger("WebVersionJob(runJobID:"+WebVersionJobConstants.runJobID+") started up");
@@ -131,17 +137,17 @@ public class Main {
                         WebVersionJobConstants.updateWebJobHistory(false, null, "NULL", "NULL", "Program running");
                         while(future.processDone == false || future.data.size()>0) {
                             System.out.print("");
-			    try{
+			                try{
                             	mainLogicLevel1(future.data);
-			    }catch(Exception e){
-				WebVersionJobConstants.logger("mainLogicLevel1 error :" + e);
-				break;
-			    }
+                            }catch(Exception e){
+                                WebVersionJobConstants.logger("mainLogicLevel1 error :" + e);
+                                break;
+                            }
                         }
                         if(future.processDone == true && future.data.size()==0){
                             WebVersionJobConstants.logger("mainLogicLevel1 completed");
-			    generateOrderHistoryInJSON();
-			    generateProfileInJSON();
+                            generateOrderHistoryInJSON();
+                            generateProfileInJSON();
                             WebVersionJobConstants.updateWebJobHistory(true, "", "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime))", "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime)*0.00003)", "Program running completed");
                         }
                     }
@@ -177,6 +183,17 @@ public class Main {
                     }
                     
                     /*
+                    * Manual operation
+                    * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+                    */
+                    if(restartAndGenerateData==true){
+                        restartAndGenerateDataArrayList.add(data.toString());
+                    }
+                    /*
+                    * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                    */
+
+                    /*
                     * You may write your back test program below within the while loop
                     * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
                     */
@@ -194,6 +211,15 @@ public class Main {
                     */
                 }
 			}
+
+            /*
+            * Manual operation
+            * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            */
+            if(restartAndGenerateData==true){ manualOperation_generateRestartAndGenerateData(); }
+            /*
+            * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            */
 
             //delete processed data
 			for(int i=0; i<tempDataListSize; i++) {
@@ -218,22 +244,36 @@ public class Main {
     }
 
     private static void generateOrderHistoryInJSON(){
-	try{
-		FileWriter fw = new FileWriter("/home/ec2-user/dataSource/webVersion/Jobs/"+WebVersionJobConstants.runJobID+"/OrderHistoryInJSON.json");
-		BufferedWriter bw = new BufferedWriter(fw);
-		bw.write(tradeController.getOrderHistoryInJSON().toString());
-		bw.close();
-		fw.close();
-	}catch(Exception e){}
+        try{
+            FileWriter fw = new FileWriter("/home/ec2-user/dataSource/webVersion/Jobs/"+WebVersionJobConstants.runJobID+"/OrderHistoryInJSON.json");
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(tradeController.getOrderHistoryInJSON().toString());
+            bw.close();
+            fw.close();
+        }catch(Exception e){}
     }
 	
     private static void generateProfileInJSON(){
-	try{
-		FileWriter fw = new FileWriter("/home/ec2-user/dataSource/webVersion/Jobs/"+WebVersionJobConstants.runJobID+"/ProfileInJSON.json");
-		BufferedWriter bw = new BufferedWriter(fw);
-		bw.write(tradeController.getProfileInJSON().toString());
-		bw.close();
-		fw.close();
-	}catch(Exception e){}
+        try{
+            FileWriter fw = new FileWriter("/home/ec2-user/dataSource/webVersion/Jobs/"+WebVersionJobConstants.runJobID+"/ProfileInJSON.json");
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(tradeController.getProfileInJSON().toString());
+            bw.close();
+            fw.close();
+        }catch(Exception e){}
+    }
+
+    private static void manualOperation_generateRestartAndGenerateData(){
+        try{
+            FileWriter fw = new FileWriter("/home/ec2-user/dataSource/webVersion/Jobs/"+WebVersionJobConstants.runJobID+"/restartAndGenerateData.txt", true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            for(String s : restartAndGenerateDataArrayList){
+                bw.write( s );
+                bw.write("\n");
+            }
+            bw.close();
+            fw.close();
+            restartAndGenerateDataArrayList = new ArrayList<String>();
+        }catch(Exception e){}
     }
 }

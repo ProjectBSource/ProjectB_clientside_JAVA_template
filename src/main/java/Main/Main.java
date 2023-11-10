@@ -145,9 +145,11 @@ public class Main {
 			                try{
                             	mainLogicLevel1(future.data);
                                 //delete processed data
-                                thread.wait();
-                                future.data = new ArrayList<JSONObject>();
-                                synchronized (thread) { thread.notify(); }
+                                synchronized (thread) {
+                                    thread.wait();
+                                    future.data = new ArrayList<JSONObject>();
+                                    thread.notify(); 
+                                }
                             }catch(Exception e){
                                 WebVersionJobConstants.logger("mainLogicLevel1 error :" + e);
                                 break;

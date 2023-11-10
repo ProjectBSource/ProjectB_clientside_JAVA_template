@@ -143,12 +143,9 @@ public class Main {
                         while(future.processDone == false || future.data.size()>0) {
                             System.out.print("");
 			                try{
-                                synchronized (thread) {
-                                    int tempDataListSize = future.data.size();
-                                    mainLogicLevel1(future.data, tempDataListSize);
-                                    //delete processed data
-                                    for(int i=0; i<tempDataListSize; i++) { future.data.remove(0); }
-                                }
+                                mainLogicLevel1(future.dataForReading);
+                                //delete processed data
+                                future.dataForReading = new ArrayList<JSONObject>();
                             }catch(Exception e){
                                 WebVersionJobConstants.logger("mainLogicLevel1 error :" + e);
                                 break;
@@ -168,83 +165,80 @@ public class Main {
 		}
     }
 
-    private static void mainLogicLevel1(ArrayList<JSONObject> dataList, int tempDataListSize) throws Exception{
-		if(tempDataListSize>0) {
-            for(int i=0; i<tempDataListSize; i++) {
-			    JSONObject data = dataList.get(i);
-                //get the response
-                if(data!=null && !data.isEmpty()) {
-                    System.out.flush();
-                    //Convert response JSON message to Java class object
-                    DataStructure dataStructure = mapper.readValue(data.toString(), DataStructure.class);
-                    //Check response finished or not
-                    if(dataStructure.getDone()!=null) {
-                        break;
-                    }
-                    //Check error caused or not
-                    if(dataStructure.getError()!=null) {
-                        WebVersionJobConstants.logger(dataStructure.getError());
-                        break;
-                    }
-                    //check the order allow to trade or not
-                    if(tradeController!=null){
-                        tradeController.tradeCheckingAndBalanceUpdate(dataStructure);
-                    }
-                    
-                    /*
-                    * Manual operation
-                    * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-                    */
-                    if(restartAndGenerateData==true){
-                        restartAndGenerateDataArrayList.add(data.toString());
-                    }
-                    /*
-                    * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                    */
-
-                    /*
-                    * You may write your back test program below within the while loop
-                    * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-                    */
-
-                    @#indicatoriesUpdateLogic#@
-
-                    @#baseLogicResult#@
-
-                    @#logicGatewayResult#@
-
-                    @#actionAndTradeLogic#@
-                    
-                    /*
-                    * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                    */
+    private static void mainLogicLevel1(ArrayList<JSONObject> dataList) throws Exception{
+        for(JSONObject data : dataList) {
+            //get the response
+            if(data!=null && !data.isEmpty()) {
+                System.out.flush();
+                //Convert response JSON message to Java class object
+                DataStructure dataStructure = mapper.readValue(data.toString(), DataStructure.class);
+                //Check response finished or not
+                if(dataStructure.getDone()!=null) {
+                    break;
                 }
-			}
+                //Check error caused or not
+                if(dataStructure.getError()!=null) {
+                    WebVersionJobConstants.logger(dataStructure.getError());
+                    break;
+                }
+                //check the order allow to trade or not
+                if(tradeController!=null){
+                    tradeController.tradeCheckingAndBalanceUpdate(dataStructure);
+                }
+                
+                /*
+                * Manual operation
+                * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+                */
+                if(restartAndGenerateData==true){
+                    restartAndGenerateDataArrayList.add(data.toString());
+                }
+                /*
+                * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                */
 
-            /*
-            * Manual operation
-            * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-            */
-            if(restartAndGenerateData==true){ manualOperation_generateRestartAndGenerateData(); }
-            /*
-            * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-            */
+                /*
+                * You may write your back test program below within the while loop
+                * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+                */
 
-            //update task real time information
-            if(WebVersionJobConstants.environment.equals("prd")){
-                if(lastUpdateTime==null){
+                @#indicatoriesUpdateLogic#@
+
+                @#baseLogicResult#@
+
+                @#logicGatewayResult#@
+
+                @#actionAndTradeLogic#@
+                
+                /*
+                * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                */
+            }
+        }
+
+        /*
+        * Manual operation
+        * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        */
+        if(restartAndGenerateData==true){ manualOperation_generateRestartAndGenerateData(); }
+        /*
+        * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        */
+
+        //update task real time information
+        if(WebVersionJobConstants.environment.equals("prd")){
+            if(lastUpdateTime==null){
+                lastUpdateTime = new Date();
+            }
+            else{
+                long diff = (new Date()).getTime() - (lastUpdateTime).getTime();
+                long seconds = TimeUnit.MILLISECONDS.toSeconds(diff);
+                if(seconds >=10){
+                    WebVersionJobConstants.updateWebVersionJobInformation();
                     lastUpdateTime = new Date();
                 }
-                else{
-                    long diff = (new Date()).getTime() - (lastUpdateTime).getTime();
-                    long seconds = TimeUnit.MILLISECONDS.toSeconds(diff);
-                    if(seconds >=10){
-                        WebVersionJobConstants.updateWebVersionJobInformation();
-                        lastUpdateTime = new Date();
-                    }
-                }
             }
-		}
+        }
     }
 
     private static void generateOrderHistoryInJSON(){

@@ -37,7 +37,7 @@ public class Main {
 
     //Manual operation variables
     public static boolean restartAndGenerateData = false;
-    public static ArrayList<String> restartAndGenerateDataArrayList = null;
+    public static ArrayList<String> restartAndGenerateDataArrayList = new ArrayList<String>();
 
 
     /* Setup the indicatories you need here */
@@ -265,7 +265,7 @@ public class Main {
 
     private static void manualOperation_generateRestartAndGenerateData(){
         try{
-            FileWriter fw = new FileWriter("/home/ec2-user/dataSource/webVersion/Jobs/"+WebVersionJobConstants.runJobID+"/restartAndGenerateData.txt", true);
+            FileWriter fw = new FileWriter("/home/ec2-user/dataSource/webVersion/Jobs/"+WebVersionJobConstants.runJobID+"/"+WebVersionJobConstants.runJobID+"_restartAndGenerateData.txt", true);
             BufferedWriter bw = new BufferedWriter(fw);
             for(String s : restartAndGenerateDataArrayList){
                 bw.write( s );

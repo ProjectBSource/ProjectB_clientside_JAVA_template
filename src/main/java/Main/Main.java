@@ -36,7 +36,7 @@ public class Main {
 
 
     //Manual operation variables
-    public static boolean restartAndGenerateData = false;
+    public static boolean restartAndGenerateData = true;
     public static ArrayList<String> restartAndGenerateDataArrayList = new ArrayList<String>();
 
 
@@ -51,6 +51,11 @@ public class Main {
         //get the input parameters
         WebVersionJobConstants.runJobID = args[0];
         WebVersionJobConstants.logger("runJobID:"+WebVersionJobConstants.runJobID);
+
+        //Manual operation variables
+        if(args.length>1 && args[1].equals("restartAndGenerateData")){
+            restartAndGenerateData = true;
+        }
 
         try{
             //initial

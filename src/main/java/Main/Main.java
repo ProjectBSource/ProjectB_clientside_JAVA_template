@@ -34,10 +34,6 @@ public class Main {
     //Variables for update task real time information
     private static Date lastUpdateTime = null;
 
-    //Manual operation variables
-    public static boolean restartAndGenerateData = false;
-    public static ArrayList<String> restartAndGenerateDataArrayList = null;
-
     /* Setup the indicatories you need here */
     //############################################################################################################################
               private static BollingerBands indicator0 = new BollingerBands(20, 2);
@@ -62,14 +58,6 @@ public class Main {
             //setup Database communication
             WebVersionJobConstants.setupDBconnection();
             WebVersionJobConstants.initialIndicator();
-            //manual restart for checking / testing / bugfix...
-            if(args.length > 1){
-                if(args[1].equals("restartAndGenerateData")){
-                        restartAndGenerateData = true;
-                        restartAndGenerateDataArrayList = new ArrayList<String>();
-                        WebVersionJobConstants.deleteWebVersionJobInformation();
-                }
-            }
             if(WebVersionJobConstants.environment.equals("prd")){
                 WebVersionJobConstants.insertWebVersionJobInformation();
             }
@@ -155,14 +143,6 @@ public class Main {
                             WebVersionJobConstants.logger("mainLogicLevel1 completed");
                             generateOrderHistoryInJSON();
                             generateProfileInJSON();
-                            /*
-                            * Manual operation
-                            * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-                            */
-                            if(restartAndGenerateData==true){ manualOperation_generateRestartAndGenerateData(); }
-                            /*
-                            * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                            */
                             WebVersionJobConstants.updateWebJobHistory(true, "", "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime))", "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime)*0.00003)", "Program running completed");
                         }
                     }
@@ -185,17 +165,11 @@ public class Main {
                     DataStructure dataStructure = mapper.readValue(data.toString(), DataStructure.class);
                     //Check response finished or not
                     if(dataStructure.getDone()!=null) {
-                        if(restartAndGenerateData==true){
-                            restartAndGenerateDataArrayList.add("dataStructure.getDone():"+dataStructure.getDone()+", i="+i+", dataList.size()="+tempDataListSize);
-                        }
                         break;
                     }
                     //Check error caused or not
                     if(dataStructure.getError()!=null) {
                         WebVersionJobConstants.logger(dataStructure.getError());
-                        if(restartAndGenerateData==true){
-                            restartAndGenerateDataArrayList.add("dataStructure.getDone():"+dataStructure.getDone()+", i="+i+", dataList.size()="+tempDataListSize);
-                        }
                         break;
                     }
                     //check the order allow to trade or not
@@ -230,44 +204,9 @@ public class Main {
                     /*
                     * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                     */
-
-                    /*
-                    * Manual operation
-                    * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-                    */
-                    if(restartAndGenerateData==true){
-                        restartAndGenerateDataArrayList.add(
-                                String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
-                                        dataStructure.getType(),
-                                        dataStructure.getDatetime(),
-                                        dataStructure.getIndex(),
-                                        dataStructure.getVolumn(),
-                                        dataStructure.getOpen(),
-                                        dataStructure.getHigh(),
-                                        dataStructure.getLow(),
-                                        dataStructure.getClose(),
-                                        dataStructure.getTotal_volumn(),
-                                        indicator0.getUpperBand(),
-                                        indicator0.getMiddleBand(),
-                                        indicator0.getLowerBand()
-                                ) 
-                        );
-                    }
-                    /*
-                    * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                    */
                             
                 }
             }
-            
-            /*
-            * Manual operation
-            * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-            */
-            if(restartAndGenerateData==true){ manualOperation_generateRestartAndGenerateData(); }
-            /*
-            * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-            */
 
             //delete processed data
             for(int i=0; i<tempDataListSize; i++) {
@@ -308,20 +247,6 @@ public class Main {
                 bw.write(tradeController.getProfileInJSON().toString());
                 bw.close();
                 fw.close();
-        }catch(Exception e){}
-    }
-
-    private static void manualOperation_generateRestartAndGenerateData(){
-        try{
-                FileWriter fw = new FileWriter("/home/ec2-user/dataSource/webVersion/Jobs/"+WebVersionJobConstants.runJobID+"/"+WebVersionJobConstants.runJobID+"_restartAndGenerateData.txt", true);
-                BufferedWriter bw = new BufferedWriter(fw);
-                for(String s : restartAndGenerateDataArrayList){
-                    bw.write( s );
-                    bw.write("\n");
-                }
-                bw.close();
-                fw.close();
-                restartAndGenerateDataArrayList = new ArrayList<String>();
         }catch(Exception e){}
     }
 }

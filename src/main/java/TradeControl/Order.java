@@ -17,7 +17,6 @@ import TradeControl.OrderActionConstants.StrikePrice;
 
 import DataController.Constants;
 
-import Util.WebVersionJobConstants;
 
 public class Order {
 	public Random random = new Random();

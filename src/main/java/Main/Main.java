@@ -90,7 +90,7 @@ public class Main {
 					) 
 				);
 
-                if(dataStructure.getType().equals("tick")){ indicator0.addPrice(dataStructure.getIndex()); }
+                if(dataStructure.getType().equals("tick")){ indicator0.update(dataStructure); }
 
 
                 boolean baseLogicResult0 = ( indicator0.getPrice()>0 && indicator0.getUpperBand() > 0 && indicator0.getPrice() > indicator0.getUpperBand()  );

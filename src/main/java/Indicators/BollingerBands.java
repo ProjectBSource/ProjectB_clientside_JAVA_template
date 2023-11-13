@@ -23,8 +23,8 @@ public class BollingerBands extends Indicator{
         this.multiplier = multiplier;
     }
     
-    public void update(double price) {
-        prices.add(price);
+    public void update(DataStructure dataStructure) {
+        prices.add(dataStructure.getIndex());
         if (prices.size() > period) {
             prices.remove(0);
         }

@@ -6,6 +6,7 @@ import java.util.List;
 public class BollingerBands extends Indicator{
     
     private List<Double> prices;
+
     private int period;
     private double multiplier;
 
@@ -22,8 +23,8 @@ public class BollingerBands extends Indicator{
         this.multiplier = multiplier;
     }
     
-    public void addPrice(double price) {
-        prices.add(price);
+    public void update(DataStructure dataStructure) {
+        prices.add(dataStructure.getIndex());
         if (prices.size() > period) {
             prices.remove(0);
         }

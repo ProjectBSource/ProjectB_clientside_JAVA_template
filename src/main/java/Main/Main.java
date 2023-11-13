@@ -1,21 +1,23 @@
 package Main;
 
-import org.json.JSONObject;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import ClientSocketControl.DataStructure;
 import ClientSocketControl.SocketClient;
 import Indicators.BollingerBands;
 import TradeControl.TradeController;
 import TradeControl.OrderActionConstants.Action;
 
-
-
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.JSONObject;
 
 public class Main {
 		
+    //Initial the ObjectMapper
+    public static ObjectMapper mapper = new ObjectMapper();
+    //Initial the JSONObject 
+    public static JSONObject response = null;
+    //Initial the DataStructure
+    public static DataStructure dataStructure;
+
 	public static void main(String args[]) throws Exception {
 		
 		//Login here
@@ -43,11 +45,6 @@ public class Main {
 		TradeController tradeController = new TradeController();
 		tradeController.setSlippage(0.0005);
 		
-		//Initial the ObjectMapper
-		ObjectMapper mapper = new ObjectMapper();
-		//Initial the JSONObject 
-		JSONObject response = null;
-
         //Setup the indicatories you need here
         BollingerBands indicator0 = new BollingerBands(20,2);
 		
@@ -74,8 +71,9 @@ public class Main {
 				 * You may write your back test program below within the while loop
 				 * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 				 */
-				
-                 System.out.println( 
+
+
+				System.out.println( 
 					String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
 						dataStructure.getType(),
 						dataStructure.getDatetime(),
@@ -92,7 +90,7 @@ public class Main {
 					) 
 				);
 
-                if(dataStructure.getType().equals("tick")){ indicator0.addPrice(dataStructure.getIndex()); }
+                if(dataStructure.getType().equals("tick")){ indicator0.update(dataStructure); }
 
 
                 boolean baseLogicResult0 = ( indicator0.getPrice()>0 && indicator0.getUpperBand() > 0 && indicator0.getPrice() > indicator0.getUpperBand()  );
@@ -115,13 +113,13 @@ public class Main {
                         tradeController.placeOFFOrder("#2", dataStructure); 
                     }
                 }
-				
+                                
 				/*
 				 * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 				 */
 			}
 		}
-
+        
         System.out.println(tradeController.getOrderHistoryInJSON());
 	}
 }

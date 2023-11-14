@@ -1,11 +1,16 @@
 package Indicators;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import ClientSocketControl.DataStructure;
+
 public class AccumulationORDistribution extends Indicator{
 
     private List<Double> highs;
     private List<Double> lows;
     private List<Double> closes;
-    private List<Double> volumes;
+    private List<Integer> volumes;
 
     private int period;
 
@@ -29,7 +34,7 @@ public class AccumulationORDistribution extends Indicator{
         highs.add(dataStructure.getHigh());
         lows.add(dataStructure.getLow());
         closes.add(dataStructure.getClose());
-        volumes.add(dataStructure.getTotal_volume());
+        volumes.add(dataStructure.getVolume());
         if (closes.size() > period) {
             highs.remove(0);
             lows.remove(0);

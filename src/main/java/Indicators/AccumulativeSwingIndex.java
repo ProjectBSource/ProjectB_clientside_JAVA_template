@@ -1,5 +1,10 @@
 package Indicators;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import ClientSocketControl.DataStructure;
+
 public class AccumulativeSwingIndex extends Indicator{
 
     private List<Double> highs;

@@ -1,5 +1,10 @@
 package Indicators;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import ClientSocketControl.DataStructure;
+
 public class AdvanceORDecline extends Indicator{
 
     private List<Double> advances ;

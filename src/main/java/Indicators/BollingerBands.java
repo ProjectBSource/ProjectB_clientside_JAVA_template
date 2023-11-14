@@ -3,6 +3,8 @@ package Indicators;
 import java.util.ArrayList;
 import java.util.List;
 
+import ClientSocketControl.DataStructure;
+
 public class BollingerBands extends Indicator{
     
     private List<Double> closes;

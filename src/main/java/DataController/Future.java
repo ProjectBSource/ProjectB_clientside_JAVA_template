@@ -30,7 +30,7 @@ public class Future implements Runnable {
 	private Date data_time = null; private Date prev_data_time = null;
 	private Date data_datetime = null; private Date prev_data_datetime = null;
 	private int data_price = -1;
-	private int data_volumn = -1;
+	private int data_volume = -1;
 	private int interval_in_seconds = 0;
 	private double mitigateNoiseWithPrecentage = -1;
 	private boolean onlyIntervalData = true;
@@ -45,7 +45,7 @@ public class Future implements Runnable {
 	private String data_high_within_interval = null;
 	private String data_low_within_interval = null; 
 	private String data_close_within_interval = null;
-	private String data_sumupvolumn_within_interval = null;
+	private String data_sumupvolume_within_interval = null;
 	private JSONObject dataDetail = null;
 	private boolean without_time_reset_interval_startendtime = false;
 	
@@ -109,7 +109,7 @@ public class Future implements Runnable {
 							data_time = Constants.df_kkmmss.parse(sbArray[1]);
 							data_datetime = Constants.df_yyyyMMddkkmmss.parse(sbArray[0]+sbArray[1]);
 							data_price = Integer.parseInt(sbArray[2]);
-							data_volumn = Integer.parseInt(sbArray[3]);
+							data_volume = Integer.parseInt(sbArray[3]);
 							
 							//check data read finished or not
 							if(Constants.outOfEndDateOrNot(enddatetime, data_datetime)==true) {
@@ -175,9 +175,9 @@ public class Future implements Runnable {
 									if(true) { 
 										data_close_within_interval = sbArray[2]; 
 									}
-									//setup sum up volumn
+									//setup sum up volume
 									if(true) { 
-										data_sumupvolumn_within_interval = (data_sumupvolumn_within_interval==null?0:Integer.parseInt(data_sumupvolumn_within_interval)) + Integer.parseInt(sbArray[3]) + ""; 
+										data_sumupvolume_within_interval = (data_sumupvolume_within_interval==null?0:Integer.parseInt(data_sumupvolume_within_interval)) + Integer.parseInt(sbArray[3]) + ""; 
 									}
 									if(onlyIntervalData==false) {
 										Double newIndex = Double.parseDouble(sbArray[2]);
@@ -206,8 +206,8 @@ public class Future implements Runnable {
 											dataDetail.put("open", Double.parseDouble(data_open_within_interval));
 											dataDetail.put("high", Double.parseDouble(data_high_within_interval));
 											dataDetail.put("low", Double.parseDouble(data_low_within_interval));
-											dataDetail.put("volumn", Integer.parseInt(sbArray[3]));
-											dataDetail.put("total_volumn", Integer.parseInt(data_sumupvolumn_within_interval));
+											dataDetail.put("volume", Integer.parseInt(sbArray[3]));
+											dataDetail.put("total_volume", Integer.parseInt(data_sumupvolume_within_interval));
 											
 											//insert into data
 											data.add(dataDetail);
@@ -255,7 +255,7 @@ public class Future implements Runnable {
 			dataDetail.put("high", Double.parseDouble(data_high_within_interval));
 			dataDetail.put("low", Double.parseDouble(data_low_within_interval));
 			dataDetail.put("close", Double.parseDouble(data_close_within_interval));
-			dataDetail.put("total_volumn", Integer.parseInt(data_sumupvolumn_within_interval));
+			dataDetail.put("total_volume", Integer.parseInt(data_sumupvolume_within_interval));
 			//insert into data
 			data.add(dataDetail);
 		}
@@ -268,7 +268,7 @@ public class Future implements Runnable {
 		data_high_within_interval = null;
 		data_low_within_interval = null;
 		data_close_within_interval = null;
-		data_sumupvolumn_within_interval = null;
+		data_sumupvolume_within_interval = null;
 		interval_starttime = Constants.addSeconds(interval_endtime, 1);
 		interval_endtime = Constants.addSeconds(interval_starttime, interval_in_seconds);
 	}

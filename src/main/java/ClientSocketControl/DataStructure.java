@@ -15,8 +15,8 @@ public class DataStructure {
 	Double high = null;
 	Double low = null;
 	Double close = null;
-	Integer volumn = null;
-	Integer total_volumn = null;
+	Integer volume = null;
+	Integer total_volume = null;
 	String error = null;
 	String done = null;
 	
@@ -104,17 +104,17 @@ public class DataStructure {
 	public void setClose(Double close) {
 		this.close = close;
 	}
-	public Integer getVolumn() {
-		return volumn;
+	public Integer getVolume() {
+		return volume;
 	}
-	public void setVolumn(Integer volumn) {
-		this.volumn = volumn;
+	public void setVolume(Integer volume) {
+		this.volume = volume;
 	}
-	public Integer getTotal_volumn() {
-		return total_volumn;
+	public Integer getTotal_volume() {
+		return total_volume;
 	}
-	public void setTotal_volumn(Integer total_volumn) {
-		this.total_volumn = total_volumn;
+	public void setTotal_volume(Integer total_volume) {
+		this.total_volume = total_volume;
 	}
 	public String getError() {
 		return error;

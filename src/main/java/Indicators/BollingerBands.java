@@ -5,7 +5,7 @@ import java.util.List;
 
 public class BollingerBands extends Indicator{
     
-    private List<Double> prices;
+    private List<Double> closes;
 
     private int period;
     private double multiplier;
@@ -18,26 +18,19 @@ public class BollingerBands extends Indicator{
     public BollingerBands(int period, double multiplier) {
         super.indicatorName  = "Bollinger Bands";
         super.parametersAmount = 2;
-        this.prices = new ArrayList<>();
+        this.closes = new ArrayList<>();
         this.period = period;
         this.multiplier = multiplier;
     }
     
     public void update(DataStructure dataStructure) {
-        prices.add(dataStructure.getIndex());
-        if (prices.size() > period) {
-            prices.remove(0);
+        super.dataStructure = dataStructure;
+        closes.add(dataStructure.getClose());
+        if (closes.size() > period) {
+            closes.remove(0);
         }
     }
 
-    public double getPrice(){
-        if(prices.size()>0){
-            return prices.get(prices.size()-1);
-        }else{
-            return 0;
-        }
-    }
-    
     public double getUpperBand() {
         double sma = getSMA();
         double stdDev = getStdDev();
@@ -55,23 +48,23 @@ public class BollingerBands extends Indicator{
     }
     
     public double getSMA() {
-        if (prices.size() < period) {
+        if (closes.size() < period) {
             return 0;
         }
         double sum = 0.0;
-        for (double price : prices) {
+        for (double price : closes) {
             sum += price;
         }
         return sum / period;
     }
     
     public double getStdDev() {
-        if (prices.size() < period) {
+        if (closes.size() < period) {
             return 0;
         }
         double sma = getSMA();
         double sum = 0.0;
-        for (double price : prices) {
+        for (double price : closes) {
             double diff = price - sma;
             sum += diff * diff;
         }

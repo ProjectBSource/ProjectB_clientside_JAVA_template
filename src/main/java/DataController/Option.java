@@ -49,7 +49,7 @@ public class Option implements Runnable {
 					tempdata.put("high", "111");
 					tempdata.put("low", "222");
 					tempdata.put("close", "333");
-					tempdata.put("volumn", "444");
+					tempdata.put("volume", "444");
 					data.add(tempdata.toString());
 				}
 			}

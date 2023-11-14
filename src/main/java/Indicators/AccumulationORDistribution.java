@@ -1,5 +1,10 @@
 package Indicators;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import ClientSocketControl.DataStructure;
+
 public class AccumulationORDistribution extends Indicator{
 
     private List<Double> highs;

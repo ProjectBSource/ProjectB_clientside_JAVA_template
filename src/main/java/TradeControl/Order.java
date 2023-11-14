@@ -111,7 +111,7 @@ public class Order {
 		if(data.getType().equals("interval")==false) {
 			if(direction==null && sp==null && ed==null) {
 				if(remained>0) {
-					int temp_trade_amount = (data.getVolumn()>=remained)?remained:data.getVolumn();
+					int temp_trade_amount = (data.getVolume()>=remained)?remained:data.getVolume();
 					traded += temp_trade_amount;
 					remained -= temp_trade_amount;
 					double temp_trade_price = data.getIndex() + ( (data.getIndex() *  slippage) * (random.nextInt(2)==0?1:-1) );

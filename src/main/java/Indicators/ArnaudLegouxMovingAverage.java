@@ -28,7 +28,7 @@ public class ArnaudLegouxMovingAverage extends Indicator{
     public void update(DataStructure dataStructure){
         if(dataStructure.getType().equals("tick")){
             super.dataStructure = dataStructure;
-            closes.get(closes.size()-1) = dataStructure.getClose();
+            closes.set(closes.size()-1, dataStructure.getClose());
         }
         else if(dataStructure.getType().equals("interval")){
             closes.add(dataStructure.getClose());

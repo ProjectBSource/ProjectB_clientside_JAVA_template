@@ -1,4 +1,5 @@
 package Indicators;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +50,7 @@ public class AdvanceORDecline extends Indicator{
         }
     }
 
-    public double getAdvance(){
+    public int getAdvance(){
         if(advances.size()>0){
             return advances.get(advances.size()-1);
         }else{
@@ -57,7 +58,7 @@ public class AdvanceORDecline extends Indicator{
         }
     }
 
-    public double getDecline(){
+    public int getDecline(){
         if(declines.size()>0){
             return declines.get(declines.size()-1);
         }else{

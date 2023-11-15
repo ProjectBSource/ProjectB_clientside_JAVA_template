@@ -28,6 +28,11 @@ public class AccumulativeSwingIndex extends Indicator{
     }
 
     public void update(DataStructure dataStructure){
+        if(closes.size()==0){
+            closes.add(dataStructure.getClose());
+            highs.add(dataStructure.getHigh());
+            lows.add(dataStructure.getLow());
+        }
         if(dataStructure.getType().equals("tick")){
             super.dataStructure = dataStructure;
             highs.set(highs.size()-1, dataStructure.getHigh());
@@ -36,6 +41,8 @@ public class AccumulativeSwingIndex extends Indicator{
         }
         else if(dataStructure.getType().equals("interval")){
             closes.add(dataStructure.getClose());
+            highs.add(dataStructure.getHigh());
+            lows.add(dataStructure.getLow());
             if (closes.size() > period) {
                 highs.remove(0);
                 lows.remove(0);

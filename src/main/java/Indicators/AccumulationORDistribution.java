@@ -29,6 +29,12 @@ public class AccumulationORDistribution extends Indicator{
     }
 
     public void update(DataStructure dataStructure){
+        if(closes.size()==0){
+            closes.add(dataStructure.getClose());
+            highs.add(dataStructure.getHigh());
+            lows.add(dataStructure.getLow());
+            volumes.add(dataStructure.getVolume());
+        }
         if(dataStructure.getType().equals("tick")){
             super.dataStructure = dataStructure;
             highs.set(highs.size()-1, dataStructure.getHigh());
@@ -38,6 +44,9 @@ public class AccumulationORDistribution extends Indicator{
         }
         else if(dataStructure.getType().equals("interval")){
             closes.add(dataStructure.getClose());
+            highs.add(dataStructure.getHigh());
+            lows.add(dataStructure.getLow());
+            volumes.add(dataStructure.getVolume());
             if (closes.size() > period) {
                 highs.remove(0);
                 lows.remove(0);

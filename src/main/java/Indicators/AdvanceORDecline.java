@@ -28,6 +28,11 @@ public class AdvanceORDecline extends Indicator{
     }
 
     public void update(DataStructure dataStructure){
+        if(closes.size()==0){
+            closes.add(dataStructure.getClose());
+            advances.add(0);
+            declines.add(0);
+        }
         if(dataStructure.getType().equals("tick")){
             super.dataStructure = dataStructure;
             closes.set(closes.size()-1, dataStructure.getClose());

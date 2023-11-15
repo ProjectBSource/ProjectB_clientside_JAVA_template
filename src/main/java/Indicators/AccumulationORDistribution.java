@@ -9,7 +9,7 @@ public class AccumulationORDistribution extends Indicator{
     private List<Double> highs;
     private List<Double> lows;
     private List<Double> closes;
-    private List<Double> volumes;
+    private List<Integer> volumes;
 
     private int period;
 

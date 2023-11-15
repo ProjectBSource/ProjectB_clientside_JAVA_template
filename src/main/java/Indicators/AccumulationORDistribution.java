@@ -14,12 +14,12 @@ public class AccumulationORDistribution extends Indicator{
     private int period;
 
     public AccumulationORDistribution(){
-        super.indicatorName  = "Accumulation/Distribution";
+        super.indicatorName  = "AccumulationORDistribution";
         super.parametersAmount = 1;
     }
 
     public AccumulationORDistribution(int period){
-        super.indicatorName  = "Accumulation/Distribution";
+        super.indicatorName  = "AccumulationORDistribution";
         super.parametersAmount = 1;
         this.highs = new ArrayList<>();
         this.lows = new ArrayList<>();

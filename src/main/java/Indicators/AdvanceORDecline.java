@@ -30,18 +30,18 @@ public class AdvanceORDecline extends Indicator{
     public void update(DataStructure dataStructure){
         if(dataStructure.getType().equals("tick")){
             super.dataStructure = dataStructure;
-            closes.get(closes.size()-1) = dataStructure.getClose();
+            closes.set(closes.size()-1, dataStructure.getClose());
             if(closes.size()>1){
                 if(closes.get(closes.size()-1) - closes.get(closes.size()-2) > 0){
-                    advances.get(advances.size()-1) = 1;
-                    declines.get(declines.size()-1) = 0;
+                    advances.set(advances.size()-1, 1);
+                    declines.set(declines.size()-1, 0);
                 }
                 else if(closes.get(closes.size()-1) - closes.get(closes.size()-2) == 0){
-                    advances.get(advances.size()-1) = 0;
-                    declines.get(declines.size()-1) = 0;
+                    advances.set(advances.size()-1, 0);
+                    declines.set(declines.size()-1, 0);
                 }else{
-                    advances.get(advances.size()-1) = 0;
-                    declines.get(declines.size()-1) = 1;
+                    advances.set(advances.size()-1, 0);
+                    declines.set(declines.size()-1, 1);
                 }
             }
         }

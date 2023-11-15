@@ -29,16 +29,21 @@ public class AccumulationORDistribution extends Indicator{
     }
 
     public void update(DataStructure dataStructure){
-        super.dataStructure = dataStructure;
-        highs.add(dataStructure.getHigh());
-        lows.add(dataStructure.getLow());
-        closes.add(dataStructure.getClose());
-        volumes.add(dataStructure.getTotal_volume());
-        if (closes.size() > period) {
-            highs.remove(0);
-            lows.remove(0);
-            closes.remove(0);
-            volumes.remove(0);
+        if(dataStructure.getType().equals("tick")){
+            super.dataStructure = dataStructure;
+            highs.get(highs.size()-1) = dataStructure.getHigh();
+            lows.get(lows.size()-1) = dataStructure.getLow();
+            closes.get(closes.size()-1) = dataStructure.getClose();
+            volumes.get(closes.size()-1) = dataStructure.getVolume();
+        }
+        else if(dataStructure.getType().equals("interval")){
+            closes.add(dataStructure.getClose());
+            if (closes.size() > period) {
+                highs.remove(0);
+                lows.remove(0);
+                closes.remove(0);
+                volumes.remove(0);
+            }
         }
     }
 

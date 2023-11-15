@@ -40,7 +40,7 @@ public class AccumulationORDistribution extends Indicator{
             highs.set(highs.size()-1, dataStructure.getHigh());
             lows.set(lows.size()-1, dataStructure.getLow());
             closes.set(closes.size()-1, dataStructure.getClose());
-            volumes.set(closes.size()-1, dataStructure.getVolume());
+            volumes.set(volumes.size()-1, dataStructure.getVolume());
         }
         else if(dataStructure.getType().equals("interval")){
             closes.add(dataStructure.getClose());
@@ -57,7 +57,7 @@ public class AccumulationORDistribution extends Indicator{
     }
 
     public double getAD() {
-        int dataLength = highs.size();
+        int dataLength = closes.size();
         
         if(dataLength==0) 
             return 0;

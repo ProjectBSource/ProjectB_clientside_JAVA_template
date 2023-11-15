@@ -30,9 +30,9 @@ public class AccumulativeSwingIndex extends Indicator{
     public void update(DataStructure dataStructure){
         if(dataStructure.getType().equals("tick")){
             super.dataStructure = dataStructure;
-            highs.get(highs.size()-1) = dataStructure.getHigh();
-            lows.get(lows.size()-1) = dataStructure.getLow();
-            closes.get(closes.size()-1) = dataStructure.getClose();
+            highs.set(highs.size()-1, dataStructure.getHigh());
+            lows.set(lows.size()-1, dataStructure.getLow());
+            closes.set(closes.size()-1, dataStructure.getClose());
         }
         else if(dataStructure.getType().equals("interval")){
             closes.add(dataStructure.getClose());

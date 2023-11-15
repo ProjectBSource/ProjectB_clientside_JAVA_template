@@ -30,7 +30,7 @@ public class AccumulationORDistribution extends Indicator{
 
     public void update(DataStructure dataStructure){
         if(closes.size()==0){
-            closes.add(dataStructure.getClose());
+            closes.add(dataStructure.getIndex());
             highs.add(dataStructure.getHigh());
             lows.add(dataStructure.getLow());
             volumes.add(dataStructure.getVolume());
@@ -43,7 +43,7 @@ public class AccumulationORDistribution extends Indicator{
             volumes.set(volumes.size()-1, dataStructure.getVolume());
         }
         else if(dataStructure.getType().equals("interval")){
-            closes.add(dataStructure.getClose());
+            closes.add(dataStructure.getIndex());
             highs.add(dataStructure.getHigh());
             lows.add(dataStructure.getLow());
             volumes.add(dataStructure.getVolume());
@@ -66,10 +66,6 @@ public class AccumulationORDistribution extends Indicator{
         
         // Calculate A/D values
         for (int i = 0; i < dataLength; i++) {
-            System.out.println("closes.get(i):"+closes.get(i));
-            System.out.println("lows.get(i):"+lows.get(i));
-            System.out.println("highs.get(i):"+highs.get(i));
-            System.out.println("volumes.get(i):"+volumes.get(i));
             double ad = ((closes.get(i) - lows.get(i)) - (highs.get(i) - closes.get(i))) / (highs.get(i) - lows.get(i)) * volumes.get(i);
             if (i > 0) {
                 ad += adValues[i - 1];

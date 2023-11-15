@@ -35,7 +35,7 @@ public class AdvanceORDecline extends Indicator{
         }
         if(dataStructure.getType().equals("tick")){
             super.dataStructure = dataStructure;
-            closes.set(closes.size()-1, dataStructure.getClose());
+            closes.set(closes.size()-1, dataStructure.getIndex());
             if(closes.size()>1){
                 if(closes.get(closes.size()-1) - closes.get(closes.size()-2) > 0){
                     advances.set(advances.size()-1, 1);
@@ -51,7 +51,7 @@ public class AdvanceORDecline extends Indicator{
             }
         }
         else if(dataStructure.getType().equals("interval")){
-            closes.add(dataStructure.getIndex());
+            closes.add(dataStructure.getClose());
             if (closes.size() > period) {
                 if(closes.size()>1){
                     if(closes.get(closes.size()-1) - closes.get(closes.size()-2) > 0){

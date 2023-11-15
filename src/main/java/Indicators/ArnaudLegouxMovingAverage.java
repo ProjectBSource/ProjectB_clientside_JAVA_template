@@ -31,10 +31,10 @@ public class ArnaudLegouxMovingAverage extends Indicator{
         }
         if(dataStructure.getType().equals("tick")){
             super.dataStructure = dataStructure;
-            closes.set(closes.size()-1, dataStructure.getClose());
+            closes.set(closes.size()-1, dataStructure.getIndex());
         }
         else if(dataStructure.getType().equals("interval")){
-            closes.add(dataStructure.getIndex());
+            closes.add(dataStructure.getClose());
             if (closes.size() > period) {
                 closes.remove(0);
             }

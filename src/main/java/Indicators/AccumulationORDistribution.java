@@ -39,11 +39,11 @@ public class AccumulationORDistribution extends Indicator{
             super.dataStructure = dataStructure;
             highs.set(highs.size()-1, dataStructure.getHigh());
             lows.set(lows.size()-1, dataStructure.getLow());
-            closes.set(closes.size()-1, dataStructure.getClose());
+            closes.set(closes.size()-1, dataStructure.getIndex());
             volumes.set(volumes.size()-1, dataStructure.getVolume());
         }
         else if(dataStructure.getType().equals("interval")){
-            closes.add(dataStructure.getIndex());
+            closes.add(dataStructure.getClose());
             highs.add(dataStructure.getHigh());
             lows.add(dataStructure.getLow());
             volumes.add(dataStructure.getVolume());

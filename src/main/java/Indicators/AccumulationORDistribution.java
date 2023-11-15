@@ -31,10 +31,10 @@ public class AccumulationORDistribution extends Indicator{
     public void update(DataStructure dataStructure){
         if(dataStructure.getType().equals("tick")){
             super.dataStructure = dataStructure;
-            highs.get(highs.size()-1) = dataStructure.getHigh();
-            lows.get(lows.size()-1) = dataStructure.getLow();
-            closes.get(closes.size()-1) = dataStructure.getClose();
-            volumes.get(closes.size()-1) = dataStructure.getVolume();
+            highs.set(highs.size()-1, dataStructure.getHigh());
+            lows.set(lows.size()-1, dataStructure.getLow());
+            closes.set(closes.size()-1, dataStructure.getClose());
+            volumes.set(closes.size()-1, dataStructure.getVolume());
         }
         else if(dataStructure.getType().equals("interval")){
             closes.add(dataStructure.getClose());

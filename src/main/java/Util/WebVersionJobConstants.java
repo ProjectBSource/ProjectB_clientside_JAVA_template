@@ -26,7 +26,7 @@ import Main.LoggerFilter;
 import Main.LoggerFormatter;
 import Main.LoggerHandler;
 
-import Indicators.BollingerBands;
+import Indicators.*;
 
 public class WebVersionJobConstants {
 	

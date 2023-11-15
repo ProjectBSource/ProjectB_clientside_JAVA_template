@@ -203,16 +203,15 @@ public class Main {
                 * You may write your back test program below within the while loop
                 * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
                 */
-WebVersionJobConstants.logger(data.toString());
-WebVersionJobConstants.logger("1");
+
                 @#indicatoriesUpdateLogic#@
-WebVersionJobConstants.logger("2");
+
                 @#baseLogicResult#@
-WebVersionJobConstants.logger("3");
+
                 @#logicGatewayResult#@
-WebVersionJobConstants.logger("4");
+
                 @#actionAndTradeLogic#@
-WebVersionJobConstants.logger("5");
+                
                 /*
                 * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                 */

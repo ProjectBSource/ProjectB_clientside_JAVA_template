@@ -261,7 +261,7 @@ public class WebVersionJobConstants {
 						boolean indicatorFunctionExist = false;
 						Indicator tempIndicator = null;
 						for(Indicator i : indicators){
-							if(i.indicatorName.equals("Bollinger Bands")){
+							if(i.indicatorName.equals(data.get("indicatorName"))){
 								indicatorFunctionExist=true; 
 								tempIndicator = i;
 								break; 
@@ -358,6 +358,10 @@ public class WebVersionJobConstants {
 	}
 
     public static void initialIndicator() {
+		indicators.add(new AccumulationORDistribution());
+		indicators.add(new AccumulativeSwingIndex());
+		indicators.add(new AdvanceORDecline());
+		indicators.add(new ArnaudLegouxMovingAverage());
 		indicators.add(new BollingerBands());
 		logger("initialIndicator() completed");
     }

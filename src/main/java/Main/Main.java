@@ -203,6 +203,7 @@ public class Main {
                 * You may write your back test program below within the while loop
                 * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
                 */
+WebVersionJobConstants.logger(data.toString());
 WebVersionJobConstants.logger("1");
                 @#indicatoriesUpdateLogic#@
 WebVersionJobConstants.logger("2");

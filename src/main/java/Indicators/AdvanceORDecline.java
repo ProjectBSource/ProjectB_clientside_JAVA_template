@@ -14,12 +14,12 @@ public class AdvanceORDecline extends Indicator{
     private int period;
 
     public AdvanceORDecline(){
-        super.indicatorName  = "Advance/Decline";
+        super.indicatorName  = "AdvanceORDecline";
         super.parametersAmount = 1;
     }
 
     public AdvanceORDecline(int period){
-        super.indicatorName  = "Advance/Decline";
+        super.indicatorName  = "AdvanceORDecline";
         super.parametersAmount = 1;
         this.advances = new ArrayList<>();
         this.declines = new ArrayList<>();

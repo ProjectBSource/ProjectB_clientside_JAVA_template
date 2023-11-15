@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ClientSocketControl.DataStructure;
 import DataController.Future;
-import Indicators.BollingerBands;
+import Indicators.*;
 import TradeControl.TradeController;
 import TradeControl.OrderActionConstants.Action;
 import TradeControl.OrderActionConstants.Direction;

@@ -30,8 +30,8 @@ public class AdvanceORDecline extends Indicator{
 
     public String getOutput(){
         dataDetail = new JSONObject();
-        dataDetail.put("getAdvance", getAdvance()+"");
-        dataDetail.put("getDecline", getDecline()+"");
+        dataDetail.put("getAdvanceSum", getAdvanceSum()+"");
+        dataDetail.put("getDeclineSum", getDeclineSum()+"");
         dataDetail.put("getADRatio", getADRatio()+"");
         return dataDetail.toString();
     }
@@ -82,17 +82,25 @@ public class AdvanceORDecline extends Indicator{
         }
     }
 
-    public int getAdvance(){
+    public int getAdvanceSum(){
         if(advances.size()>0){
-            return advances.get(advances.size()-1);
+            int sumup = 0;
+            for(int advance : advances){
+                sumup += advance;
+            }
+            return sumup;
         }else{
             return 0;
         }
     }
 
-    public int getDecline(){
+    public int getDeclineSum(){
         if(declines.size()>0){
-            return declines.get(declines.size()-1);
+            int sumup = 0;
+            for(int decline : declines){
+                sumup += decline;
+            }
+            return sumup;
         }else{
             return 0;
         }

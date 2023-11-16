@@ -127,6 +127,7 @@ public class Order {
                     Order temp_market = new Order(this);
 					history.add(temp_market);
 					//update order history in JSON
+					System.out.println(orderDetailInJSON);
 					historyInJSON.add(orderDetailInJSON);
 					//Update profle
 					if(action == Action.SELL) { temp_trade_amount *= -1; }

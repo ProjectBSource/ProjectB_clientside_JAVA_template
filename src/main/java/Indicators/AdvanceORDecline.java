@@ -27,6 +27,14 @@ public class AdvanceORDecline extends Indicator{
         this.period = period;
     }
 
+    public String getOutput(){
+        dataDetail = new JSONObject();
+        dataDetail.put("getAdvance", getAdvance());
+        dataDetail.put("getDecline", getDecline());
+        dataDetail.put("getADRatio", getADRatio());
+        return dataDetail.toString();
+    }
+
     public void update(DataStructure dataStructure){
         if(closes.size()==0){
             closes.add(dataStructure.getIndex());

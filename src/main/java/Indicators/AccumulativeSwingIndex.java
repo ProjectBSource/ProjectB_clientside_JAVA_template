@@ -27,6 +27,12 @@ public class AccumulativeSwingIndex extends Indicator{
         this.period = period;
     }
 
+    public String getOutput(){
+        dataDetail = new JSONObject();
+        dataDetail.put("getASI", getASI());
+        return dataDetail.toString();
+    }
+
     public void update(DataStructure dataStructure){
         if(closes.size()==0){
             closes.add(dataStructure.getIndex());

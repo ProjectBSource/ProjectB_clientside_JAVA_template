@@ -108,7 +108,7 @@ public class Order {
 	}
 
 	public JSONObject trade(Profile profile, DataStructure data, double slippage) throws Exception {
-		if(data.getType().equals("interval")==false) {
+		if(data.getType().equals("tick")==false) {
 			if(direction==null && sp==null && ed==null) {
 				if(remained>0) {
 					int temp_trade_amount = (data.getVolume()>=remained)?remained:data.getVolume();

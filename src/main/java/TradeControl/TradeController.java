@@ -139,12 +139,12 @@ public class TradeController {
 		JSONArray history = new JSONArray();
         for(Order order : completedOrders){
 			for(Order childOrder : order.history){
-				history.put(childOrder);
+				history.put(childOrder.orderDetailInJSON);
 			}
         }
         for (Map.Entry<String, Order> order : orders.entrySet()) {
 			for(Order childOrder : order.getValue().history){
-				history.put(childOrder);
+				history.put(childOrder.orderDetailInJSON);
 			}
         }
 		JSONObject result = new JSONObject();

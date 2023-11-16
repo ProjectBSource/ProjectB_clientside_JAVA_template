@@ -193,7 +193,9 @@ public class Main {
                 * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
                 */
                 if(restartAndGenerateData==true){
-                    restartAndGenerateDataArrayList.add(data.toString());
+                    restartAndGenerateDataArrayList.add(
+                        String.format("%s@#manualOpertionOutputControl1#@",data.toString()@#manualOpertionOutputControl2#@)
+                    );
                 }
                 /*
                 * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

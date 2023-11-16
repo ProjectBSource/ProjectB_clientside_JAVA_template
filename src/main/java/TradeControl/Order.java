@@ -38,6 +38,7 @@ public class Order {
 	public boolean oneTimeTradeCheck;
 	public JSONObject orderDetailInJSON;
 	public ArrayList<Order> history = new ArrayList<>();
+	public ArrayList<JSONObject> historyInJSON = new ArrayList<>();
 
 	public Order(String orderAlias, DataStructure dataStructure, Action action, int quantity, boolean oneTimeTradeCheck) throws Exception {
 		this.symbol = dataStructure.getSymbol();
@@ -125,6 +126,8 @@ public class Order {
 					//update order history node
                     Order temp_market = new Order(this);
 					history.add(temp_market);
+					//update order history in JSON
+					historyInJSON.add(orderDetailInJSON);
 					//Update profle
 					if(action == Action.SELL) { temp_trade_amount *= -1; }
 					profile.update(symbol, temp_trade_amount, temp_trade_price);

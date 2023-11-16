@@ -143,8 +143,8 @@ public class TradeController {
 			}
         }
         for (Map.Entry<String, Order> order : orders.entrySet()) {
-			for(Order childOrder : order.history){
-				history.put(order.getValue().childOrder);
+			for(Order childOrder : order.getValue().history){
+				history.put(childOrder);
 			}
         }
 		JSONObject result = new JSONObject();

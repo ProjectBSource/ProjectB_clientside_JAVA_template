@@ -3,6 +3,7 @@ package Indicators;
 import ClientSocketControl.DataStructure;
 import java.util.ArrayList;
 import java.util.List;
+import org.json.JSONObject;
 
 public class AccumulationORDistribution extends Indicator{
 

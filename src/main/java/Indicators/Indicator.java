@@ -1,6 +1,7 @@
 package Indicators;
 
 import ClientSocketControl.DataStructure;
+import org.json.JSONObject;
 
 public class Indicator {
     public String indicatorName = null;

@@ -30,9 +30,9 @@ public class AdvanceORDecline extends Indicator{
 
     public String getOutput(){
         dataDetail = new JSONObject();
-        dataDetail.put("getAdvance", getAdvance());
-        dataDetail.put("getDecline", getDecline());
-        dataDetail.put("getADRatio", getADRatio());
+        dataDetail.put("getAdvance", getAdvance()+"");
+        dataDetail.put("getDecline", getDecline()+"");
+        dataDetail.put("getADRatio", getADRatio()+"");
         return dataDetail.toString();
     }
 

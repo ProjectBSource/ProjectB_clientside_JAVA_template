@@ -28,11 +28,11 @@ public class BollingerBands extends Indicator{
 
     public String getOutput(){
         dataDetail = new JSONObject();
-        dataDetail.put("getUpperBand", getUpperBand());
-        dataDetail.put("getMiddleBand", getMiddleBand());
-        dataDetail.put("getLowerBand", getLowerBand());
-        dataDetail.put("getSMA", getSMA());
-        dataDetail.put("getStdDev", getStdDev());
+        dataDetail.put("getUpperBand", getUpperBand()+"");
+        dataDetail.put("getMiddleBand", getMiddleBand()+"");
+        dataDetail.put("getLowerBand", getLowerBand()+"");
+        dataDetail.put("getSMA", getSMA()+"");
+        dataDetail.put("getStdDev", getStdDev()+"");
         return dataDetail.toString();
     }
     

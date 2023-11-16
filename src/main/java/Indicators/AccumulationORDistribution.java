@@ -31,7 +31,7 @@ public class AccumulationORDistribution extends Indicator{
 
     public String getOutput(){
         dataDetail = new JSONObject();
-        dataDetail.put("getAD", getAD());
+        dataDetail.put("getAD", getAD()+"");
         return dataDetail.toString();
     }
 

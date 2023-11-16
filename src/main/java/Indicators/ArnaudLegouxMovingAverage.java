@@ -28,7 +28,7 @@ public class ArnaudLegouxMovingAverage extends Indicator{
 
     public String getOutput(){
         dataDetail = new JSONObject();
-        dataDetail.put("getALMA", getALMA());
+        dataDetail.put("getALMA", getALMA()+"");
         return dataDetail.toString();
     }
 

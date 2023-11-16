@@ -30,7 +30,7 @@ public class AccumulativeSwingIndex extends Indicator{
 
     public String getOutput(){
         dataDetail = new JSONObject();
-        dataDetail.put("getASI", getASI());
+        dataDetail.put("getASI", getASI()+"");
         return dataDetail.toString();
     }
 

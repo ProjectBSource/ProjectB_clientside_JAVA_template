@@ -63,20 +63,20 @@ public class AdvanceORDecline extends Indicator{
         }
         else if(dataStructure.getType().equals("interval")){
             closes.add(dataStructure.getClose());
-            if (closes.size() > period) {
-                if(closes.size()>1){
-                    if(closes.get(closes.size()-1) - closes.get(closes.size()-2) > 0){
-                        advances.add(1);
-                        declines.add(0);
-                    }
-                    else if(closes.get(closes.size()-1) - closes.get(closes.size()-2) == 0){
-                        advances.add(0);
-                        declines.add(0);
-                    }else{
-                        advances.add(0);
-                        declines.add(1);
-                    }
+            if(closes.size()>1){
+                if(closes.get(closes.size()-1) - closes.get(closes.size()-2) > 0){
+                    advances.add(1);
+                    declines.add(0);
                 }
+                else if(closes.get(closes.size()-1) - closes.get(closes.size()-2) == 0){
+                    advances.add(0);
+                    declines.add(0);
+                }else{
+                    advances.add(0);
+                    declines.add(1);
+                }
+            }
+            if (closes.size() > period) {
                 advances.remove(0);
                 declines.remove(0);
                 closes.remove(0);

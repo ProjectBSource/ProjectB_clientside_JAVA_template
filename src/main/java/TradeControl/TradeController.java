@@ -101,34 +101,30 @@ public class TradeController {
 	public boolean placeOFFOrder(String targetId, DataStructure dataStructure) throws Exception {
 		Order order = orders.get(targetId);
 		if(order!=null){
-			if(profile.holding.size() > 0){
-				if(profile.holding.get(order.symbol)!=null){
-					if(profile.holding.get(order.symbol) >= order.traded){
-						//For non option trade off
-						if(order.direction==null){
-							if(order.action==Action.BUY){
-								orders.put(targetId+"_OFF", new Order(targetId+"_OFF", dataStructure, Action.SELL, order.traded, order.oneTimeTradeCheck));
-							}
-							else if(order.action==Action.SELL){
-								orders.put(targetId+"_OFF", new Order(targetId+"_OFF", dataStructure, Action.BUY, order.traded, order.oneTimeTradeCheck));
-							}
-						}
-						//For option trade off
-						if(order.direction!=null){
-							if(order.action==Action.BUY){
-								orders.put(targetId+"_OFF", new Order(targetId+"_OFF", order.symbol, Action.SELL, order.direction, order.sp, order.ed, order.traded, order.oneTimeTradeCheck));
-							}
-							else if(order.action==Action.SELL){
-								orders.put(targetId+"_OFF", new Order(targetId+"_OFF", order.symbol, Action.BUY, order.direction, order.sp, order.ed, order.traded, order.oneTimeTradeCheck));
-							}
-						}
-						if(order.oneTimeTradeCheck==false){
-                            completedOrders.add(order);
-                            orders.remove(targetId);
-						}
-						return true;
+			if(profile.holding.get(order.symbol)!=null){
+				//For non option trade off
+				if(order.direction==null){
+					if(order.action==Action.BUY){
+						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", dataStructure, Action.SELL, order.traded, order.oneTimeTradeCheck));
+					}
+					else if(order.action==Action.SELL){
+						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", dataStructure, Action.BUY, order.traded, order.oneTimeTradeCheck));
 					}
 				}
+				//For option trade off
+				if(order.direction!=null){
+					if(order.action==Action.BUY){
+						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", order.symbol, Action.SELL, order.direction, order.sp, order.ed, order.traded, order.oneTimeTradeCheck));
+					}
+					else if(order.action==Action.SELL){
+						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", order.symbol, Action.BUY, order.direction, order.sp, order.ed, order.traded, order.oneTimeTradeCheck));
+					}
+				}
+				if(order.oneTimeTradeCheck==false){
+					completedOrders.add(order);
+					orders.remove(targetId);
+				}
+				return true;
 			}
 		}
 		return false;

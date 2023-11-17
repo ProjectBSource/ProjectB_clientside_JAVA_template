@@ -47,7 +47,7 @@ public class Main {
 
     public static void main(String args[]) throws Exception {
         Main m = new Main();
-		m.run();
+		m.run(args);
     }
 
 	public void run(String args[]) throws Exception {

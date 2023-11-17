@@ -39,7 +39,7 @@ public class Order {
 	public boolean oneTimeTradeCheck;
 	public JSONObject orderDetailInJSON;
 	public ArrayList<Order> history = new ArrayList<>();
-	public ArrayList<JSONObject> historyInJSON = new ArrayList<>();
+	public ArrayList<String> historyInJSON = new ArrayList<>();
 
 	public Order(){}
 

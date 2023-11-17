@@ -25,19 +25,19 @@ import java.io.IOException;
 public class Main {
 		
     //Initial the ObjectMapper
-    public ObjectMapper mapper = new ObjectMapper();
+    public static ObjectMapper mapper = new ObjectMapper();
     //Initial the DataStructure
-    public DataStructure dataStructure = null;
+    public static DataStructure dataStructure = null;
     //Trade controller
-    public TradeController tradeController = null;
+    public static TradeController tradeController = null;
 
     //Variables for update task real time information
-    private Date lastUpdateTime = null;
+    private static Date lastUpdateTime = null;
 
 
     //Manual operation variables
-    public boolean restartAndGenerateData = true;
-    public ArrayList<String> restartAndGenerateDataArrayList = new ArrayList<String>();
+    public static boolean restartAndGenerateData = true;
+    public static ArrayList<String> restartAndGenerateDataArrayList = new ArrayList<String>();
 
 
     /* Setup the indicatories you need here */
@@ -45,12 +45,8 @@ public class Main {
     @#indicatories#@
     //############################################################################################################################
 
-    public static void main(String args[]) throws Exception {
-        Main m = new Main();
-		m.run(args);
-    }
 
-	public void run(String args[]) throws Exception {
+	public static void main(String args[]) throws Exception {
 
         //get the input parameters
         WebVersionJobConstants.runJobID = args[0];
@@ -171,7 +167,7 @@ public class Main {
 		}
     }
 
-    private void mainLogicLevel1(ArrayList<JSONObject> dataList) throws Exception{
+    private static void mainLogicLevel1(ArrayList<JSONObject> dataList) throws Exception{
         for(JSONObject data : dataList) {
             //get the response
             if(data!=null && !data.isEmpty()) {
@@ -249,7 +245,7 @@ public class Main {
         }
     }
 
-    private void generateOrderHistoryInJSON(){
+    private static void generateOrderHistoryInJSON(){
         try{
             FileWriter fw = new FileWriter("/home/ec2-user/dataSource/webVersion/Jobs/"+WebVersionJobConstants.runJobID+"/OrderHistoryInJSON.json");
             BufferedWriter bw = new BufferedWriter(fw);
@@ -259,7 +255,7 @@ public class Main {
         }catch(Exception e){}
     }
 	
-    private void generateProfileInJSON(){
+    private static void generateProfileInJSON(){
         try{
             FileWriter fw = new FileWriter("/home/ec2-user/dataSource/webVersion/Jobs/"+WebVersionJobConstants.runJobID+"/ProfileInJSON.json");
             BufferedWriter bw = new BufferedWriter(fw);
@@ -269,7 +265,7 @@ public class Main {
         }catch(Exception e){}
     }
 
-    private void manualOperation_generateRestartAndGenerateData(){
+    private static void manualOperation_generateRestartAndGenerateData(){
         try{
             FileWriter fw = new FileWriter("/home/ec2-user/dataSource/webVersion/Jobs/"+WebVersionJobConstants.runJobID+"/"+WebVersionJobConstants.runJobID+"_restartAndGenerateData.txt", true);
             BufferedWriter bw = new BufferedWriter(fw);

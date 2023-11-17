@@ -50,7 +50,7 @@ public class Main {
 		m.run();
     }
 
-	public static void run(String args[]) throws Exception {
+	public void run(String args[]) throws Exception {
 
         //get the input parameters
         WebVersionJobConstants.runJobID = args[0];

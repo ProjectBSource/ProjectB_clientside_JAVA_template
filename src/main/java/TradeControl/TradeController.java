@@ -39,9 +39,6 @@ public class TradeController {
             trade_notification = order.getValue().trade(profile, ds, slippage);
 			if(trade_notification!=null) {
 				trade_notification_list.put(trade_notification);
-				//update order history node
-				order.getValue().history.add(new Order());
-				order.getValue().history.get(order.getValue().history.size()-1).copyOrder(order.getValue());
 			}
         }
 

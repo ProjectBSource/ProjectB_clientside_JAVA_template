@@ -41,7 +41,7 @@ public class TradeController {
 				trade_notification_list.put(trade_notification);
 				//update order history node
 				order.getValue().history.add(new Order());
-				order.getValue().history.get(order.getValue().history.size()-1).copyOrder(order);
+				order.getValue().history.get(order.getValue().history.size()-1).copyOrder(order.getValue());
 			}
         }
 

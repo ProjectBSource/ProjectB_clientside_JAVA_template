@@ -124,7 +124,8 @@ public class Order {
 					orderDetailInJSON.put("orderFillDateTime", orderFillDateTime);
 					//update order history node
 					history.add(new Order(this));
-					System.out.println(history.get(0).orderFillDateTime);
+					if(history.size()>0){ System.out.println("history.get(0).orderFillDateTime:"+history.get(0).orderFillDateTime); }
+					if(history.size()>1){ System.out.println("history.get(1).orderFillDateTime:"+history.get(1).orderFillDateTime); }
 					//Update profle
 					if(action == Action.SELL) { temp_trade_amount *= -1; }
 					profile.update(symbol, temp_trade_amount, temp_trade_price);

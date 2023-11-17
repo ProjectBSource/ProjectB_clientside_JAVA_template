@@ -39,6 +39,7 @@ public class Order {
 	public boolean oneTimeTradeCheck;
 	public JSONObject orderDetailInJSON;
 	public ArrayList<Order> history = new ArrayList<>();
+	public ArrayList<String> historyInJSON = new ArrayList<>();
 
 	public Order(){}
 
@@ -127,6 +128,10 @@ public class Order {
                     orderDetailInJSON.put("tradePrice", tradePrice);
                     orderDetailInJSON.put("averageTradePrice", averageTradePrice);
 					orderDetailInJSON.put("orderFillDateTime", orderFillDateTime);
+					//update order history node
+					history.add(new Order());
+					history.get(history.size()-1).copyOrder(this);
+					historyInJSON.add(orderDetailInJSON);
 					//Update profle
 					if(action == Action.SELL) { temp_trade_amount *= -1; }
 					profile.update(symbol, temp_trade_amount, tradePrice);

@@ -131,7 +131,7 @@ public class Order {
 					//update order history node
 					history.add(new Order());
 					history.get(history.size()-1).copyOrder(this);
-					historyInJSON.add(new JSONObject(orderDetailInJSON));
+					historyInJSON.add(orderDetailInJSON.toString());
 					//Update profle
 					if(action == Action.SELL) { temp_trade_amount *= -1; }
 					profile.update(symbol, temp_trade_amount, tradePrice);

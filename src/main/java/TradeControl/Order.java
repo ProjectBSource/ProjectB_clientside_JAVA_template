@@ -40,6 +40,8 @@ public class Order {
 	public JSONObject orderDetailInJSON;
 	public ArrayList<Order> history = new ArrayList<>();
 
+	public Order(){}
+
 	public Order(String orderAlias, DataStructure dataStructure, Action action, int quantity, boolean oneTimeTradeCheck) throws Exception {
 		this.symbol = dataStructure.getSymbol();
 		this.orderid = UUID.randomUUID().toString();
@@ -90,7 +92,7 @@ public class Order {
 		orderDetailInJSON.put("lastUpdateDateTime", this.lastUpdateDateTime);
 	}
 	
-	public Order(Order order) {
+	public copyOrder(Order order) {
 		this.symbol = order.symbol;
 		this.orderid = order.orderid;
 		this.orderAlias = order.orderAlias;
@@ -126,9 +128,8 @@ public class Order {
                     orderDetailInJSON.put("averageTradePrice", averageTradePrice);
 					orderDetailInJSON.put("orderFillDateTime", orderFillDateTime);
 					//update order history node
-					history.add(new Order(this));
-					if(history.size()>0){ System.out.println("history.get(0).orderDetailInJSON:"+history.get(0).orderDetailInJSON); }
-					if(history.size()>1){ System.out.println("history.get(1).orderDetailInJSON:"+history.get(1).orderDetailInJSON); }
+					history.add(new Order());
+					history.get(history.size()-1).copyOrder(this);
 					//Update profle
 					if(action == Action.SELL) { temp_trade_amount *= -1; }
 					profile.update(symbol, temp_trade_amount, tradePrice);

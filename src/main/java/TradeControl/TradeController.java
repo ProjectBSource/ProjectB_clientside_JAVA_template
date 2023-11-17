@@ -138,12 +138,12 @@ public class TradeController {
 	public JSONObject getOrderHistoryInJSON() throws JsonProcessingException, JSONException {
 		JSONArray history = new JSONArray();
         for(Order order : completedOrders){
-			for(String childOrderInJSON : order.historyInJSON){
+			for(JSONObject childOrderInJSON : order.historyInJSON){
 				history.put(childOrderInJSON);
 			}
         }
         for (Map.Entry<String, Order> order : orders.entrySet()) {
-			for(String childOrderInJSON : order.getValue().historyInJSON){
+			for(JSONObject childOrderInJSON : order.getValue().historyInJSON){
 				history.put(childOrderInJSON);
 			}
         }

@@ -127,9 +127,6 @@ public class Order {
                     orderDetailInJSON.put("tradePrice", tradePrice);
                     orderDetailInJSON.put("averageTradePrice", averageTradePrice);
 					orderDetailInJSON.put("orderFillDateTime", orderFillDateTime);
-					//update order history node
-					history.add(new Order());
-					history.get(history.size()-1).copyOrder(this);
 					//Update profle
 					if(action == Action.SELL) { temp_trade_amount *= -1; }
 					profile.update(symbol, temp_trade_amount, tradePrice);

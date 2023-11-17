@@ -25,19 +25,19 @@ import java.io.IOException;
 public class Main {
 		
     //Initial the ObjectMapper
-    public static ObjectMapper mapper = new ObjectMapper();
+    public ObjectMapper mapper = new ObjectMapper();
     //Initial the DataStructure
-    public static DataStructure dataStructure = null;
+    public DataStructure dataStructure = null;
     //Trade controller
-    public static TradeController tradeController = null;
+    public TradeController tradeController = null;
 
     //Variables for update task real time information
-    private static Date lastUpdateTime = null;
+    private Date lastUpdateTime = null;
 
 
     //Manual operation variables
-    public static boolean restartAndGenerateData = true;
-    public static ArrayList<String> restartAndGenerateDataArrayList = new ArrayList<String>();
+    public boolean restartAndGenerateData = true;
+    public ArrayList<String> restartAndGenerateDataArrayList = new ArrayList<String>();
 
 
     /* Setup the indicatories you need here */
@@ -45,8 +45,12 @@ public class Main {
     @#indicatories#@
     //############################################################################################################################
 
+    public static void main(String args[]) throws Exception {
+        Main m = new Main();
+		m.run();
+    }
 
-	public static void main(String args[]) throws Exception {
+	public static void run(String args[]) throws Exception {
 
         //get the input parameters
         WebVersionJobConstants.runJobID = args[0];

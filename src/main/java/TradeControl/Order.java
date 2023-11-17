@@ -30,7 +30,7 @@ public class Order {
 	public StrikePrice sp;
 	public ExpiryDate ed;
 	public int quantity;
-	public int traded;
+	public int totalTraded;
 	public int remained;
 	public double averageTradePrice;
 	public double tradePrice;
@@ -103,7 +103,7 @@ public class Order {
 		this.sp = order.sp;
 		this.ed = order.ed;
 		this.quantity = order.quantity;
-		this.traded = order.traded;
+		this.totalTraded = order.totalTraded;
 		this.remained = order.remained;
 		this.oneTimeTradeCheck = order.oneTimeTradeCheck;
 		this.averageTradePrice = order.averageTradePrice;
@@ -118,12 +118,13 @@ public class Order {
 			if(direction==null && sp==null && ed==null) {
 				if(remained>0) {
 					int temp_trade_amount = (data.getVolume()>=remained)?remained:data.getVolume();
-					traded += temp_trade_amount;
-					remained -= temp_trade_amount;
 					tradePrice = data.getIndex() + ( (data.getIndex() *  slippage) * (random.nextInt(2)==0?1:-1) );
-					averageTradePrice = (averageTradePrice + (temp_trade_amount * tradePrice)) / traded;
+					averageTradePrice = ((averageTradePrice * totalTraded) + (temp_trade_amount * tradePrice)) / (totalTraded + temp_trade_amount);
+					totalTraded += temp_trade_amount;
+					remained -= temp_trade_amount;
 					orderFillDateTime = Constants.df_yyyyMMddkkmmss.parse(data.getDatetime());
-                    orderDetailInJSON.put("traded", traded);
+                    orderDetailInJSON.put("traded", temp_trade_amount);
+					orderDetailInJSON.put("totalTraded", totalTraded);
                     orderDetailInJSON.put("remained", remained);
                     orderDetailInJSON.put("tradePrice", tradePrice);
                     orderDetailInJSON.put("averageTradePrice", averageTradePrice);

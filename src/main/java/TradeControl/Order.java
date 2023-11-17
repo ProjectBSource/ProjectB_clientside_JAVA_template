@@ -33,6 +33,7 @@ public class Order {
 	public int traded;
 	public int remained;
 	public double averageTradePrice;
+	public double tradePrice;
 	public Date lastUpdateDateTime;
 	public Date orderFillDateTime;
 	public boolean oneTimeTradeCheck;
@@ -104,6 +105,8 @@ public class Order {
 		this.oneTimeTradeCheck = order.oneTimeTradeCheck;
 		this.averageTradePrice = order.averageTradePrice;
 		this.lastUpdateDateTime = order.lastUpdateDateTime;
+		this.tradePrice = order.tradePrice;
+		this.orderFillDateTime = order.orderFillDateTime;
 		this.orderDetailInJSON = order.orderDetailInJSON;
 	}
 
@@ -114,18 +117,18 @@ public class Order {
 					int temp_trade_amount = (data.getVolume()>=remained)?remained:data.getVolume();
 					traded += temp_trade_amount;
 					remained -= temp_trade_amount;
-					double temp_trade_price = data.getIndex() + ( (data.getIndex() *  slippage) * (random.nextInt(2)==0?1:-1) );
+					tradePrice = data.getIndex() + ( (data.getIndex() *  slippage) * (random.nextInt(2)==0?1:-1) );
 					averageTradePrice = (averageTradePrice + (temp_trade_amount * temp_trade_price)) / traded;
 					orderFillDateTime = Constants.df_yyyyMMddkkmmss.parse(data.getDatetime());
                     orderDetailInJSON.put("traded", traded);
                     orderDetailInJSON.put("remained", remained);
-                    orderDetailInJSON.put("temp_trade_price", temp_trade_price);
+                    orderDetailInJSON.put("tradePrice", tradePrice);
                     orderDetailInJSON.put("averageTradePrice", averageTradePrice);
 					orderDetailInJSON.put("orderFillDateTime", orderFillDateTime);
 					//update order history node
 					history.add(new Order(this));
-					if(history.size()>0){ System.out.println("history.get(0).orderFillDateTime:"+history.get(0).orderFillDateTime); }
-					if(history.size()>1){ System.out.println("history.get(1).orderFillDateTime:"+history.get(1).orderFillDateTime); }
+					if(history.size()>0){ System.out.println("history.get(0).orderDetailInJSON:"+history.get(0).orderDetailInJSON); }
+					if(history.size()>1){ System.out.println("history.get(1).orderDetailInJSON:"+history.get(1).orderDetailInJSON); }
 					//Update profle
 					if(action == Action.SELL) { temp_trade_amount *= -1; }
 					profile.update(symbol, temp_trade_amount, temp_trade_price);

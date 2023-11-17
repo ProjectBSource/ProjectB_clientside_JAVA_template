@@ -92,7 +92,7 @@ public class Order {
 		orderDetailInJSON.put("lastUpdateDateTime", this.lastUpdateDateTime);
 	}
 	
-	public copyOrder(Order order) {
+	public void copyOrder(Order order) {
 		this.symbol = order.symbol;
 		this.orderid = order.orderid;
 		this.orderAlias = order.orderAlias;

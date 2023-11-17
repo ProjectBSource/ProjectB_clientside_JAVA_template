@@ -171,7 +171,7 @@ public class Main {
 		}
     }
 
-    private static void mainLogicLevel1(ArrayList<JSONObject> dataList) throws Exception{
+    private void mainLogicLevel1(ArrayList<JSONObject> dataList) throws Exception{
         for(JSONObject data : dataList) {
             //get the response
             if(data!=null && !data.isEmpty()) {
@@ -249,7 +249,7 @@ public class Main {
         }
     }
 
-    private static void generateOrderHistoryInJSON(){
+    private void generateOrderHistoryInJSON(){
         try{
             FileWriter fw = new FileWriter("/home/ec2-user/dataSource/webVersion/Jobs/"+WebVersionJobConstants.runJobID+"/OrderHistoryInJSON.json");
             BufferedWriter bw = new BufferedWriter(fw);
@@ -259,7 +259,7 @@ public class Main {
         }catch(Exception e){}
     }
 	
-    private static void generateProfileInJSON(){
+    private void generateProfileInJSON(){
         try{
             FileWriter fw = new FileWriter("/home/ec2-user/dataSource/webVersion/Jobs/"+WebVersionJobConstants.runJobID+"/ProfileInJSON.json");
             BufferedWriter bw = new BufferedWriter(fw);
@@ -269,7 +269,7 @@ public class Main {
         }catch(Exception e){}
     }
 
-    private static void manualOperation_generateRestartAndGenerateData(){
+    private void manualOperation_generateRestartAndGenerateData(){
         try{
             FileWriter fw = new FileWriter("/home/ec2-user/dataSource/webVersion/Jobs/"+WebVersionJobConstants.runJobID+"/"+WebVersionJobConstants.runJobID+"_restartAndGenerateData.txt", true);
             BufferedWriter bw = new BufferedWriter(fw);

@@ -105,19 +105,19 @@ public class TradeController {
 				//For non option trade off
 				if(order.direction==null){
 					if(order.action==Action.BUY){
-						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", dataStructure, Action.SELL, order.traded, order.oneTimeTradeCheck));
+						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", dataStructure, Action.SELL, order.totalTraded, order.oneTimeTradeCheck));
 					}
 					else if(order.action==Action.SELL){
-						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", dataStructure, Action.BUY, order.traded, order.oneTimeTradeCheck));
+						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", dataStructure, Action.BUY, order.totalTraded, order.oneTimeTradeCheck));
 					}
 				}
 				//For option trade off
 				if(order.direction!=null){
 					if(order.action==Action.BUY){
-						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", order.symbol, Action.SELL, order.direction, order.sp, order.ed, order.traded, order.oneTimeTradeCheck));
+						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", order.symbol, Action.SELL, order.direction, order.sp, order.ed, order.totalTraded, order.oneTimeTradeCheck));
 					}
 					else if(order.action==Action.SELL){
-						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", order.symbol, Action.BUY, order.direction, order.sp, order.ed, order.traded, order.oneTimeTradeCheck));
+						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", order.symbol, Action.BUY, order.direction, order.sp, order.ed, order.totalTraded, order.oneTimeTradeCheck));
 					}
 				}
 				if(order.oneTimeTradeCheck==false){

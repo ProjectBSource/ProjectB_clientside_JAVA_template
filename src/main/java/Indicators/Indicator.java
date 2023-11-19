@@ -1,11 +1,14 @@
 package Indicators;
 
 import ClientSocketControl.DataStructure;
+import org.json.JSONObject;
 
 public class Indicator {
     public String indicatorName = null;
     public int parametersAmount = 0;
     public DataStructure dataStructure = null;
+
+    public JSONObject dataDetail = new JSONObject();
     
     public Double getIndex(){
         if(dataStructure!=null){

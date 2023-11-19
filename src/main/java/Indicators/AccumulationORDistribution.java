@@ -3,6 +3,7 @@ package Indicators;
 import ClientSocketControl.DataStructure;
 import java.util.ArrayList;
 import java.util.List;
+import org.json.JSONObject;
 
 public class AccumulationORDistribution extends Indicator{
 
@@ -14,12 +15,12 @@ public class AccumulationORDistribution extends Indicator{
     private int period;
 
     public AccumulationORDistribution(){
-        super.indicatorName  = "Accumulation/Distribution";
+        super.indicatorName  = "AccumulationORDistribution";
         super.parametersAmount = 1;
     }
 
     public AccumulationORDistribution(int period){
-        super.indicatorName  = "Accumulation/Distribution";
+        super.indicatorName  = "AccumulationORDistribution";
         super.parametersAmount = 1;
         this.highs = new ArrayList<>();
         this.lows = new ArrayList<>();
@@ -28,16 +29,31 @@ public class AccumulationORDistribution extends Indicator{
         this.period = period;
     }
 
+    public String getOutput(){
+        dataDetail = new JSONObject();
+        dataDetail.put("getAD", getAD()+"");
+        return dataDetail.toString();
+    }
+
     public void update(DataStructure dataStructure){
+        if(closes.size()==0){
+            closes.add(dataStructure.getIndex());
+            highs.add(dataStructure.getHigh());
+            lows.add(dataStructure.getLow());
+            volumes.add(dataStructure.getTotal_volume());
+        }
         if(dataStructure.getType().equals("tick")){
             super.dataStructure = dataStructure;
-            highs.get(highs.size()-1) = dataStructure.getHigh();
-            lows.get(lows.size()-1) = dataStructure.getLow();
-            closes.get(closes.size()-1) = dataStructure.getClose();
-            volumes.get(closes.size()-1) = dataStructure.getVolume();
+            highs.set(highs.size()-1, dataStructure.getHigh());
+            lows.set(lows.size()-1, dataStructure.getLow());
+            closes.set(closes.size()-1, dataStructure.getIndex());
+            volumes.set(volumes.size()-1, dataStructure.getTotal_volume());
         }
         else if(dataStructure.getType().equals("interval")){
             closes.add(dataStructure.getClose());
+            highs.add(dataStructure.getHigh());
+            lows.add(dataStructure.getLow());
+            volumes.add(dataStructure.getTotal_volume());
             if (closes.size() > period) {
                 highs.remove(0);
                 lows.remove(0);
@@ -48,7 +64,7 @@ public class AccumulationORDistribution extends Indicator{
     }
 
     public double getAD() {
-        int dataLength = highs.size();
+        int dataLength = closes.size();
         
         if(dataLength==0) 
             return 0;

@@ -2,6 +2,7 @@ package Indicators;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.json.JSONObject;
 
 import ClientSocketControl.DataStructure;
 
@@ -24,11 +25,24 @@ public class BollingerBands extends Indicator{
         this.period = period;
         this.multiplier = multiplier;
     }
+
+    public String getOutput(){
+        dataDetail = new JSONObject();
+        dataDetail.put("getUpperBand", getUpperBand()+"");
+        dataDetail.put("getMiddleBand", getMiddleBand()+"");
+        dataDetail.put("getLowerBand", getLowerBand()+"");
+        dataDetail.put("getSMA", getSMA()+"");
+        dataDetail.put("getStdDev", getStdDev()+"");
+        return dataDetail.toString();
+    }
     
     public void update(DataStructure dataStructure) {
+        if(closes.size()==0){
+            closes.add(dataStructure.getIndex());
+        }
         if(dataStructure.getType().equals("tick")){
             super.dataStructure = dataStructure;
-            closes.get(closes.size()-1) = dataStructure.getClose();
+            closes.set(closes.size()-1, dataStructure.getIndex());
         }
         else if(dataStructure.getType().equals("interval")){
             closes.add(dataStructure.getClose());

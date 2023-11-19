@@ -17,7 +17,6 @@ import TradeControl.OrderActionConstants.StrikePrice;
 
 import DataController.Constants;
 
-
 public class Order {
 	public Random random = new Random();
 	public String orderid;
@@ -29,14 +28,18 @@ public class Order {
 	public StrikePrice sp;
 	public ExpiryDate ed;
 	public int quantity;
-	public int traded;
+	public int totalTraded;
 	public int remained;
 	public double averageTradePrice;
+	public double tradePrice;
 	public Date lastUpdateDateTime;
 	public Date orderFillDateTime;
 	public boolean oneTimeTradeCheck;
 	public JSONObject orderDetailInJSON;
 	public ArrayList<Order> history = new ArrayList<>();
+	public ArrayList<String> historyInJSON = new ArrayList<>();
+
+	public Order(){}
 
 	public Order(String orderAlias, DataStructure dataStructure, Action action, int quantity, boolean oneTimeTradeCheck) throws Exception {
 		this.symbol = dataStructure.getSymbol();
@@ -88,7 +91,7 @@ public class Order {
 		orderDetailInJSON.put("lastUpdateDateTime", this.lastUpdateDateTime);
 	}
 	
-	public Order(Order order) {
+	public void copyOrder(Order order) {
 		this.symbol = order.symbol;
 		this.orderid = order.orderid;
 		this.orderAlias = order.orderAlias;
@@ -98,35 +101,39 @@ public class Order {
 		this.sp = order.sp;
 		this.ed = order.ed;
 		this.quantity = order.quantity;
-		this.traded = order.traded;
+		this.totalTraded = order.totalTraded;
 		this.remained = order.remained;
 		this.oneTimeTradeCheck = order.oneTimeTradeCheck;
 		this.averageTradePrice = order.averageTradePrice;
 		this.lastUpdateDateTime = order.lastUpdateDateTime;
+		this.tradePrice = order.tradePrice;
+		this.orderFillDateTime = order.orderFillDateTime;
 		this.orderDetailInJSON = order.orderDetailInJSON;
 	}
 
 	public JSONObject trade(Profile profile, DataStructure data, double slippage) throws Exception {
-		if(data.getType().equals("interval")==false) {
+		if(data.getType().equals("tick")) {
 			if(direction==null && sp==null && ed==null) {
 				if(remained>0) {
 					int temp_trade_amount = (data.getVolume()>=remained)?remained:data.getVolume();
-					traded += temp_trade_amount;
+					tradePrice = data.getIndex() + ( (data.getIndex() *  slippage) * (random.nextInt(2)==0?1:-1) );
+					averageTradePrice = ((averageTradePrice * totalTraded) + (temp_trade_amount * tradePrice)) / (totalTraded + temp_trade_amount);
+					totalTraded += temp_trade_amount;
 					remained -= temp_trade_amount;
-					double temp_trade_price = data.getIndex() + ( (data.getIndex() *  slippage) * (random.nextInt(2)==0?1:-1) );
-					averageTradePrice = (averageTradePrice + (temp_trade_amount * temp_trade_price)) / traded;
 					orderFillDateTime = Constants.df_yyyyMMddkkmmss.parse(data.getDatetime());
-                    orderDetailInJSON.put("traded", traded);
+                    orderDetailInJSON.put("traded", temp_trade_amount);
+					orderDetailInJSON.put("totalTraded", totalTraded);
                     orderDetailInJSON.put("remained", remained);
-                    orderDetailInJSON.put("temp_trade_price", temp_trade_price);
+                    orderDetailInJSON.put("tradePrice", tradePrice);
                     orderDetailInJSON.put("averageTradePrice", averageTradePrice);
 					orderDetailInJSON.put("orderFillDateTime", orderFillDateTime);
 					//update order history node
-                    Order temp_market = new Order(this);
-					history.add(temp_market);
+					history.add(new Order());
+					history.get(history.size()-1).copyOrder(this);
+					historyInJSON.add(orderDetailInJSON.toString());
 					//Update profle
 					if(action == Action.SELL) { temp_trade_amount *= -1; }
-					profile.update(symbol, temp_trade_amount, temp_trade_price);
+					profile.update(symbol, temp_trade_amount, tradePrice);
 
                     return orderDetailInJSON;
 				}

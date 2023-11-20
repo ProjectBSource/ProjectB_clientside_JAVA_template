@@ -249,7 +249,7 @@ public class Main {
 	
     private static void generateResultInJSON(String result){
         try{
-            FileWriter fw = new FileWriter("/home/ec2-user/dataSource/webVersion/Jobs/"+WebVersionJobConstants.runJobID+"/ResultInJSON("+WebVersionJobConstants.runJobID+").json");
+            FileWriter fw = new FileWriter("/home/ec2-user/dataSource/webVersion/Jobs/"+WebVersionJobConstants.runJobID+"/ResultInJSON_"+WebVersionJobConstants.runJobID+".json");
             BufferedWriter bw = new BufferedWriter(fw);
             bw.write(result);
             bw.close();

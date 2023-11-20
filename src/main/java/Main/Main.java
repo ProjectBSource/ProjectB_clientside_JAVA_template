@@ -155,12 +155,11 @@ public class Main {
                         }
                         if(future.processDone == true){
                             WebVersionJobConstants.logger("mainLogicLevel1 completed");
-                            generateOrderHistoryInJSON();
-                            generateProfileInJSON();
                             JSONObject testResultDetailInJSON = new JSONObject();
                             testResultDetailInJSON.put("OrderHistory", tradeController.getOrderHistoryInJSON().toString());
                             testResultDetailInJSON.put("Profile", tradeController.getProfileInJSON().toString());
-                            WebVersionJobConstants.updateWebJobHistory(true, testResultDetailInJSON.toString(), "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime))", "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime)*0.00003)", "Program running completed");
+                            generateResultInJSON(testResultDetailInJSON.toString());
+                            WebVersionJobConstants.updateWebJobHistory(true, "", "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime))", "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime)*0.00003)", "Program running completed");
                         }
                     }
                 }
@@ -247,22 +246,12 @@ public class Main {
             }
         }
     }
-
-    private static void generateOrderHistoryInJSON(){
-        try{
-            FileWriter fw = new FileWriter("/home/ec2-user/dataSource/webVersion/Jobs/"+WebVersionJobConstants.runJobID+"/OrderHistoryInJSON.json");
-            BufferedWriter bw = new BufferedWriter(fw);
-            bw.write(tradeController.getOrderHistoryInJSON().toString());
-            bw.close();
-            fw.close();
-        }catch(Exception e){}
-    }
 	
-    private static void generateProfileInJSON(){
+    private static void generateResultInJSON(String result){
         try{
-            FileWriter fw = new FileWriter("/home/ec2-user/dataSource/webVersion/Jobs/"+WebVersionJobConstants.runJobID+"/ProfileInJSON.json");
+            FileWriter fw = new FileWriter("/home/ec2-user/dataSource/webVersion/Jobs/"+WebVersionJobConstants.runJobID+"/ResultInJSON.json");
             BufferedWriter bw = new BufferedWriter(fw);
-            bw.write(tradeController.getProfileInJSON().toString());
+            bw.write(result);
             bw.close();
             fw.close();
         }catch(Exception e){}

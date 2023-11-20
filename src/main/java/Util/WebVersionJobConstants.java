@@ -4,6 +4,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.Socket;
+import java.net.URL;
 import java.lang.NullPointerException;
 import java.net.Socket;
 import java.net.URL;
@@ -21,7 +26,6 @@ import java.util.logging.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import Indicators.Indicator;
 import Main.LoggerFilter;
 import Main.LoggerFormatter;
 import Main.LoggerHandler;
@@ -374,4 +378,38 @@ public class WebVersionJobConstants {
 		dbcommunication.deleteWebVersionJobInformation(runJobID);
     }
 
+	private JSONObject postRequest(String url, String message) throws IOException {
+		URL obj = new URL(url);
+        HttpURLConnection httpURLConnection = (HttpURLConnection) obj.openConnection();
+        httpURLConnection.setRequestMethod("POST");
+        httpURLConnection.setRequestProperty("User-Agent", "Mozilla/5.0");
+
+        // For POST only - START
+        if(message!=null) {
+	        httpURLConnection.setDoOutput(true);
+	        OutputStream os = httpURLConnection.getOutputStream();
+	        os.write(message.getBytes());
+	        os.flush();
+	        os.close();
+        }
+        // For POST only - END
+
+        int responseCode = httpURLConnection.getResponseCode();
+        if (responseCode == HttpURLConnection.HTTP_OK) { // success
+            BufferedReader in = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+
+            while ((inputLine = in .readLine()) != null) {
+                response.append(inputLine);
+            } in .close();
+
+            // print result
+            return new JSONObject(response.toString());
+        } else {
+            System.out.println("POST request not worked");
+        }
+        
+        return null;
+	}
 }

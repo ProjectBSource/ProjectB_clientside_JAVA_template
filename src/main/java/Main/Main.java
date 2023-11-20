@@ -158,8 +158,8 @@ public class Main {
                             generateOrderHistoryInJSON();
                             generateProfileInJSON();
                             JSONObject testResultDetailInJSON = new JSONObject();
-                            dataStreamingRequest.put("OrderHistory", tradeController.getOrderHistoryInJSON().toString());
-                            dataStreamingRequest.put("Profile", tradeController.getProfileInJSON().toString());
+                            testResultDetailInJSON.put("OrderHistory", tradeController.getOrderHistoryInJSON().toString());
+                            testResultDetailInJSON.put("Profile", tradeController.getProfileInJSON().toString());
                             WebVersionJobConstants.updateWebJobHistory(true, testResultDetailInJSON.toString(), "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime))", "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime)*0.00003)", "Program running completed");
                         }
                     }

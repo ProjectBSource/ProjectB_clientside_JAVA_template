@@ -157,7 +157,10 @@ public class Main {
                             WebVersionJobConstants.logger("mainLogicLevel1 completed");
                             generateOrderHistoryInJSON();
                             generateProfileInJSON();
-                            WebVersionJobConstants.updateWebJobHistory(true, "", "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime))", "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime)*0.00003)", "Program running completed");
+                            JSONObject testResultDetailInJSON = new JSONObject();
+                            dataStreamingRequest.put("OrderHistory", tradeController.getOrderHistoryInJSON().toString());
+                            dataStreamingRequest.put("Profile", tradeController.getProfileInJSON().toString());
+                            WebVersionJobConstants.updateWebJobHistory(true, testResultDetailInJSON.toString(), "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime))", "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime)*0.00003)", "Program running completed");
                         }
                     }
                 }

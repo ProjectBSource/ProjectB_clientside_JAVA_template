@@ -54,14 +54,14 @@ public class TradeController {
 		}
 		orders = tempNewOrders;
 		
-		//update profile balance
-		profile.balance = 0;
+		//update profile profits
+		profile.profits = 0;
 		for (Map.Entry<String, Integer> item : profile.holding.entrySet()) {
 		    if(item.getKey().equals(ds.getSymbol())) {
-		    	profile.balance += item.getValue() * ds.getIndex();
+		    	profile.profits += item.getValue() * ds.getIndex();
 		    }
 		}
-		profile.balance += profile.cash;  
+		profile.profits += profile.cash;  
 		
 		//return 
 		if(trade_notification_list.isEmpty()) return null;

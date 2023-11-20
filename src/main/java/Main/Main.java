@@ -156,9 +156,8 @@ public class Main {
                         if(future.processDone == true){
                             WebVersionJobConstants.logger("mainLogicLevel1 completed");
                             JSONObject testResultDetailInJSON = new JSONObject();
-                            testResultDetailInJSON.put("OrderHistory", tradeController.getOrderHistoryInJSON().toString());
-                            testResultDetailInJSON.put("Profile", tradeController.getProfileInJSON().toString());
-                            generateResultInJSON(testResultDetailInJSON.toString());
+                            WebVersionJobConstants.postRequest("https://projectb.click/ProjectB/TestResult/saveOrderHistory.php?password=AIDkrepkclkdsaf123JK", tradeController.getOrderHistoryInJSON().toString());
+                            WebVersionJobConstants.postRequest("https://projectb.click/ProjectB/TestResult/saveProfile.php?password=AIDkrepkclkdsaf123JK", tradeController.getProfileInJSON().toString());
                             WebVersionJobConstants.updateWebJobHistory(true, "", "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime))", "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime)*0.00003)", "Program running completed");
                         }
                     }
@@ -245,16 +244,6 @@ public class Main {
                 }
             }
         }
-    }
-	
-    private static void generateResultInJSON(String result){
-        try{
-            FileWriter fw = new FileWriter("/home/ec2-user/dataSource/webVersion/Jobs/"+WebVersionJobConstants.runJobID+"/ResultInJSON_"+WebVersionJobConstants.runJobID+".json");
-            BufferedWriter bw = new BufferedWriter(fw);
-            bw.write(result);
-            bw.close();
-            fw.close();
-        }catch(Exception e){}
     }
 
     private static void manualOperation_generateRestartAndGenerateData(){

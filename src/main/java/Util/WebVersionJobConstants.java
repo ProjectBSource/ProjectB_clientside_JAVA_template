@@ -378,7 +378,7 @@ public class WebVersionJobConstants {
 		dbcommunication.deleteWebVersionJobInformation(runJobID);
     }
 
-	private static JSONObject postRequest(String url, String message) throws IOException {
+	public static JSONObject postRequest(String url, String message) throws IOException {
 		URL obj = new URL(url);
         HttpURLConnection httpURLConnection = (HttpURLConnection) obj.openConnection();
         httpURLConnection.setRequestMethod("POST");

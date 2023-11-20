@@ -156,8 +156,10 @@ public class Main {
                         if(future.processDone == true){
                             WebVersionJobConstants.logger("mainLogicLevel1 completed");
                             JSONObject testResultDetailInJSON = new JSONObject();
-                            WebVersionJobConstants.postRequest("https://projectb.click/ProjectB/WebVersion/TestResult/saveOrderHistory.php?password=AIDkrepkclkdsaf123JK", tradeController.getOrderHistoryInJSON().toString());
-                            WebVersionJobConstants.postRequest("https://projectb.click/ProjectB/WebVersion/TestResult/saveProfile.php?password=AIDkrepkclkdsaf123JK", tradeController.getProfileInJSON().toString());
+                            testResultDetailInJSON.put("OrderHistory", tradeController.getOrderHistoryInJSON().toString());
+                            testResultDetailInJSON.put("Profile", tradeController.getProfileInJSON().toString());
+                            testResultDetailInJSON.put("runJobID", WebVersionJobConstants.runJobID);
+                            WebVersionJobConstants.postRequest("https://projectb.click/ProjectB/WebVersion/TestResult/save.php?password=AIDkrepkclkdsaf123JK", testResultDetailInJSON.toString());                            
                             WebVersionJobConstants.updateWebJobHistory(true, "", "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime))", "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime)*0.00003)", "Program running completed");
                         }
                     }

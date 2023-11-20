@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 class Profile {
 	public HashMap<String, Integer> holding = new HashMap<>();
-	public double balance;
+	public double profits;
 	public double cash;
 	
 	public void update(String symbol, int quantity, double price) {

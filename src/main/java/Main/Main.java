@@ -106,7 +106,7 @@ public class Main {
                 dataStreamingRequest.put("enddate", "@#enddate#@");
                 dataStreamingRequest.put("starttime", "@#starttime#@");
                 dataStreamingRequest.put("endtime", "@#endtime#@");
-                dataStreamingRequest.put("interval", @#interval#@-1);
+                dataStreamingRequest.put("interval", @#interval#@);
                 dataStreamingRequest.put("mitigateNoiseWithinPrecentage", @#mitigateNoiseWithinPrecentage#@);
                 WebVersionJobConstants.logger("dataStreamingRequest :" + dataStreamingRequest.toString());
                 

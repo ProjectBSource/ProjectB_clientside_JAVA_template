@@ -79,9 +79,9 @@ public class TradeController {
 	/**
      *For Stock and Future trading
      */
-	public boolean placeOrder(String id, DataStructure dataStructure, Action action, int quantity, boolean oneTimeTradeCheck) throws Exception {
+	public boolean placeOrder(String id, DataStructure dataStructure, Action action, int quantity, boolean oneTimeTradeCheck, String reason) throws Exception {
 		if(orders.get(id)==null){
-			orders.put(id, new Order(id, dataStructure, action, quantity, oneTimeTradeCheck));
+			orders.put(id, new Order(id, dataStructure, action, quantity, oneTimeTradeCheck, reason));
 			return true;
 		}
 		return false;
@@ -90,15 +90,15 @@ public class TradeController {
 	/**
      *For Option trading
      */
-	public boolean placeOrder(String id, String symbol, Action action, Direction direction, StrikePrice sp, ExpiryDate ed, int quantity, boolean oneTimeTradeCheck) {
+	public boolean placeOrder(String id, String symbol, Action action, Direction direction, StrikePrice sp, ExpiryDate ed, int quantity, boolean oneTimeTradeCheck, String reason) {
 		if(orders.get(id)==null){
-			orders.put(id, new Order(id, symbol, action, direction, sp, ed, quantity, oneTimeTradeCheck));
+			orders.put(id, new Order(id, symbol, action, direction, sp, ed, quantity, oneTimeTradeCheck, reason));
 			return true;
 		}
 		return false;
 	}
 
-	public boolean placeOFFOrder(String targetId, DataStructure dataStructure) throws Exception {
+	public boolean placeOFFOrder(String targetId, DataStructure dataStructure, String reason) throws Exception {
 		Order order = orders.get(targetId);
 		if(order!=null){
 			if(profile.holding.get(order.symbol)!=null){

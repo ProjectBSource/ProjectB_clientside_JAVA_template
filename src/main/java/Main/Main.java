@@ -74,11 +74,13 @@ public class Main {
             WebVersionJobConstants.logger("WebVersionJob(runJobID:"+WebVersionJobConstants.runJobID+") started up");
 
             //get task detail
+	    WebVersionJobConstants.logger("Download request message");
             JSONObject input = WebVersionJobConstants.getRequestMessage();
             JSONArray nodeDataArray = input.has("nodeDataArray")==true?input.getJSONArray("nodeDataArray"):null;
             JSONArray linkDataArray = input.has("linkDataArray")==true?input.getJSONArray("linkDataArray"):null;
 
             //Request testing
+	    WebVersionJobConstants.logger("Request testing");
             ArrayList<String> errorMessage = new ArrayList<String>();
             WebVersionJobConstants.updateWebJobHistory(false, null, "NULL", "NULL", "Program validating");
             errorMessage.addAll(WebVersionJobConstants.subscribedDataListValidation(nodeDataArray));
@@ -88,6 +90,7 @@ public class Main {
 
             boolean requestValidationPass = true;
             if(errorMessage.size()>0){
+		WebVersionJobConstants.logger("Request test result fail");
                 requestValidationPass = false; 
                 StringBuilder testResultDetail = new StringBuilder();
                 for(String s : errorMessage){ 
@@ -97,6 +100,7 @@ public class Main {
             }
 
             if(requestValidationPass==true){
+		WebVersionJobConstants.logger("Request test result pass");
                 //Generate the data request JSON object
                 JSONObject dataStreamingRequest = new JSONObject();
                 dataStreamingRequest.put("activity", "@#activity#@");

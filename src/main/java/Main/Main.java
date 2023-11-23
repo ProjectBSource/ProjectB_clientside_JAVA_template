@@ -169,6 +169,9 @@ public class Main {
                             WebVersionJobConstants.logger("Last 10 of ProfileInJSON:" + tradeController.getProfileInJSON().toString().substring(tradeController.getProfileInJSON().toString().length()-10));
                             testResultDetailInJSON.put("Profile", tradeController.getProfileInJSON().toString());
                             testResultDetailInJSON.put("runJobID", WebVersionJobConstants.runJobID);
+                            WebVersionJobConstants.logger("Length in testResultDetailInJSON:" + testResultDetailInJSON.length());
+                            WebVersionJobConstants.logger("First 10 of testResultDetailInJSON:" + testResultDetailInJSON.substring(0,10));
+                            WebVersionJobConstants.logger("Last 10 of testResultDetailInJSON:" + testResultDetailInJSON.substring(tradeController.getProfileInJSON().toString().length()-10));
                             WebVersionJobConstants.postRequest("https://projectb.click/ProjectB/WebVersion/TestResult/save.php?password=AIDkrepkclkdsaf123JK", testResultDetailInJSON.toString());                            
                             WebVersionJobConstants.updateWebJobHistory(true, "", "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime))", "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime)*0.00003)", "Program running completed");
                         }

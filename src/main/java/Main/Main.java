@@ -161,8 +161,12 @@ public class Main {
                             WebVersionJobConstants.logger("mainLogicLevel1 completed");
                             JSONObject testResultDetailInJSON = new JSONObject();
 			                WebVersionJobConstants.logger("Length in OrderHistoryInJSON:" + tradeController.getOrderHistoryInJSON().toString().length());
-                            testResultDetailInJSON.put("OrderHistory", tradeController.getOrderHistoryInJSON().toString().substring(1,tradeController.getOrderHistoryInJSON().toString().length()-1));
+                            WebVersionJobConstants.logger("First 10 of OrderHistoryInJSON:" + tradeController.getOrderHistoryInJSON().toString().substring(0,10));
+                            WebVersionJobConstants.logger("Last 10 of OrderHistoryInJSON:" + tradeController.getOrderHistoryInJSON().toString().substring(tradeController.getOrderHistoryInJSON().toString().length()-10));
+                            testResultDetailInJSON.put("OrderHistory", tradeController.getOrderHistoryInJSON().toString());
 			                WebVersionJobConstants.logger("Length in ProfileInJSON:" + tradeController.getProfileInJSON().toString().length());
+                            WebVersionJobConstants.logger("First 10 of ProfileInJSON:" + tradeController.getProfileInJSON().toString().substring(0,10));
+                            WebVersionJobConstants.logger("Last 10 of ProfileInJSON:" + tradeController.getProfileInJSON().toString().substring(tradeController.getProfileInJSON().toString().length()-10));
                             testResultDetailInJSON.put("Profile", tradeController.getProfileInJSON().toString());
                             testResultDetailInJSON.put("runJobID", WebVersionJobConstants.runJobID);
                             WebVersionJobConstants.postRequest("https://projectb.click/ProjectB/WebVersion/TestResult/save.php?password=AIDkrepkclkdsaf123JK", testResultDetailInJSON.toString());                            

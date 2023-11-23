@@ -160,18 +160,9 @@ public class Main {
                         if(future.processDone == true){
                             WebVersionJobConstants.logger("mainLogicLevel1 completed");
                             JSONObject testResultDetailInJSON = new JSONObject();
-			                WebVersionJobConstants.logger("Length in OrderHistoryInJSON:" + tradeController.getOrderHistoryInJSON().toString().length());
-                            WebVersionJobConstants.logger("First 10 of OrderHistoryInJSON:" + tradeController.getOrderHistoryInJSON().toString().substring(0,10));
-                            WebVersionJobConstants.logger("Last 10 of OrderHistoryInJSON:" + tradeController.getOrderHistoryInJSON().toString().substring(tradeController.getOrderHistoryInJSON().toString().length()-10));
                             testResultDetailInJSON.put("OrderHistory", tradeController.getOrderHistoryInJSON().toString());
-			                WebVersionJobConstants.logger("Length in ProfileInJSON:" + tradeController.getProfileInJSON().toString().length());
-                            WebVersionJobConstants.logger("First 10 of ProfileInJSON:" + tradeController.getProfileInJSON().toString().substring(0,10));
-                            WebVersionJobConstants.logger("Last 10 of ProfileInJSON:" + tradeController.getProfileInJSON().toString().substring(tradeController.getProfileInJSON().toString().length()-10));
                             testResultDetailInJSON.put("Profile", tradeController.getProfileInJSON().toString());
-                            testResultDetailInJSON.put("runJobID", WebVersionJobConstants.runJobID);
-                            WebVersionJobConstants.logger("Length in testResultDetailInJSON:" + testResultDetailInJSON.length());
-                            WebVersionJobConstants.logger("First 10 of testResultDetailInJSON:" + testResultDetailInJSON.substring(0,10));
-                            WebVersionJobConstants.logger("Last 10 of testResultDetailInJSON:" + testResultDetailInJSON.substring(tradeController.getProfileInJSON().toString().length()-10));
+                            testResultDetailInJSON.put("runJobID", "{"+WebVersionJobConstants.runJobID+"}");
                             WebVersionJobConstants.postRequest("https://projectb.click/ProjectB/WebVersion/TestResult/save.php?password=AIDkrepkclkdsaf123JK", testResultDetailInJSON.toString());                            
                             WebVersionJobConstants.updateWebJobHistory(true, "", "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime))", "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime)*0.00003)", "Program running completed");
                         }

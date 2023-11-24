@@ -38,7 +38,7 @@ public class Order {
 	public Date orderFillDateTime;
 	public boolean oneTimeTradeCheck;
 	public JSONObject orderDetailInJSON;
-	public String reason;
+	public String description;
 	public ArrayList<Order> history = new ArrayList<>();
 	public ArrayList<String> historyInJSON = new ArrayList<>();
 
@@ -54,7 +54,7 @@ public class Order {
 		this.remained = quantity;
 		this.oneTimeTradeCheck = oneTimeTradeCheck;
 		this.lastUpdateDateTime = this.orderDateTime;
-		this.reason = reason;
+		this.description = reason;
 		orderDetailInJSON = new JSONObject();
 		orderDetailInJSON.put("symbol", this.symbol);
 		orderDetailInJSON.put("orderid", this.orderid);
@@ -65,7 +65,7 @@ public class Order {
 		orderDetailInJSON.put("remained", this.remained);
 		orderDetailInJSON.put("oneTimeTradeCheck", this.oneTimeTradeCheck);
 		orderDetailInJSON.put("lastUpdateDateTime", this.lastUpdateDateTime);
-		orderDetailInJSON.put("reason", this.reason);
+		orderDetailInJSON.put("description", this.description);
 	}
 	
 	public Order(String orderAlias, String symbol, Action action, Direction direction, StrikePrice sp, ExpiryDate ed,  int quantity, boolean oneTimeTradeCheck, String reason) {
@@ -81,7 +81,7 @@ public class Order {
 		this.remained = quantity;
 		this.oneTimeTradeCheck = oneTimeTradeCheck;
 		this.lastUpdateDateTime = this.orderDateTime;
-		this.reason = reason;
+		this.description = reason;
 		orderDetailInJSON = new JSONObject();
 		orderDetailInJSON.put("symbol", this.symbol);
 		orderDetailInJSON.put("orderid", this.orderid);
@@ -95,7 +95,7 @@ public class Order {
 		orderDetailInJSON.put("remained", this.remained);
 		orderDetailInJSON.put("oneTimeTradeCheck", this.oneTimeTradeCheck);
 		orderDetailInJSON.put("lastUpdateDateTime", this.lastUpdateDateTime);
-		orderDetailInJSON.put("reason", this.reason);
+		orderDetailInJSON.put("description", this.description);
 	}
 	
 	public void copyOrder(Order order) {
@@ -116,7 +116,7 @@ public class Order {
 		this.tradePrice = order.tradePrice;
 		this.orderFillDateTime = order.orderFillDateTime;
 		this.orderDetailInJSON = order.orderDetailInJSON;
-		this.reason = order.reason;
+		this.description = order.description;
 	}
 
 	public JSONObject trade(Profile profile, DataStructure data, double slippage) throws Exception {

@@ -159,7 +159,7 @@ public class Main {
                         }
                         if(future.processDone == true){
                             WebVersionJobConstants.logger("mainLogicLevel1 completed");
-                            JSONArray testResultDetailInJSON = new JSONObject();
+                            JSONObject testResultDetailInJSON = new JSONObject();
                             testResultDetailInJSON.put("OrderHistory", tradeController.getOrderHistoryInJSON());
                             testResultDetailInJSON.put("Profile", tradeController.getProfileInJSON());
                             WebVersionJobConstants.logger("testResultDetailInJSON:"+(testResultDetailInJSON.toString().substring(0,100) + ".........."+ testResultDetailInJSON.toString().substring(testResultDetailInJSON.toString().length()-100)));

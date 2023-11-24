@@ -217,6 +217,8 @@ public class Main {
 
                 @#baseLogicResult#@
 
+		@#baseLogicResultReason#@
+
                 @#logicGatewayResult#@
 
                 @#actionAndTradeLogic#@

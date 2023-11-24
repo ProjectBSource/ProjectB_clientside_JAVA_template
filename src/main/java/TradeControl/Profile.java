@@ -9,7 +9,7 @@ class Profile {
 	
 	public void update(String symbol, int quantity, double price) {
 		if(holding.containsKey(symbol)) {  
-			holding.set(symbol, holding.get(symbol)+quantity);
+			holding.put(symbol, holding.get(symbol)+quantity);
 		}
 		else {
 			holding.put(symbol, quantity);

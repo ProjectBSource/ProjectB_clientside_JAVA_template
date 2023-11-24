@@ -15,8 +15,8 @@ public class DataStructure {
 	Double high = 0.0;
 	Double low = 0.0;
 	Double close = 0.0;
-	Integer volume = 0.0;
-	Integer total_volume = 0.0;
+	Integer volume = 0;
+	Integer total_volume = 0;
 	String error = null;
 	String done = null;
 	

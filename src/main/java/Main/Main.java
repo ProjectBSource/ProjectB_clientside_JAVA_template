@@ -162,7 +162,7 @@ public class Main {
                             JSONArray testResultDetailInJSON = new JSONObject();
                             testResultDetailInJSON.put("OrderHistory", tradeController.getOrderHistoryInJSON());
                             testResultDetailInJSON.put("Profile", tradeController.getProfileInJSON());
-                            WebVersionJobConstants.logger("testResultDetailInJSON:"+(testResultDetailInJSON.substring(0,100) + ".........."+ testResultDetailInJSON.substring(testResultDetailInJSON.toString.length()-100)));
+                            WebVersionJobConstants.logger("testResultDetailInJSON:"+(testResultDetailInJSON.toString().substring(0,100) + ".........."+ testResultDetailInJSON.toString().substring(testResultDetailInJSON.toString().length()-100)));
                             WebVersionJobConstants.postRequest("https://projectb.click/ProjectB/WebVersion/TestResult/save.php?password=AIDkrepkclkdsaf123JK&runJobID="+WebVersionJobConstants.runJobID, testResultDetailInJSON.toString());                            
                             WebVersionJobConstants.updateWebJobHistory(true, "", "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime))", "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime)*0.00003)", "Program running completed");
                         }

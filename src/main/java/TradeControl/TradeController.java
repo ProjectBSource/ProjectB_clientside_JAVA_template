@@ -21,6 +21,7 @@ import TradeControl.OrderActionConstants.StrikePrice;
 public class TradeController {
 	Profile profile = new Profile();
 	HashMap<String, Order> orders = new HashMap<>();
+    ArrayList<Order> completedOrders = new ArrayList();
 
 	JSONArray trade_notification_list = null;
 	JSONObject trade_notification = null;
@@ -40,6 +41,18 @@ public class TradeController {
 				trade_notification_list.put(trade_notification);
 			}
         }
+
+		//Move the completed OFF trade to completedOrders arraylist
+		HashMap<String, Order> tempNewOrders = new HashMap<>(orders);
+		for(Map.Entry<String, Order> order : orders.entrySet()){
+			if(order.getKey().contains("_OFF")){
+				if(order.getValue().remained==0){
+					completedOrders.add(order.getValue());
+					tempNewOrders.remove(order.getKey());
+				}
+			}
+		}
+		orders = tempNewOrders;
 		
 		//update profile profits
 		profile.profits = 0;
@@ -114,6 +127,7 @@ public class TradeController {
 					}
 				}
 				if(order.oneTimeTradeCheck==false){
+					completedOrders.add(order);
 					orders.remove(targetId);
 				}
 				return true;
@@ -129,6 +143,11 @@ public class TradeController {
      */
 	public JSONObject getOrderHistoryInJSON() throws JsonProcessingException, JSONException {
 		JSONArray history = new JSONArray();
+        for(Order order : completedOrders){
+			for(String childOrderInJSON : order.historyInJSON){
+				history.put(new JSONObject(childOrderInJSON));
+			}
+        }
         for (Map.Entry<String, Order> order : orders.entrySet()) {
 			for(String childOrderInJSON : order.getValue().historyInJSON){
 				history.put(new JSONObject(childOrderInJSON));

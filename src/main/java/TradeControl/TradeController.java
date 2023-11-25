@@ -153,7 +153,6 @@ public class TradeController {
 				history.put(new JSONObject(childOrderInJSON));
 			}
         }
-        System.out.println("generate orderHistory, history:"+history.lenght());
 		JSONObject result = new JSONObject();
 		result.put("orderHistory", history);
 		return result;

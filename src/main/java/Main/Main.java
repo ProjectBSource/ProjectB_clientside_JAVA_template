@@ -160,7 +160,9 @@ public class Main {
                         if(future.processDone == true){
                             WebVersionJobConstants.logger("mainLogicLevel1 completed");
                             JSONObject testResultDetailInJSON = new JSONObject();
+                            WebVersionJobConstants.logger("write getOrderHistoryInJSON: "+tradeController.getOrderHistoryInJSON().toString().length());
                             testResultDetailInJSON.put("OrderHistory", tradeController.getOrderHistoryInJSON());
+                            WebVersionJobConstants.logger("write getProfileInJSON: "+tradeController.getProfileInJSON().toString().length());
                             testResultDetailInJSON.put("Profile", tradeController.getProfileInJSON());
                             testResultDetailInJSON.put("runJobID", WebVersionJobConstants.runJobID);
                             WebVersionJobConstants.postRequest("https://projectb.click/ProjectB/WebVersion/TestResult/save.php?password=AIDkrepkclkdsaf123JK", testResultDetailInJSON.toString());                            

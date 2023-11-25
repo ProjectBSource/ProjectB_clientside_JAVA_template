@@ -86,6 +86,7 @@ public class TradeController {
             if(order.remained>0){
                 order.remained = 0;
                 order.description += "Off signal triggered and force stop trading and off this order; ";
+                order.trade(profile, dataStructure, slippage);
             }
             completedOrders.add(order);
 			orders.remove(id+"_OFF");
@@ -107,6 +108,7 @@ public class TradeController {
             if(order.remained>0){
                 order.remained = 0;
                 order.description += "Off signal triggered and force stop trading and off this order; ";
+                order.trade(profile, dataStructure, slippage);
             }
             completedOrders.add(order);
 			orders.remove(id+"_OFF");
@@ -126,6 +128,7 @@ public class TradeController {
                 if(order.remained>0){
                     order.remained = 0;
                     order.description += "Off signal triggered and force stop trading and off this order; ";
+                    order.trade(profile, dataStructure, slippage);
                 }
 
 				//For non option trade off

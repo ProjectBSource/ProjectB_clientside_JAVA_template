@@ -103,8 +103,10 @@ public class TradeController {
 		if(order!=null){
 			if(profile.holding.get(order.symbol)!=null){
 				//Stop the order trading first
-				order.remained = 0;
-				order.description += "Off signal triggered, force stop trading and off this order;";
+                if(order.remained>0){
+                    order.remained = 0;
+                    order.description += "Off signal triggered, force stop trading and off this order;";
+                }
 
 				//For non option trade off
 				if(order.direction==null){

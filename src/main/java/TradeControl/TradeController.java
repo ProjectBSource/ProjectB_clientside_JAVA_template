@@ -80,7 +80,17 @@ public class TradeController {
      *For Stock and Future trading
      */
 	public boolean placeOrder(String id, DataStructure dataStructure, Action action, int quantity, boolean oneTimeTradeCheck, String reason) throws Exception {
-		if(orders.get(id)==null){
+		if(orders.get(id+"_OFF")!=null){
+            Order order = orders.get(id+"_OFF");
+            //Stop the order trading first
+            if(order.remained>0){
+                order.remained = 0;
+                order.description += "Off signal triggered and force stop trading and off this order; ";
+            }
+            completedOrders.add(order);
+			orders.remove(id+"_OFF");
+        }
+        if(orders.get(id)==null){
 			orders.put(id, new Order(id, dataStructure, action, quantity, oneTimeTradeCheck, reason));
 			return true;
 		}
@@ -91,7 +101,17 @@ public class TradeController {
      *For Option trading
      */
 	public boolean placeOrder(String id, String symbol, Action action, Direction direction, StrikePrice sp, ExpiryDate ed, int quantity, boolean oneTimeTradeCheck, String reason) {
-		if(orders.get(id)==null){
+		if(orders.get(id+"_OFF")!=null){
+            Order order = orders.get(id+"_OFF");
+            //Stop the order trading first
+            if(order.remained>0){
+                order.remained = 0;
+                order.description += "Off signal triggered and force stop trading and off this order; ";
+            }
+            completedOrders.add(order);
+			orders.remove(id+"_OFF");
+        }
+        if(orders.get(id)==null){
 			orders.put(id, new Order(id, symbol, action, direction, sp, ed, quantity, oneTimeTradeCheck, reason));
 			return true;
 		}
@@ -105,7 +125,7 @@ public class TradeController {
 				//Stop the order trading first
                 if(order.remained>0){
                     order.remained = 0;
-                    order.description += "Off signal triggered, force stop trading and off this order;";
+                    order.description += "Off signal triggered and force stop trading and off this order; ";
                 }
 
 				//For non option trade off

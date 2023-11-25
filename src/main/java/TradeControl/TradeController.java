@@ -143,6 +143,7 @@ public class TradeController {
 		JSONArray history = new JSONArray();
         System.out.println("completedOrders.size():"+completedOrders.size());
         for(Order order : completedOrders){
+            System.out.println("order.orderAlias:"+order.orderAlias);
 			for(String childOrderInJSON : order.historyInJSON){
 				history.put(new JSONObject(childOrderInJSON));
 			}
@@ -153,7 +154,6 @@ public class TradeController {
 				history.put(new JSONObject(childOrderInJSON));
 			}
         }
-        System.out.println("history.size():"+history.size());
 		JSONObject result = new JSONObject();
 		result.put("orderHistory", history);
 		return result;

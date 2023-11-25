@@ -114,7 +114,6 @@ public class TradeController {
 					}
 				}
 				if(order.oneTimeTradeCheck==false){
-					completedOrders.add(order);
 					orders.remove(targetId);
 				}
 				return true;

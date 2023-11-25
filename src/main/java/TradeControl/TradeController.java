@@ -42,15 +42,13 @@ public class TradeController {
 			}
         }
 
-		//Move the completed OFF trade to completedOrders arraylist
+		//Move the completed trade to completedOrders arraylist
 		HashMap<String, Order> tempNewOrders = new HashMap<>(orders);
 		for(Map.Entry<String, Order> order : orders.entrySet()){
-			if(order.getKey().contains("_OFF")){
-				if(order.getValue().remained==0){
-					completedOrders.add(order.getValue());
-					tempNewOrders.remove(order.getKey());
-				}
-			}
+			if(order.getValue().remained==0){
+                completedOrders.add(order.getValue());
+                tempNewOrders.remove(order.getKey());
+            }
 		}
 		orders = tempNewOrders;
 		
@@ -103,7 +101,7 @@ public class TradeController {
 		if(order!=null){
 			if(profile.holding.get(order.symbol)!=null){
 				//Stop the order trading first
-                if(order.remained>0){
+                if(order.remained>0)
                     order.remained = 0;
                     order.description += "Off signal triggered, force stop trading and off this order;";
                 }

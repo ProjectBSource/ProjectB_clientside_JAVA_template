@@ -35,6 +35,13 @@ public class TradeController {
 		trade_notification_list = new JSONArray();
 		trade_notification = null;
 
+        for (Map.Entry<String, Order> order : orders.entrySet()) {
+            trade_notification = order.getValue().trade(profile, ds, slippage);
+			if(trade_notification!=null) {
+				trade_notification_list.put(trade_notification);
+			}
+        }
+
         //Move the completed OFF trade to completedOrders arraylist
 		HashMap<String, Order> tempNewOrders = new HashMap<>(orders);
 		for(Map.Entry<String, Order> order : orders.entrySet()){
@@ -48,13 +55,6 @@ public class TradeController {
             }
 		}
 		orders = tempNewOrders;
-        
-        for (Map.Entry<String, Order> order : orders.entrySet()) {
-            trade_notification = order.getValue().trade(profile, ds, slippage);
-			if(trade_notification!=null) {
-				trade_notification_list.put(trade_notification);
-			}
-        }
 		
 		//update profile profits
 		profile.profits = 0;

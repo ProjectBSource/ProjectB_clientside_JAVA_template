@@ -131,6 +131,7 @@ public class TradeController {
      */
 	public JSONObject getOrderHistoryInJSON() throws JsonProcessingException, JSONException {
 		JSONArray history = new JSONArray();
+        System.out.println(completedOrders.size());
         for(Order order : completedOrders){
 			for(String childOrderInJSON : order.historyInJSON){
 				history.put(new JSONObject(childOrderInJSON));

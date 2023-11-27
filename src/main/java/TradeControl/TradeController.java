@@ -86,7 +86,6 @@ public class TradeController {
             if(order.remained>0){
                 order.remained = 0;
                 order.description += "Off signal triggered and force stop trading and off this order; ";
-                order.trade(profile, dataStructure, slippage);
             }
             completedOrders.add(order);
 			orders.remove(id+"_OFF");
@@ -101,14 +100,13 @@ public class TradeController {
 	/**
      *For Option trading
      */
-	public boolean placeOrder(String id, DataStructure dataStructure, String symbol, Action action, Direction direction, StrikePrice sp, ExpiryDate ed, int quantity, boolean oneTimeTradeCheck, String reason) throws Exception {
+	public boolean placeOrder(String id, String symbol, Action action, Direction direction, StrikePrice sp, ExpiryDate ed, int quantity, boolean oneTimeTradeCheck, String reason) throws Exception {
 		if(orders.get(id+"_OFF")!=null){
             Order order = orders.get(id+"_OFF");
             //Stop the order trading first
             if(order.remained>0){
                 order.remained = 0;
                 order.description += "Off signal triggered and force stop trading and off this order; ";
-                order.trade(profile, dataStructure, slippage);
             }
             completedOrders.add(order);
 			orders.remove(id+"_OFF");
@@ -128,7 +126,6 @@ public class TradeController {
                 if(order.remained>0){
                     order.remained = 0;
                     order.description += "Off signal triggered and force stop trading and off this order; ";
-                    order.trade(profile, dataStructure, slippage);
                 }
 
 				//For non option trade off

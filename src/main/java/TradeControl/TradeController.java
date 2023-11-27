@@ -38,9 +38,13 @@ public class TradeController {
         //Move the completed OFF trade to completedOrders arraylist
 		HashMap<String, Order> tempNewOrders = new HashMap<>(orders);
 		for(Map.Entry<String, Order> order : orders.entrySet()){
-			if(order.getValue().remained==0){
-                completedOrders.add(order.getValue());
-                tempNewOrders.remove(order.getKey());
+            if(order.getValue().orderAlias.contains("_OFF")){
+                if(order.getValue().remained==0){
+                    completedOrders.add(orders.get(order.getValue().orderAlias.substring(0, order.getValue().orderAlias.indexOf("_OFF"))));
+                    tempNewOrders.remove( order.getValue().orderAlias.substring(0, order.getValue().orderAlias.indexOf("_OFF")) );
+                    completedOrders.add(order.getValue());
+                    tempNewOrders.remove(order.getKey());
+                }
             }
 		}
 		orders = tempNewOrders;
@@ -98,8 +102,7 @@ public class TradeController {
 
 	public boolean placeOFFOrder(String targetId, DataStructure dataStructure, String reason) throws Exception {
 		Order targetOrder = orders.get(targetId);
-        Order order = orders.get(targetId+"_OFF");
-		if(targetOrder!=null && order==null){
+		if(targetOrder!=null && orders.get(targetId+"_OFF")==null){
 			if(profile.holding.get(targetOrder.symbol)!=null){
 				//For non option trade off
 				if(targetOrder.direction==null){

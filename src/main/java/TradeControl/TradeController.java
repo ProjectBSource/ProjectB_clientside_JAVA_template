@@ -35,24 +35,22 @@ public class TradeController {
 		trade_notification_list = new JSONArray();
 		trade_notification = null;
 
+        //Move the completed OFF trade to completedOrders arraylist
+		HashMap<String, Order> tempNewOrders = new HashMap<>(orders);
+		for(Map.Entry<String, Order> order : orders.entrySet()){
+			if(order.getValue().remained==0){
+                completedOrders.add(order.getValue());
+                tempNewOrders.remove(order.getKey());
+            }
+		}
+		orders = tempNewOrders;
+        
         for (Map.Entry<String, Order> order : orders.entrySet()) {
             trade_notification = order.getValue().trade(profile, ds, slippage);
 			if(trade_notification!=null) {
 				trade_notification_list.put(trade_notification);
 			}
         }
-
-		//Move the completed OFF trade to completedOrders arraylist
-		HashMap<String, Order> tempNewOrders = new HashMap<>(orders);
-		for(Map.Entry<String, Order> order : orders.entrySet()){
-			if(order.getKey().contains("_OFF")){
-				if(order.getValue().remained==0){
-					completedOrders.add(order.getValue());
-					tempNewOrders.remove(order.getKey());
-				}
-			}
-		}
-		orders = tempNewOrders;
 		
 		//update profile profits
 		profile.profits = 0;
@@ -79,19 +77,9 @@ public class TradeController {
 	/**
      *For Stock and Future trading
      */
-	public boolean placeOrder(String id, DataStructure dataStructure, Action action, int quantity, boolean oneTimeTradeCheck, String reason) throws Exception {
-		if(orders.get(id+"_OFF")!=null){
-            Order order = orders.get(id+"_OFF");
-            //Stop the order trading first
-            if(order.remained>0){
-                order.remained = 0;
-                order.description += "Off signal triggered and force stop trading and off this order; ";
-            }
-            completedOrders.add(order);
-			orders.remove(id+"_OFF");
-        }
+	public boolean placeOrder(String id, DataStructure dataStructure, Action action, int quantity, String reason) throws Exception {
         if(orders.get(id)==null){
-			orders.put(id, new Order(id, dataStructure, action, quantity, oneTimeTradeCheck, reason));
+			orders.put(id, new Order(id, dataStructure, action, quantity, reason));
 			return true;
 		}
 		return false;
@@ -100,19 +88,9 @@ public class TradeController {
 	/**
      *For Option trading
      */
-	public boolean placeOrder(String id, String symbol, Action action, Direction direction, StrikePrice sp, ExpiryDate ed, int quantity, boolean oneTimeTradeCheck, String reason) throws Exception {
-		if(orders.get(id+"_OFF")!=null){
-            Order order = orders.get(id+"_OFF");
-            //Stop the order trading first
-            if(order.remained>0){
-                order.remained = 0;
-                order.description += "Off signal triggered and force stop trading and off this order; ";
-            }
-            completedOrders.add(order);
-			orders.remove(id+"_OFF");
-        }
+	public boolean placeOrder(String id, String symbol, Action action, Direction direction, StrikePrice sp, ExpiryDate ed, int quantity, String reason) throws Exception {
         if(orders.get(id)==null){
-			orders.put(id, new Order(id, symbol, action, direction, sp, ed, quantity, oneTimeTradeCheck, reason));
+			orders.put(id, new Order(id, symbol, action, direction, sp, ed, quantity, reason));
 			return true;
 		}
 		return false;
@@ -122,33 +100,23 @@ public class TradeController {
 		Order order = orders.get(targetId);
 		if(order!=null){
 			if(profile.holding.get(order.symbol)!=null){
-				//Stop the order trading first
-                if(order.remained>0){
-                    order.remained = 0;
-                    order.description += "Off signal triggered and force stop trading and off this order; ";
-                }
-
 				//For non option trade off
 				if(order.direction==null){
 					if(order.action==Action.BUY){
-						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", dataStructure, Action.SELL, order.totalTraded, order.oneTimeTradeCheck, reason));
+						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", dataStructure, Action.SELL, order.totalTraded, reason));
 					}
 					else if(order.action==Action.SELL){
-						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", dataStructure, Action.BUY, order.totalTraded, order.oneTimeTradeCheck, reason));
+						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", dataStructure, Action.BUY, order.totalTraded, reason));
 					}
 				}
 				//For option trade off
 				if(order.direction!=null){
 					if(order.action==Action.BUY){
-						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", order.symbol, Action.SELL, order.direction, order.sp, order.ed, order.totalTraded, order.oneTimeTradeCheck, reason));
+						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", order.symbol, Action.SELL, order.direction, order.sp, order.ed, order.totalTraded, reason));
 					}
 					else if(order.action==Action.SELL){
-						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", order.symbol, Action.BUY, order.direction, order.sp, order.ed, order.totalTraded, order.oneTimeTradeCheck, reason));
+						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", order.symbol, Action.BUY, order.direction, order.sp, order.ed, order.totalTraded, reason));
 					}
-				}
-				if(order.oneTimeTradeCheck==false){
-					completedOrders.add(order);
-					orders.remove(targetId);
 				}
 				return true;
 			}

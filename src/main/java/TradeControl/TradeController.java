@@ -97,25 +97,26 @@ public class TradeController {
 	}
 
 	public boolean placeOFFOrder(String targetId, DataStructure dataStructure, String reason) throws Exception {
-		Order order = orders.get(targetId);
-		if(order!=null){
-			if(profile.holding.get(order.symbol)!=null){
+		Order targetOrder = orders.get(targetId);
+        Order order = orders.get(targetId+"_OFF");
+		if(targetOrder!=null && order==null){
+			if(profile.holding.get(targetOrder.symbol)!=null){
 				//For non option trade off
-				if(order.direction==null){
-					if(order.action==Action.BUY){
-						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", dataStructure, Action.SELL, order.totalTraded, reason));
+				if(targetOrder.direction==null){
+					if(targetOrder.action==Action.BUY){
+						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", dataStructure, Action.SELL, targetOrder.totalTraded, reason));
 					}
-					else if(order.action==Action.SELL){
-						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", dataStructure, Action.BUY, order.totalTraded, reason));
+					else if(targetOrder.action==Action.SELL){
+						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", dataStructure, Action.BUY, targetOrder.totalTraded, reason));
 					}
 				}
 				//For option trade off
-				if(order.direction!=null){
-					if(order.action==Action.BUY){
-						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", order.symbol, Action.SELL, order.direction, order.sp, order.ed, order.totalTraded, reason));
+				if(targetOrder.direction!=null){
+					if(targetOrder.action==Action.BUY){
+						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", targetOrder.symbol, Action.SELL, targetOrder.direction, targetOrder.sp, targetOrder.ed, targetOrder.totalTraded, reason));
 					}
-					else if(order.action==Action.SELL){
-						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", order.symbol, Action.BUY, order.direction, order.sp, order.ed, order.totalTraded, reason));
+					else if(targetOrder.action==Action.SELL){
+						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", targetOrder.symbol, Action.BUY, targetOrder.direction, targetOrder.sp, targetOrder.ed, targetOrder.totalTraded, reason));
 					}
 				}
 				return true;

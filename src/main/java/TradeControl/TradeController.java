@@ -101,7 +101,7 @@ public class TradeController {
 	/**
      *For Option trading
      */
-	public boolean placeOrder(String id, DataStructure dataStructure, String symbol, Action action, Direction direction, StrikePrice sp, ExpiryDate ed, int quantity, boolean oneTimeTradeCheck, String reason) {
+	public boolean placeOrder(String id, DataStructure dataStructure, String symbol, Action action, Direction direction, StrikePrice sp, ExpiryDate ed, int quantity, boolean oneTimeTradeCheck, String reason) throws Exception {
 		if(orders.get(id+"_OFF")!=null){
             Order order = orders.get(id+"_OFF");
             //Stop the order trading first

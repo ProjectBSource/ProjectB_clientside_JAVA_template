@@ -113,6 +113,11 @@ public class Order {
 		this.description = order.description;
 	}
 
+    public void addNewDescription(String description){
+        this.description += description;
+        this.orderDetailInJSON.put("description", this.description);
+    }
+
 	public JSONObject trade(Profile profile, DataStructure data, double slippage) throws Exception {
 		if(data.getType().equals("tick")) {
 			if(direction==null && sp==null && ed==null) {

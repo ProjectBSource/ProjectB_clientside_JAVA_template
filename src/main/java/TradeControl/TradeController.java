@@ -105,7 +105,7 @@ public class TradeController {
 		if(targetOrder!=null && orders.get(targetId+"_OFF")==null){
             if(targetOrder.remained>0){
                 targetOrder.remained = 0;
-                targetOrder.description += "off trade signal triggered; ";
+                targetOrder.addNewDescription("off trade signal triggered; ");
             }
 			if(profile.holding.get(targetOrder.symbol)!=null){
 				//For non option trade off

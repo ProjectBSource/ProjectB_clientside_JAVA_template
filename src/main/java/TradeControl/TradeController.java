@@ -40,8 +40,8 @@ public class TradeController {
 		for(Map.Entry<String, Order> order : orders.entrySet()){
             if(order.getValue().orderAlias.contains("_OFF")){
                 if(order.getValue().remained==0){
-                    completedOrders.add(orders.get(order.getValue().orderAlias.substring(0, order.getValue().orderAlias.indexOf("_OFF"))));
-                    tempNewOrders.remove( order.getValue().orderAlias.substring(0, order.getValue().orderAlias.indexOf("_OFF")) );
+                    completedOrders.add(orders.get(order.getKey().substring(0, order.getKey().indexOf("_OFF"))));
+                    tempNewOrders.remove( order.getKey().substring(0, order.getKey().indexOf("_OFF")) );
                     completedOrders.add(order.getValue());
                     tempNewOrders.remove(order.getKey());
                 }

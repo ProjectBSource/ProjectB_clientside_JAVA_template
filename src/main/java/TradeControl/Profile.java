@@ -8,8 +8,8 @@ class Profile {
 	public double cash;
 	
 	public void update(String symbol, int quantity, double price) {
-		if(holding.containsKey(symbol)) { 
-			holding.put(symbol, holding.get(symbol)+quantity); 
+		if(holding.containsKey(symbol)) {  
+			holding.put(symbol, holding.get(symbol)+quantity);
 		}
 		else {
 			holding.put(symbol, quantity);

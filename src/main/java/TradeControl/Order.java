@@ -34,14 +34,14 @@ public class Order {
 	public double tradePrice;
 	public Date lastUpdateDateTime;
 	public Date orderFillDateTime;
-	public boolean oneTimeTradeCheck;
 	public JSONObject orderDetailInJSON;
+	public String description;
 	public ArrayList<Order> history = new ArrayList<>();
 	public ArrayList<String> historyInJSON = new ArrayList<>();
 
 	public Order(){}
 
-	public Order(String orderAlias, DataStructure dataStructure, Action action, int quantity, boolean oneTimeTradeCheck) throws Exception {
+	public Order(String orderAlias, DataStructure dataStructure, Action action, int quantity, String reason) throws Exception {
 		this.symbol = dataStructure.getSymbol();
 		this.orderid = UUID.randomUUID().toString();
 		this.orderAlias = orderAlias;
@@ -49,8 +49,8 @@ public class Order {
 		this.action = action;
 		this.quantity = quantity;
 		this.remained = quantity;
-		this.oneTimeTradeCheck = oneTimeTradeCheck;
 		this.lastUpdateDateTime = this.orderDateTime;
+		this.description = reason;
 		orderDetailInJSON = new JSONObject();
 		orderDetailInJSON.put("symbol", this.symbol);
 		orderDetailInJSON.put("orderid", this.orderid);
@@ -59,11 +59,11 @@ public class Order {
 		orderDetailInJSON.put("action", this.action.getAction());
 		orderDetailInJSON.put("quantity", this.quantity);
 		orderDetailInJSON.put("remained", this.remained);
-		orderDetailInJSON.put("oneTimeTradeCheck", this.oneTimeTradeCheck);
 		orderDetailInJSON.put("lastUpdateDateTime", this.lastUpdateDateTime);
+		orderDetailInJSON.put("description", this.description);
 	}
 	
-	public Order(String orderAlias, String symbol, Action action, Direction direction, StrikePrice sp, ExpiryDate ed,  int quantity, boolean oneTimeTradeCheck) {
+	public Order(String orderAlias, String symbol, Action action, Direction direction, StrikePrice sp, ExpiryDate ed,  int quantity, String reason) {
 		this.symbol = symbol;
 		this.orderid = UUID.randomUUID().toString();
 		this.orderAlias = orderAlias;
@@ -74,8 +74,8 @@ public class Order {
 		this.ed = ed;
 		this.quantity = quantity;
 		this.remained = quantity;
-		this.oneTimeTradeCheck = oneTimeTradeCheck;
 		this.lastUpdateDateTime = this.orderDateTime;
+		this.description = reason;
 		orderDetailInJSON = new JSONObject();
 		orderDetailInJSON.put("symbol", this.symbol);
 		orderDetailInJSON.put("orderid", this.orderid);
@@ -87,8 +87,8 @@ public class Order {
 		orderDetailInJSON.put("ed", this.ed.getExpiryDate());
 		orderDetailInJSON.put("quantity", this.quantity);
 		orderDetailInJSON.put("remained", this.remained);
-		orderDetailInJSON.put("oneTimeTradeCheck", this.oneTimeTradeCheck);
 		orderDetailInJSON.put("lastUpdateDateTime", this.lastUpdateDateTime);
+		orderDetailInJSON.put("description", this.description);
 	}
 	
 	public void copyOrder(Order order) {
@@ -103,13 +103,18 @@ public class Order {
 		this.quantity = order.quantity;
 		this.totalTraded = order.totalTraded;
 		this.remained = order.remained;
-		this.oneTimeTradeCheck = order.oneTimeTradeCheck;
 		this.averageTradePrice = order.averageTradePrice;
 		this.lastUpdateDateTime = order.lastUpdateDateTime;
 		this.tradePrice = order.tradePrice;
 		this.orderFillDateTime = order.orderFillDateTime;
 		this.orderDetailInJSON = order.orderDetailInJSON;
+		this.description = order.description;
 	}
+
+    public void addNewDescription(String description){
+        this.description += description;
+        this.orderDetailInJSON.put("description", this.description);
+    }
 
 	public JSONObject trade(Profile profile, DataStructure data, double slippage) throws Exception {
 		if(data.getType().equals("tick")) {

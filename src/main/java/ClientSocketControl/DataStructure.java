@@ -5,18 +5,18 @@ public class DataStructure {
 	String type = null;
 	String symbol = null;
 	String market = null;
-	Integer strike_price = null;
+	Integer strike_price = 0;
 	String expiry_date = null;
 	String date = null;
 	String time = null;
 	String datetime = null;
-	Double index = null;
-	Double open = null;
-	Double high = null;
-	Double low = null;
-	Double close = null;
-	Integer volume = null;
-	Integer total_volume = null;
+	Double index = 0.0;
+	Double open = 0.0;
+	Double high = 0.0;
+	Double low = 0.0;
+	Double close = 0.0;
+	Integer volume = 0;
+	Integer total_volume = 0;
 	String error = null;
 	String done = null;
 	

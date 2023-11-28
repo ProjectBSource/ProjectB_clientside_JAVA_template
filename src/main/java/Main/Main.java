@@ -71,49 +71,10 @@ public class Main {
 				 * You may write your back test program below within the while loop
 				 * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 				 */
-
-
-				System.out.println( 
-					String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
-						dataStructure.getType(),
-						dataStructure.getDatetime(),
-						dataStructure.getIndex(),
-						dataStructure.getVolume(),
-						dataStructure.getOpen(),
-						dataStructure.getHigh(),
-						dataStructure.getLow(),
-						dataStructure.getClose(),
-						dataStructure.getTotal_volume(),
-                        indicator0.getUpperBand(),
-                        indicator0.getMiddleBand(),
-                        indicator0.getLowerBand()
-					) 
-				);
-
-                if(dataStructure.getType().equals("tick")){ indicator0.update(dataStructure); }
-
-
-                boolean baseLogicResult0 = ( indicator0.getClose()>0 && indicator0.getUpperBand() > 0 && indicator0.getClose() > indicator0.getUpperBand()  );
-                boolean baseLogicResult1 = ( indicator0.getClose()>0 && indicator0.getLowerBand() > 0 && indicator0.getClose() < indicator0.getLowerBand()  );
-                boolean baseLogicResult2 = ( indicator0.getClose()>0 && indicator0.getMiddleBand() > 0 && indicator0.getClose() == indicator0.getMiddleBand()  );
-
-
-                
-                if(dataStructure.getType().equals("tick")){ 
-                    if(baseLogicResult0==true){ 
-                        tradeController.placeOrder("#1", dataStructure, Action.BUY, 1, false); 
-                    }
-                    if(baseLogicResult1==true){ 
-                        tradeController.placeOrder("#2", dataStructure, Action.SELL, 1, false); 
-                    }
-                    if(baseLogicResult2==true){ 
-                        tradeController.placeOFFOrder("#1", dataStructure); 
-                    }
-                    if(baseLogicResult2==true){ 
-                        tradeController.placeOFFOrder("#2", dataStructure); 
-                    }
-                }
-                                
+																													
+				\    / ._ o _|_  _        _      ._    _ _|_ ._ _. _|_  _   _       |_   _  ._ _  | 
+				\/\/  |  |  |_ (/_   \/ (_) |_| |    _>  |_ | (_|  |_ (/_ (_| \/   | | (/_ | (/_ o 
+									/                                     _| /                    							
 				/*
 				 * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 				 */

@@ -21,19 +21,19 @@ public class Main {
 	public static void main(String args[]) throws Exception {
 		
 		//Login here
-		SocketClient dataStreaming = new SocketClient("funganything@gmail.com", "123");
+		SocketClient dataStreaming = new SocketClient(/*email*/, /*password*/);
 		
 		//Form JSON object message for data streaming request
 		JSONObject dataStreamingRequest = new JSONObject();
-        dataStreamingRequest.put("activity", "TickDataStreaming");
-        dataStreamingRequest.put("market", "FUTURE");
-        dataStreamingRequest.put("index", "HSI");
-        dataStreamingRequest.put("startdate", "20230103");
-        dataStreamingRequest.put("enddate", "20230103");
-        dataStreamingRequest.put("starttime", "091500");
-        dataStreamingRequest.put("endtime", "091600");
-        dataStreamingRequest.put("interval", 60-1);
-        dataStreamingRequest.put("mitigateNoiseWithinPrecentage", 100);
+        dataStreamingRequest.put("activity", /* e.g. "TickDataStreaming" */);
+        dataStreamingRequest.put("market", /* e.g. "FUTURE" */);
+        dataStreamingRequest.put("index", /* e.g. "HSI" */);
+        dataStreamingRequest.put("startdate", /* e.g. "20230103" */);
+        dataStreamingRequest.put("enddate", /* e.g. "20230103" */);
+        dataStreamingRequest.put("starttime", /* e.g. "091500" */);
+        dataStreamingRequest.put("endtime", /* e.g. "091600" */);
+        dataStreamingRequest.put("interval", /* e.g. 59 */);
+        dataStreamingRequest.put("mitigateNoiseWithinPrecentage", /* e.g. 100 */);
 		
 		//Send the request to server
 		dataStreaming.request(dataStreamingRequest);
@@ -43,10 +43,10 @@ public class Main {
 		 * You may modify the function to fit your back test
 		 */
 		TradeController tradeController = new TradeController();
-		tradeController.setSlippage(0.0005);
+		tradeController.setSlippage(/* e.g. 0.0005 */);
 		
         //Setup the indicatories you need here
-        BollingerBands indicator0 = new BollingerBands(20,2);
+		/* e.g. BollingerBands indicator0 = new BollingerBands(20,2); */
 		
 		while(true) {
 			//get the response
@@ -84,7 +84,5 @@ public class Main {
 				 */
 			}
 		}
-        
-        System.out.println(tradeController.getOrderHistoryInJSON());
 	}
 }

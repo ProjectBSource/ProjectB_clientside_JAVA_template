@@ -2,7 +2,7 @@ package Main;
 
 import ClientSocketControl.DataStructure;
 import ClientSocketControl.SocketClient;
-import Indicators.BollingerBands;
+import Indicators.*;
 import TradeControl.TradeController;
 import TradeControl.OrderActionConstants.Action;
 

@@ -202,11 +202,11 @@ public class Future implements Runnable {
 											dataDetail.put("time", sbArray[1]);
 											dataDetail.put("datetime", sbArray[0]+sbArray[1]);
 											dataDetail.put("index", newIndex);
-											dataDetail.put("open", Double.parseDouble(data_open_within_interval));
-											dataDetail.put("high", Double.parseDouble(data_high_within_interval));
-											dataDetail.put("low", Double.parseDouble(data_low_within_interval));
+											dataDetail.put("open", Double.parseDouble(tempIntervalData.data_open_within_interval));
+											dataDetail.put("high", Double.parseDouble(tempIntervalData.data_high_within_interval));
+											dataDetail.put("low", Double.parseDouble(tempIntervalData.data_low_within_interval));
 											dataDetail.put("volume", Integer.parseInt(sbArray[3]));
-											dataDetail.put("total_volume", Integer.parseInt(data_sumupvolume_within_interval));
+											dataDetail.put("total_volume", Integer.parseInt(tempIntervalData.data_sumupvolume_within_interval));
 											dataDetail.put("expiration_year_month", sbArray[4]);
 											
 											//insert into data

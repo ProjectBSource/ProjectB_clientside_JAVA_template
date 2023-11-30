@@ -284,8 +284,8 @@ public class Future implements Runnable {
 			interval_starttime = Constants.addSeconds(interval_endtime, 1);
 			interval_endtime = Constants.addSeconds(interval_starttime, interval_in_seconds);
 		}
+		intervalData_of_diff_contract = new HashMap<String, IntervalData>();
 	}
-	intervalData_of_diff_contract = new HashMap<String, IntervalData>();
 }
 
 class IntervalData{

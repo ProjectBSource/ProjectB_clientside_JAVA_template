@@ -201,7 +201,7 @@ public class Main {
                 */
                 if(restartAndGenerateData==true){
                     restartAndGenerateDataArrayList.add(
-                        String.format("%s,%s,%s,%s,%s,%s",data.toString())
+                        String.format("%s",data.toString())
                     );
                 }
                 /*

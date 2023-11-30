@@ -241,7 +241,7 @@ public class Future implements Runnable {
 	
 	private void sumData() {
 		for (Map.Entry<String, IntervalData> intervalData : intervalData_of_diff_contract.entrySet()) {
-			IntervalData tempIntervalData = intervalData.getKey();
+			IntervalData tempIntervalData = intervalData.getValue();
 			if(tempIntervalData.data_date_within_interval!=null) {
 				//sum up data
 				dataDetail = new JSONObject();

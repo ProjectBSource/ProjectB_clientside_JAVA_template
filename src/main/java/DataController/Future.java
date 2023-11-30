@@ -36,17 +36,6 @@ public class Future implements Runnable {
 	private Date interval_endtime = null;
 	private boolean without_time_reset_interval_startendtime = false;
 
-	private String data_date_within_interval = null;
-	private String data_time_within_interval = null;
-	private String data_datetime_within_interval = null;
-	private String data_index_within_interval = null;
-	private String data_open_within_interval = null;
-	private String data_high_within_interval = null;
-	private String data_low_within_interval = null; 
-	private String data_close_within_interval = null;
-	private String data_sumupvolume_within_interval = null;
-	private String data_contractyyyyMM_within_interval = null;
-
 	private FileReader fr;
 	private BufferedReader br;
     private static Constants constants = new Constants();
@@ -251,38 +240,39 @@ public class Future implements Runnable {
 	}
 	
 	private void sumData() {
-		for (Map.Entry<String, String> intervalData : intervalData_of_diff_contract.entrySet()) {
-			if(intervalData.data_date_within_interval!=null) {
+		for (Map.Entry<String, IntervalData> intervalData : intervalData_of_diff_contract.entrySet()) {
+			IntervalData tempIntervalData = intervalData.getKey();
+			if(tempIntervalData.data_date_within_interval!=null) {
 				//sum up data
 				dataDetail = new JSONObject();
 				dataDetail.put("dataSourceID", runJobID);
 				dataDetail.put("type", "interval");
 				dataDetail.put("symbol", symbol);
 				dataDetail.put("market", "future");
-				dataDetail.put("date", intervalData.data_date_within_interval);
-				dataDetail.put("time", intervalData.data_time_within_interval);
-				dataDetail.put("datetime", intervalData.data_datetime_within_interval);
-				dataDetail.put("index", Double.parseDouble(intervalData.data_index_within_interval));
-				dataDetail.put("open", Double.parseDouble(intervalData.data_open_within_interval));
-				dataDetail.put("high", Double.parseDouble(intervalData.data_high_within_interval));
-				dataDetail.put("low", Double.parseDouble(intervalData.data_low_within_interval));
-				dataDetail.put("close", Double.parseDouble(intervalData.data_close_within_interval));
-				dataDetail.put("total_volume", Integer.parseInt(intervalData.data_sumupvolume_within_interval));
-				dataDetail.put("expiration_year_month", intervalData.data_contractyyyyMM_within_interval);
+				dataDetail.put("date", tempIntervalData.data_date_within_interval);
+				dataDetail.put("time", tempIntervalData.data_time_within_interval);
+				dataDetail.put("datetime", tempIntervalData.data_datetime_within_interval);
+				dataDetail.put("index", Double.parseDouble(tempIntervalData.data_index_within_interval));
+				dataDetail.put("open", Double.parseDouble(tempIntervalData.data_open_within_interval));
+				dataDetail.put("high", Double.parseDouble(tempIntervalData.data_high_within_interval));
+				dataDetail.put("low", Double.parseDouble(tempIntervalData.data_low_within_interval));
+				dataDetail.put("close", Double.parseDouble(tempIntervalData.data_close_within_interval));
+				dataDetail.put("total_volume", Integer.parseInt(tempIntervalData.data_sumupvolume_within_interval));
+				dataDetail.put("expiration_year_month", tempIntervalData.data_contractyyyyMM_within_interval);
 				//insert into data
 				data.add(dataDetail);
 			}
 			//rest
-			intervalData.data_date_within_interval = null;
-			intervalData.data_time_within_interval = null;
-			intervalData.data_datetime_within_interval = null;
-			intervalData.data_index_within_interval = null;
-			intervalData.data_open_within_interval = null;
-			intervalData.data_high_within_interval = null;
-			intervalData.data_low_within_interval = null;
-			intervalData.data_close_within_interval = null;
-			intervalData.data_sumupvolume_within_interval = null;
-			intervalData.data_contractyyyyMM_within_interval = null;
+			tempIntervalData.data_date_within_interval = null;
+			tempIntervalData.data_time_within_interval = null;
+			tempIntervalData.data_datetime_within_interval = null;
+			tempIntervalData.data_index_within_interval = null;
+			tempIntervalData.data_open_within_interval = null;
+			tempIntervalData.data_high_within_interval = null;
+			tempIntervalData.data_low_within_interval = null;
+			tempIntervalData.data_close_within_interval = null;
+			tempIntervalData.data_sumupvolume_within_interval = null;
+			tempIntervalData.data_contractyyyyMM_within_interval = null;
 			interval_starttime = Constants.addSeconds(interval_endtime, 1);
 			interval_endtime = Constants.addSeconds(interval_starttime, interval_in_seconds);
 		}

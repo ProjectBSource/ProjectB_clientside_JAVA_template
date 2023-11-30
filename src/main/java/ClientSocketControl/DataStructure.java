@@ -17,6 +17,7 @@ public class DataStructure {
 	Double close = 0.0;
 	Integer volume = 0;
 	Integer total_volume = 0;
+	String expiration_year_month = null;
 	String error = null;
 	String done = null;
 	
@@ -115,6 +116,12 @@ public class DataStructure {
 	}
 	public void setTotal_volume(Integer total_volume) {
 		this.total_volume = total_volume;
+	}
+	public String getExpiration_year_month() {
+		return expiration_year_month;
+	}
+	public void setExpiration_year_month(String expiration_year_month) {
+		this.expiration_year_month = expiration_year_month;
 	}
 	public String getError() {
 		return error;

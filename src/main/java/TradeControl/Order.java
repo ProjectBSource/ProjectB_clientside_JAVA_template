@@ -27,8 +27,8 @@ public class Order {
 	public String symbol;
 	public Action action;
 	public Direction direction;
-	public StrikePrice sp;
-	public ExpiryDate ed;
+	public StrikePrice strickPrice;
+	public String exipryMonth;
 	public int quantity;
 	public int totalTraded;
 	public int remained;
@@ -43,12 +43,13 @@ public class Order {
 
 	public Order(){}
 
-	public Order(String orderAlias, DataStructure dataStructure, Action action, int quantity, String reason) throws Exception {
+	public Order(String orderAlias, DataStructure dataStructure, Action action, int quantity, String exipryMonth, String reason) throws Exception {
 		this.symbol = dataStructure.getSymbol();
 		this.orderid = UUID.randomUUID().toString();
 		this.orderAlias = orderAlias;
 		this.orderDateTime = Constants.df_yyyyMMddkkmmss.parse(dataStructure.getDatetime());
 		this.action = action;
+		this.exipryMonth = exipryMonth;
 		this.quantity = quantity;
 		this.remained = quantity;
 		this.lastUpdateDateTime = this.orderDateTime;
@@ -59,21 +60,22 @@ public class Order {
 		orderDetailInJSON.put("orderAlias", this.orderAlias);
 		orderDetailInJSON.put("orderDateTime", this.orderDateTime);
 		orderDetailInJSON.put("action", this.action.getAction());
+		orderDetailInJSON.put("exipryMonth", this.exipryMonth);
 		orderDetailInJSON.put("quantity", this.quantity);
 		orderDetailInJSON.put("remained", this.remained);
 		orderDetailInJSON.put("lastUpdateDateTime", this.lastUpdateDateTime);
 		orderDetailInJSON.put("description", this.description);
 	}
 	
-	public Order(String orderAlias, String symbol, Action action, Direction direction, StrikePrice sp, ExpiryDate ed,  int quantity, String reason) {
+	public Order(String orderAlias, String symbol, Action action, Direction direction, StrikePrice strickPrice, String exipryMonth,  int quantity, String reason) {
 		this.symbol = symbol;
 		this.orderid = UUID.randomUUID().toString();
 		this.orderAlias = orderAlias;
 		this.orderDateTime = new Date();
 		this.action = action;
 		this.direction = direction;
-		this.sp = sp;
-		this.ed = ed;
+		this.strickPrice = strickPrice;
+		this.exipryMonth = exipryMonth;
 		this.quantity = quantity;
 		this.remained = quantity;
 		this.lastUpdateDateTime = this.orderDateTime;
@@ -85,8 +87,8 @@ public class Order {
 		orderDetailInJSON.put("orderDateTime", this.orderDateTime);
 		orderDetailInJSON.put("action", this.action.getAction());
 		orderDetailInJSON.put("direction", this.direction.getDirection());
-		orderDetailInJSON.put("sp", this.sp.getStrikePrice());
-		orderDetailInJSON.put("ed", this.ed.getExpiryDate());
+		orderDetailInJSON.put("StrikePrice", this.strickPrice.getStrikePrice());
+		orderDetailInJSON.put("exipryMonth", this.exipryMonth);
 		orderDetailInJSON.put("quantity", this.quantity);
 		orderDetailInJSON.put("remained", this.remained);
 		orderDetailInJSON.put("lastUpdateDateTime", this.lastUpdateDateTime);
@@ -100,8 +102,8 @@ public class Order {
 		this.orderDateTime = order.orderDateTime;
 		this.action = order.action;
 		this.direction = order.direction;
-		this.sp = order.sp;
-		this.ed = order.ed;
+		this.strickPrice = order.strickPrice;
+		this.exipryMonth = order.exipryMonth;
 		this.quantity = order.quantity;
 		this.totalTraded = order.totalTraded;
 		this.remained = order.remained;
@@ -119,30 +121,33 @@ public class Order {
     }
 
 	public JSONObject trade(Profile profile, DataStructure data, double slippage) throws Exception {
-		if(data.getType().equals("tick")) {
-			if(direction==null && sp==null && ed==null) {
-				if(remained>0) {
-					int temp_trade_amount = (data.getVolume()>=remained)?remained:data.getVolume();
-					tradePrice = data.getIndex() + ( (data.getIndex() *  slippage) * (random.nextInt(2)==0?1:-1) );
-					averageTradePrice = ((averageTradePrice * totalTraded) + (temp_trade_amount * tradePrice)) / (totalTraded + temp_trade_amount);
-					totalTraded += temp_trade_amount;
-					remained -= temp_trade_amount;
-					orderFillDateTime = Constants.df_yyyyMMddkkmmss.parse(data.getDatetime());
-                    orderDetailInJSON.put("traded", temp_trade_amount);
-					orderDetailInJSON.put("totalTraded", totalTraded);
-                    orderDetailInJSON.put("remained", remained);
-                    orderDetailInJSON.put("tradePrice", tradePrice);
-                    orderDetailInJSON.put("averageTradePrice", averageTradePrice);
-					orderDetailInJSON.put("orderFillDateTime", orderFillDateTime);
-					//update order history node
-					history.add(new Order());
-					history.get(history.size()-1).copyOrder(this);
-					historyInJSON.add(orderDetailInJSON.toString());
-					//Update profle
-					if(action == Action.SELL) { temp_trade_amount *= -1; }
-					profile.update(symbol, temp_trade_amount, tradePrice);
+		if(remained>0) {
+			if(data.getType().equals("tick")) {
+				//For future trading
+				if(direction==null && strickPrice==null) {
+					if(exipryMonth.equals(data.getExpiration_year_month())){
+						int temp_trade_amount = (data.getVolume()>=remained)?remained:data.getVolume();
+						tradePrice = data.getIndex() + ( (data.getIndex() *  slippage) * (random.nextInt(2)==0?1:-1) );
+						averageTradePrice = ((averageTradePrice * totalTraded) + (temp_trade_amount * tradePrice)) / (totalTraded + temp_trade_amount);
+						totalTraded += temp_trade_amount;
+						remained -= temp_trade_amount;
+						orderFillDateTime = Constants.df_yyyyMMddkkmmss.parse(data.getDatetime());
+						orderDetailInJSON.put("traded", temp_trade_amount);
+						orderDetailInJSON.put("totalTraded", totalTraded);
+						orderDetailInJSON.put("remained", remained);
+						orderDetailInJSON.put("tradePrice", tradePrice);
+						orderDetailInJSON.put("averageTradePrice", averageTradePrice);
+						orderDetailInJSON.put("orderFillDateTime", orderFillDateTime);
+						//update order history node
+						history.add(new Order());
+						history.get(history.size()-1).copyOrder(this);
+						historyInJSON.add(orderDetailInJSON.toString());
+						//Update profle
+						if(action == Action.SELL) { temp_trade_amount *= -1; }
+						profile.update(symbol, temp_trade_amount, tradePrice);
 
-                    return orderDetailInJSON;
+						return orderDetailInJSON;
+					}
 				}
 			}
 			return null;

@@ -10,33 +10,30 @@ import org.json.JSONObject;
 
 public class Future implements Runnable {
 	private String runJobID;
-	private FileReader fr;
-	private BufferedReader br;
-	private String linedata;
-	private String[] sbArray;
-    private static Constants constants = new Constants();
-	public boolean processDone = false;
-	private JSONObject previousDataDetail = null;
-	public ArrayList<JSONObject> data = new ArrayList<JSONObject>();
-	public ArrayList<JSONObject> dataForReading = new ArrayList<JSONObject>();
 	private String symbol = null;
 	private Date startdate = null;
 	private Date enddate = null;
-	private Date startdatetime = null;
 	private Date starttime = null;
 	private Date endtime = null;
+	private Date startdatetime = null;
 	private Date enddatetime = null;
-	private Date data_date = null; private Date prev_data_date = null;
-	private Date data_time = null; private Date prev_data_time = null;
-	private Date data_datetime = null; private Date prev_data_datetime = null;
-	private int data_price = -1;
-	private int data_volume = -1;
 	private int interval_in_seconds = 0;
 	private double mitigateNoiseWithPrecentage = -1;
 	private boolean onlyIntervalData = true;
 	private boolean dataSubscriptedOrNot = true;
+
+	private JSONObject dataDetail = null;
+
+	private String linedata;
+	private String[] sbArray;
+	private Date data_date = null; private Date prev_data_date = null;
+	private Date data_time = null; private Date prev_data_time = null;
+	private Date data_datetime = null; private Date prev_data_datetime = null;
+
 	private Date interval_starttime = null;
 	private Date interval_endtime = null;
+	private boolean without_time_reset_interval_startendtime = false;
+
 	private String data_date_within_interval = null;
 	private String data_time_within_interval = null;
 	private String data_datetime_within_interval = null;
@@ -46,8 +43,16 @@ public class Future implements Runnable {
 	private String data_low_within_interval = null; 
 	private String data_close_within_interval = null;
 	private String data_sumupvolume_within_interval = null;
-	private JSONObject dataDetail = null;
-	private boolean without_time_reset_interval_startendtime = false;
+	private String data_contractyyyyMM_within_interval = null;
+
+	private FileReader fr;
+	private BufferedReader br;
+    private static Constants constants = new Constants();
+	public boolean processDone = false;
+	private JSONObject previousDataDetail = null;
+	public ArrayList<JSONObject> data = new ArrayList<JSONObject>();
+	public HashMap<String, IntervalData> intervalData_of_diff_contract = new HashMap<String, IntervalData>();
+	public ArrayList<JSONObject> dataForReading = new ArrayList<JSONObject>();
 	
 	public Future(JSONObject input, boolean onlyIntervalData) {
 		try {
@@ -76,7 +81,7 @@ public class Future implements Runnable {
 		}
 	}
 	
- @Override
+ 	@Override
 	public void run() {
 		try {
 			if(dataSubscriptedOrNot==false) {
@@ -108,8 +113,6 @@ public class Future implements Runnable {
 							data_date = Constants.df_yyyyMMdd.parse(sbArray[0]);
 							data_time = Constants.df_kkmmss.parse(sbArray[1]);
 							data_datetime = Constants.df_yyyyMMddkkmmss.parse(sbArray[0]+sbArray[1]);
-							data_price = Integer.parseInt(sbArray[2]);
-							data_volume = Integer.parseInt(sbArray[3]);
 							
 							//check data read finished or not
 							if(Constants.outOfEndDateOrNot(enddatetime, data_datetime)==true) {
@@ -143,42 +146,47 @@ public class Future implements Runnable {
 								
 								//select data within the interval
 								if(Constants.withinDateOrNot(interval_starttime, interval_endtime, data_datetime)==true) {
+									
+									if(intervalData_of_diff_contract.get(sbArray[4])==null){ intervalData_of_diff_contract.put(sbArray[4], new IntervalData()); }
+									IntervalData tempIntervalData = intervalData_of_diff_contract.get(sbArray[4]);
+
 									//setup date
-									if(data_date_within_interval==null) { 
-										data_date_within_interval = sbArray[0]; 
+									if(tempIntervalData.data_date_within_interval==null) { 
+										tempIntervalData.data_date_within_interval = sbArray[0]; 
 									}
 									//setup time
-									if(data_time_within_interval==null) { 
-										data_time_within_interval = sbArray[1]; 
+									if(tempIntervalData.data_time_within_interval==null) { 
+										tempIntervalData.data_time_within_interval = sbArray[1]; 
 									}
 									//setup datetime
-									if(data_datetime_within_interval==null) { 
-										data_datetime_within_interval = sbArray[0]+sbArray[1]; 
+									if(tempIntervalData.data_datetime_within_interval==null) { 
+										tempIntervalData.data_datetime_within_interval = sbArray[0]+sbArray[1]; 
 									}
 									//setup index
-									if(data_index_within_interval==null) { 
-										data_index_within_interval = sbArray[2]; 
+									if(tempIntervalData.data_index_within_interval==null) { 
+										tempIntervalData.data_index_within_interval = sbArray[2]; 
 									}
 									//setup open
-									if(data_open_within_interval==null) { 
-										data_open_within_interval = sbArray[2]; 
+									if(tempIntervalData.data_open_within_interval==null) { 
+										tempIntervalData.data_open_within_interval = sbArray[2]; 
 									}
 									//setup high
-									if(data_high_within_interval==null || Integer.parseInt(data_high_within_interval)<Integer.parseInt(sbArray[2]) ) {
-										data_high_within_interval = sbArray[2]; 
+									if(tempIntervalData.data_high_within_interval==null || Integer.parseInt(tempIntervalData.data_high_within_interval)<Integer.parseInt(sbArray[2]) ) {
+										tempIntervalData.data_high_within_interval = sbArray[2]; 
 									}
 									//setup low
-									if(data_low_within_interval==null || Integer.parseInt(data_low_within_interval)>Integer.parseInt(sbArray[2]) ) {
-										data_low_within_interval = sbArray[2]; 
+									if(tempIntervalData.data_low_within_interval==null || Integer.parseInt(tempIntervalData.data_low_within_interval)>Integer.parseInt(sbArray[2]) ) {
+										tempIntervalData.data_low_within_interval = sbArray[2]; 
 									}
 									//setup close
 									if(true) { 
-										data_close_within_interval = sbArray[2]; 
+										tempIntervalData.data_close_within_interval = sbArray[2]; 
 									}
 									//setup sum up volume
 									if(true) { 
-										data_sumupvolume_within_interval = (data_sumupvolume_within_interval==null?0:Integer.parseInt(data_sumupvolume_within_interval)) + Integer.parseInt(sbArray[3]) + ""; 
+										tempIntervalData.data_sumupvolume_within_interval = (tempIntervalData.data_sumupvolume_within_interval==null?0:Integer.parseInt(tempIntervalData.data_sumupvolume_within_interval)) + Integer.parseInt(sbArray[3]) + ""; 
 									}
+
 									if(onlyIntervalData==false) {
 										Double newIndex = Double.parseDouble(sbArray[2]);
 										
@@ -208,6 +216,7 @@ public class Future implements Runnable {
 											dataDetail.put("low", Double.parseDouble(data_low_within_interval));
 											dataDetail.put("volume", Integer.parseInt(sbArray[3]));
 											dataDetail.put("total_volume", Integer.parseInt(data_sumupvolume_within_interval));
+											dataDetail.put("expiration_year_month", sbArray[4]);
 											
 											//insert into data
 											data.add(dataDetail);
@@ -240,37 +249,54 @@ public class Future implements Runnable {
 	}
 	
 	private void sumData() {
-		if(data_date_within_interval!=null) {
-			//sum up data
-			dataDetail = new JSONObject();
-			dataDetail.put("dataSourceID", runJobID);
-			dataDetail.put("type", "interval");
-			dataDetail.put("symbol", symbol);
-			dataDetail.put("market", "future");
-			dataDetail.put("date", data_date_within_interval);
-			dataDetail.put("time", data_time_within_interval);
-			dataDetail.put("datetime", data_datetime_within_interval);
-			dataDetail.put("index", Double.parseDouble(data_index_within_interval));
-			dataDetail.put("open", Double.parseDouble(data_open_within_interval));
-			dataDetail.put("high", Double.parseDouble(data_high_within_interval));
-			dataDetail.put("low", Double.parseDouble(data_low_within_interval));
-			dataDetail.put("close", Double.parseDouble(data_close_within_interval));
-			dataDetail.put("total_volume", Integer.parseInt(data_sumupvolume_within_interval));
-			//insert into data
-			data.add(dataDetail);
+		for (Map.Entry<String, String> intervalData : intervalData_of_diff_contract.entrySet()) {
+			if(intervalData.data_date_within_interval!=null) {
+				//sum up data
+				dataDetail = new JSONObject();
+				dataDetail.put("dataSourceID", runJobID);
+				dataDetail.put("type", "interval");
+				dataDetail.put("symbol", symbol);
+				dataDetail.put("market", "future");
+				dataDetail.put("date", intervalData.data_date_within_interval);
+				dataDetail.put("time", intervalData.data_time_within_interval);
+				dataDetail.put("datetime", intervalData.data_datetime_within_interval);
+				dataDetail.put("index", Double.parseDouble(intervalData.data_index_within_interval));
+				dataDetail.put("open", Double.parseDouble(intervalData.data_open_within_interval));
+				dataDetail.put("high", Double.parseDouble(intervalData.data_high_within_interval));
+				dataDetail.put("low", Double.parseDouble(intervalData.data_low_within_interval));
+				dataDetail.put("close", Double.parseDouble(intervalData.data_close_within_interval));
+				dataDetail.put("total_volume", Integer.parseInt(intervalData.data_sumupvolume_within_interval));
+				dataDetail.put("expiration_year_month", intervalData.data_contractyyyyMM_within_interval);
+				//insert into data
+				data.add(dataDetail);
+			}
+			//rest
+			intervalData.data_date_within_interval = null;
+			intervalData.data_time_within_interval = null;
+			intervalData.data_datetime_within_interval = null;
+			intervalData.data_index_within_interval = null;
+			intervalData.data_open_within_interval = null;
+			intervalData.data_high_within_interval = null;
+			intervalData.data_low_within_interval = null;
+			intervalData.data_close_within_interval = null;
+			intervalData.data_sumupvolume_within_interval = null;
+			intervalData.data_contractyyyyMM_within_interval = null;
+			interval_starttime = Constants.addSeconds(interval_endtime, 1);
+			interval_endtime = Constants.addSeconds(interval_starttime, interval_in_seconds);
 		}
-		//rest
-		data_date_within_interval = null;
-		data_time_within_interval = null;
-		data_datetime_within_interval = null;
-		data_index_within_interval = null;
-		data_open_within_interval = null;
-		data_high_within_interval = null;
-		data_low_within_interval = null;
-		data_close_within_interval = null;
-		data_sumupvolume_within_interval = null;
-		interval_starttime = Constants.addSeconds(interval_endtime, 1);
-		interval_endtime = Constants.addSeconds(interval_starttime, interval_in_seconds);
 	}
+	intervalData_of_diff_contract = new HashMap<String, IntervalData>();
+}
 
+class IntervalData{
+	public String data_date_within_interval = null;
+	public String data_time_within_interval = null;
+	public String data_datetime_within_interval = null;
+	public String data_index_within_interval = null;
+	public String data_open_within_interval = null;
+	public String data_high_within_interval = null;
+	public String data_low_within_interval = null; 
+	public String data_close_within_interval = null;
+	public String data_sumupvolume_within_interval = null;
+	public String data_contractyyyyMM_within_interval = null;
 }

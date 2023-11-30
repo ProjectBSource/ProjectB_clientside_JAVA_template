@@ -412,4 +412,8 @@ public class WebVersionJobConstants {
         
         return null;
 	}
+
+	public String calContractExpiryYearMonth(String yyyyMM, int addMonths){
+		return (Integer.parseInt(yyyyMM) + addMonths + "");
+	}
 }

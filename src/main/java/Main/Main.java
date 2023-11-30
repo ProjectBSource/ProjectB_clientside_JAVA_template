@@ -201,7 +201,7 @@ public class Main {
                 */
                 if(restartAndGenerateData==true){
                     restartAndGenerateDataArrayList.add(
-                        String.format("%s@#manualOpertionOutputControl1#@",data.toString()@#manualOpertionOutputControl2#@)
+                        String.format("%s,%s,%s,%s,%s,%s",data.toString())
                     );
                 }
                 /*

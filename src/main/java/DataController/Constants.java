@@ -17,6 +17,7 @@ import Util.WebVersionJobConstants;
 public class Constants {
 	public static String futuretickdatafilesparentpath = "";
 	public static SimpleDateFormat df_yyyyMMdd = new SimpleDateFormat("yyyyMMdd");
+	public static SimpleDateFormat df_yyyyMM = new SimpleDateFormat("yyyyMM");
 	public static SimpleDateFormat df_kkmmss = new SimpleDateFormat("kkmmss");
 	public static SimpleDateFormat df_yyyyMMddkkmmss = new SimpleDateFormat("yyyyMMddkkmmss");
 	public static Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);

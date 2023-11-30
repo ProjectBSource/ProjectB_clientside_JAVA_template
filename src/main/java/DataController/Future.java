@@ -258,7 +258,7 @@ public class Future implements Runnable {
 				dataDetail.put("low", Double.parseDouble(tempIntervalData.data_low_within_interval));
 				dataDetail.put("close", Double.parseDouble(tempIntervalData.data_close_within_interval));
 				dataDetail.put("total_volume", Integer.parseInt(tempIntervalData.data_sumupvolume_within_interval));
-				dataDetail.put("expiration_year_month", tempIntervalData.data_contractyyyyMM_within_interval);
+				dataDetail.put("expiration_year_month", intervalData.getKey());
 				//insert into data
 				data.add(dataDetail);
 			}
@@ -272,7 +272,6 @@ public class Future implements Runnable {
 			tempIntervalData.data_low_within_interval = null;
 			tempIntervalData.data_close_within_interval = null;
 			tempIntervalData.data_sumupvolume_within_interval = null;
-			tempIntervalData.data_contractyyyyMM_within_interval = null;
 			interval_starttime = Constants.addSeconds(interval_endtime, 1);
 			interval_endtime = Constants.addSeconds(interval_starttime, interval_in_seconds);
 		}
@@ -290,5 +289,4 @@ class IntervalData{
 	public String data_low_within_interval = null; 
 	public String data_close_within_interval = null;
 	public String data_sumupvolume_within_interval = null;
-	public String data_contractyyyyMM_within_interval = null;
 }

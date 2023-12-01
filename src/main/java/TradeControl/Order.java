@@ -120,7 +120,7 @@ public class Order {
     }
 
 	public JSONObject trade(Profile profile, DataStructure data, double slippage) throws Exception {
-		if(remained>0) {
+		if(this.remained>0) {
 			System.out.println("data.getType():"+data.getType());
 			System.out.println("direction:"+direction);
 			System.out.println("strickPrice:"+strickPrice);
@@ -130,15 +130,15 @@ public class Order {
 				//For future trading
 				if(direction==null && strickPrice==null) {
 					if(exipryMonth.equals(data.getExpiration_year_month())){
-						int temp_trade_amount = (data.getVolume()>=remained)?remained:data.getVolume();
+						int temp_trade_amount = (data.getVolume()>=this.remained)?this.remained:data.getVolume();
 						tradePrice = data.getIndex() + ( (data.getIndex() *  slippage) * (random.nextInt(2)==0?1:-1) );
 						averageTradePrice = ((averageTradePrice * totalTraded) + (temp_trade_amount * tradePrice)) / (totalTraded + temp_trade_amount);
 						totalTraded += temp_trade_amount;
-						remained -= temp_trade_amount;
+						this.remained -= temp_trade_amount;
 						orderFillDateTime = Constants.df_yyyyMMddkkmmss.parse(data.getDatetime());
 						orderDetailInJSON.put("traded", temp_trade_amount);
 						orderDetailInJSON.put("totalTraded", totalTraded);
-						orderDetailInJSON.put("remained", remained);
+						orderDetailInJSON.put("remained", this.remained);
 						orderDetailInJSON.put("tradePrice", tradePrice);
 						orderDetailInJSON.put("averageTradePrice", averageTradePrice);
 						orderDetailInJSON.put("orderFillDateTime", orderFillDateTime);

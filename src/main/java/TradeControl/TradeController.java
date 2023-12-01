@@ -82,7 +82,7 @@ public class TradeController {
      */
 	public boolean placeOrder(String id, DataStructure dataStructure, Action action, int quantity, String exipryMonth, String reason) throws Exception {
         if(orders.get(id)==null){
-			orders.put(id, new Order(id, dataStructure, action, quantity, reason));
+			orders.put(id, new Order(id, dataStructure, action, quantity, exipryMonth, reason));
 			return true;
 		}
 		return false;
@@ -91,9 +91,9 @@ public class TradeController {
 	/**
      *For Option trading
      */
-	public boolean placeOrder(String id, String symbol, Action action, Direction direction, StrikePrice sp, String exipryMonth, int quantity, String reason) throws Exception {
+	public boolean placeOrder(String id, String symbol, Action action, Direction direction, StrikePrice strikePrice, String exipryMonth, int quantity, String reason) throws Exception {
         if(orders.get(id)==null){
-			orders.put(id, new Order(id, symbol, action, direction, sp, ed, quantity, reason));
+			orders.put(id, new Order(id, symbol, action, direction, strikePrice, exipryMonth, quantity, reason));
 			return true;
 		}
 		return false;

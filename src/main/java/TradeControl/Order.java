@@ -121,6 +121,11 @@ public class Order {
 
 	public JSONObject trade(Profile profile, DataStructure data, double slippage) throws Exception {
 		if(remained>0) {
+			System.out.println("data.getType():"+data.getType());
+			System.out.println("direction:"+direction);
+			System.out.println("strickPrice:"+strickPrice);
+			System.out.println("exipryMonth:"+exipryMonth);
+			System.out.println("data.getExpiration_year_month():"+data.getExpiration_year_month());
 			if(data.getType().equals("tick")) {
 				//For future trading
 				if(direction==null && strickPrice==null) {

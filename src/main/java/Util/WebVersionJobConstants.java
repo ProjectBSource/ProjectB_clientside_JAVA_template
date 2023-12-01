@@ -414,7 +414,7 @@ public class WebVersionJobConstants {
         return null;
 	}
 
-	public static String calContractExpiryYearMonth(String yyyyMM, int addMonths){
+	public static String calContractExpiryYearMonth(String yyyyMM, int addMonths) throws Exception{
 		Date tempDate = Constants.addMonths( Constants.df_yyyyMM.parse(yyyyMM), addMonths);
 		int tempYear = tempDate.getYear()+1900;
 		int tempMonth = tempDate.getMonth()+1;

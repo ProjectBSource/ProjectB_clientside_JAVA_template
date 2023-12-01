@@ -80,9 +80,9 @@ public class TradeController {
 	/**
      *For Stock and Future trading
      */
-	public boolean placeOrder(String id, DataStructure dataStructure, Action action, int quantity, String exipryMonth, String reason) throws Exception {
+	public boolean placeOrder(String id, DataStructure dataStructure, Action action, int quantity, String expiryMonth, String reason) throws Exception {
         if(orders.get(id)==null){
-			orders.put(id, new Order(id, dataStructure, action, quantity, exipryMonth, reason));
+			orders.put(id, new Order(id, dataStructure, action, quantity, expiryMonth, reason));
 			return true;
 		}
 		return false;
@@ -91,9 +91,9 @@ public class TradeController {
 	/**
      *For Option trading
      */
-	public boolean placeOrder(String id, String symbol, Action action, Direction direction, StrikePrice strikePrice, String exipryMonth, int quantity, String reason) throws Exception {
+	public boolean placeOrder(String id, String symbol, Action action, Direction direction, StrikePrice strikePrice, String expiryMonth, int quantity, String reason) throws Exception {
         if(orders.get(id)==null){
-			orders.put(id, new Order(id, symbol, action, direction, strikePrice, exipryMonth, quantity, reason));
+			orders.put(id, new Order(id, symbol, action, direction, strikePrice, expiryMonth, quantity, reason));
 			return true;
 		}
 		return false;
@@ -110,19 +110,19 @@ public class TradeController {
 				//For non option trade off
 				if(targetOrder.direction==null){
 					if(targetOrder.action==Action.BUY){
-						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", dataStructure, Action.SELL, targetOrder.totalTraded, targetOrder.exipryMonth, reason));
+						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", dataStructure, Action.SELL, targetOrder.totalTraded, targetOrder.expiryMonth, reason));
 					}
 					else if(targetOrder.action==Action.SELL){
-						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", dataStructure, Action.BUY, targetOrder.totalTraded, targetOrder.exipryMonth, reason));
+						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", dataStructure, Action.BUY, targetOrder.totalTraded, targetOrder.expiryMonth, reason));
 					}
 				}
 				//For option trade off
 				if(targetOrder.direction!=null){
 					if(targetOrder.action==Action.BUY){
-						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", targetOrder.symbol, Action.SELL, targetOrder.direction, targetOrder.strickPrice, targetOrder.exipryMonth, targetOrder.totalTraded, reason));
+						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", targetOrder.symbol, Action.SELL, targetOrder.direction, targetOrder.strickPrice, targetOrder.expiryMonth, targetOrder.totalTraded, reason));
 					}
 					else if(targetOrder.action==Action.SELL){
-						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", targetOrder.symbol, Action.BUY, targetOrder.direction, targetOrder.strickPrice, targetOrder.exipryMonth, targetOrder.totalTraded, reason));
+						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", targetOrder.symbol, Action.BUY, targetOrder.direction, targetOrder.strickPrice, targetOrder.expiryMonth, targetOrder.totalTraded, reason));
 					}
 				}
 				return true;

@@ -64,7 +64,6 @@ public class Order {
 		orderDetailInJSON.put("remained", this.remained);
 		orderDetailInJSON.put("lastUpdateDateTime", this.lastUpdateDateTime);
 		orderDetailInJSON.put("description", this.description);
-		System.out.println(orderDetailInJSON.toString());
 	}
 	
 	public Order(String orderAlias, String symbol, Action action, Direction direction, StrikePrice strickPrice, String expiryMonth,  int quantity, String reason) {
@@ -93,7 +92,6 @@ public class Order {
 		orderDetailInJSON.put("remained", this.remained);
 		orderDetailInJSON.put("lastUpdateDateTime", this.lastUpdateDateTime);
 		orderDetailInJSON.put("description", this.description);
-		System.out.println(orderDetailInJSON.toString());
 	}
 	
 	public void copyOrder(Order order) {

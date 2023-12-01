@@ -6,7 +6,6 @@ public class DataStructure {
 	String symbol = null;
 	String market = null;
 	Integer strike_price = 0;
-	String expiry_date = null;
 	String date = null;
 	String time = null;
 	String datetime = null;
@@ -50,12 +49,6 @@ public class DataStructure {
 	}
 	public void setStrike_price(Integer strike_price) {
 		this.strike_price = strike_price;
-	}
-	public String getExpiry_date() {
-		return expiry_date;
-	}
-	public void setExpiry_date(String expiry_date) {
-		this.expiry_date = expiry_date;
 	}
 	public String getDate() {
 		return date;

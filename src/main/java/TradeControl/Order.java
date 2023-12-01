@@ -64,6 +64,7 @@ public class Order {
 		orderDetailInJSON.put("remained", this.remained);
 		orderDetailInJSON.put("lastUpdateDateTime", this.lastUpdateDateTime);
 		orderDetailInJSON.put("description", this.description);
+		System.out.println(orderDetailInJSON.toString());
 	}
 	
 	public Order(String orderAlias, String symbol, Action action, Direction direction, StrikePrice strickPrice, String expiryMonth,  int quantity, String reason) {
@@ -92,6 +93,7 @@ public class Order {
 		orderDetailInJSON.put("remained", this.remained);
 		orderDetailInJSON.put("lastUpdateDateTime", this.lastUpdateDateTime);
 		orderDetailInJSON.put("description", this.description);
+		System.out.println(orderDetailInJSON.toString());
 	}
 	
 	public void copyOrder(Order order) {
@@ -120,8 +122,8 @@ public class Order {
     }
 
 	public JSONObject trade(Profile profile, DataStructure data, double slippage) throws Exception {
-		if(data.getType().equals("tick")) {
-			if(this.remained>0) {
+		if(this.remained>0) {	
+			if(data.getType().equals("tick")) {
 				//For future trading
 				if(direction==null && strickPrice==null) {
 					if(expiryMonth.equals(data.getExpiration_year_month())){

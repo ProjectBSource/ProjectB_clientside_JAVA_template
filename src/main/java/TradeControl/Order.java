@@ -27,7 +27,7 @@ public class Order {
 	public Action action;
 	public Direction direction;
 	public StrikePrice strickPrice;
-	public String exipryMonth;
+	public String expiryMonth;
 	public int quantity;
 	public int totalTraded;
 	public int remained;
@@ -42,13 +42,13 @@ public class Order {
 
 	public Order(){}
 
-	public Order(String orderAlias, DataStructure dataStructure, Action action, int quantity, String exipryMonth, String reason) throws Exception {
+	public Order(String orderAlias, DataStructure dataStructure, Action action, int quantity, String expiryMonth, String reason) throws Exception {
 		this.symbol = dataStructure.getSymbol();
 		this.orderid = UUID.randomUUID().toString();
 		this.orderAlias = orderAlias;
 		this.orderDateTime = Constants.df_yyyyMMddkkmmss.parse(dataStructure.getDatetime());
 		this.action = action;
-		this.exipryMonth = exipryMonth;
+		this.expiryMonth = expiryMonth;
 		this.quantity = quantity;
 		this.remained = quantity;
 		this.lastUpdateDateTime = this.orderDateTime;
@@ -59,14 +59,14 @@ public class Order {
 		orderDetailInJSON.put("orderAlias", this.orderAlias);
 		orderDetailInJSON.put("orderDateTime", this.orderDateTime);
 		orderDetailInJSON.put("action", this.action.getAction());
-		orderDetailInJSON.put("exipryMonth", this.exipryMonth);
+		orderDetailInJSON.put("expiryMonth", this.expiryMonth);
 		orderDetailInJSON.put("quantity", this.quantity);
 		orderDetailInJSON.put("remained", this.remained);
 		orderDetailInJSON.put("lastUpdateDateTime", this.lastUpdateDateTime);
 		orderDetailInJSON.put("description", this.description);
 	}
 	
-	public Order(String orderAlias, String symbol, Action action, Direction direction, StrikePrice strickPrice, String exipryMonth,  int quantity, String reason) {
+	public Order(String orderAlias, String symbol, Action action, Direction direction, StrikePrice strickPrice, String expiryMonth,  int quantity, String reason) {
 		this.symbol = symbol;
 		this.orderid = UUID.randomUUID().toString();
 		this.orderAlias = orderAlias;
@@ -74,7 +74,7 @@ public class Order {
 		this.action = action;
 		this.direction = direction;
 		this.strickPrice = strickPrice;
-		this.exipryMonth = exipryMonth;
+		this.expiryMonth = expiryMonth;
 		this.quantity = quantity;
 		this.remained = quantity;
 		this.lastUpdateDateTime = this.orderDateTime;
@@ -87,7 +87,7 @@ public class Order {
 		orderDetailInJSON.put("action", this.action.getAction());
 		orderDetailInJSON.put("direction", this.direction.getDirection());
 		orderDetailInJSON.put("StrikePrice", this.strickPrice.getStrikePrice());
-		orderDetailInJSON.put("exipryMonth", this.exipryMonth);
+		orderDetailInJSON.put("expiryMonth", this.expiryMonth);
 		orderDetailInJSON.put("quantity", this.quantity);
 		orderDetailInJSON.put("remained", this.remained);
 		orderDetailInJSON.put("lastUpdateDateTime", this.lastUpdateDateTime);
@@ -102,7 +102,7 @@ public class Order {
 		this.action = order.action;
 		this.direction = order.direction;
 		this.strickPrice = order.strickPrice;
-		this.exipryMonth = order.exipryMonth;
+		this.expiryMonth = order.expiryMonth;
 		this.quantity = order.quantity;
 		this.totalTraded = order.totalTraded;
 		this.remained = order.remained;
@@ -120,16 +120,11 @@ public class Order {
     }
 
 	public JSONObject trade(Profile profile, DataStructure data, double slippage) throws Exception {
-		if(this.remained>0) {
-			System.out.println("data.getType():"+data.getType());
-			System.out.println("direction:"+direction);
-			System.out.println("strickPrice:"+strickPrice);
-			System.out.println("exipryMonth:"+exipryMonth);
-			System.out.println("data.getExpiration_year_month():"+data.getExpiration_year_month());
-			if(data.getType().equals("tick")) {
+		if(data.getType().equals("tick")) {
+			if(this.remained>0) {
 				//For future trading
 				if(direction==null && strickPrice==null) {
-					if(exipryMonth.equals(data.getExpiration_year_month())){
+					if(expiryMonth.equals(data.getExpiration_year_month())){
 						int temp_trade_amount = (data.getVolume()>=this.remained)?this.remained:data.getVolume();
 						tradePrice = data.getIndex() + ( (data.getIndex() *  slippage) * (random.nextInt(2)==0?1:-1) );
 						averageTradePrice = ((averageTradePrice * totalTraded) + (temp_trade_amount * tradePrice)) / (totalTraded + temp_trade_amount);

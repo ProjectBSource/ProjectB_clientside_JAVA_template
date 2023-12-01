@@ -111,10 +111,10 @@ public class TradeController {
 				//For non option trade off
 				if(targetOrder.direction==null){
 					if(targetOrder.action==Action.BUY){
-						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", dataStructure, Action.SELL, targetOrder.totalTraded, reason));
+						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", dataStructure, Action.SELL, targetOrder.totalTraded, targetOrder.exipryMonth, reason));
 					}
 					else if(targetOrder.action==Action.SELL){
-						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", dataStructure, Action.BUY, targetOrder.totalTraded, reason));
+						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", dataStructure, Action.BUY, targetOrder.totalTraded, targetOrder.exipryMonth, reason));
 					}
 				}
 				//For option trade off

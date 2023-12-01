@@ -137,6 +137,13 @@ public class Constants {
 	    cal.add(Calendar.DATE, dates);
 	    return cal.getTime();
 	}
+
+	public static Date addMonths(Date date, Integer months) {
+	    Calendar cal = Calendar.getInstance();
+	    cal.setTime(date);
+	    cal.add(Calendar.MONTH, months);
+	    return cal.getTime();
+	}
 	
 	public static int daysBetween(Date start, Date end) {
 	    long diff = end.getTime() - start.getTime();

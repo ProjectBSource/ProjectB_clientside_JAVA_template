@@ -212,6 +212,9 @@ public class Main {
                 * You may write your back test program below within the while loop
                 * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
                 */
+                System.out.println("WebVersionJobConstants.calContractExpiryYearMonth(dataStructure.getDate().substring(0,6), 2):"+WebVersionJobConstants.calContractExpiryYearMonth(dataStructure.getDate().substring(0,6), 2));
+                System.out.println("dataStructure.getDate().substring(0,6):"+dataStructure.getDate().substring(0,6));
+                System.out.println("dataStructure.getExpiration_year_month():"+dataStructure.getExpiration_year_month());
                 if(dataStructure.getDate().substring(0,6).equals(dataStructure.getExpiration_year_month())){
                     @#indicatoriesUpdateLogic#@
                 }

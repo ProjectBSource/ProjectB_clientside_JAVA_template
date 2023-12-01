@@ -1,5 +1,6 @@
 package Util;
 
+import DataController.Constants;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -414,6 +415,9 @@ public class WebVersionJobConstants {
 	}
 
 	public String calContractExpiryYearMonth(String yyyyMM, int addMonths){
-		return (Integer.parseInt(yyyyMM) + addMonths + "");
+		Date tempDate = Constants.addMonths( Constants.df_yyyyMM.parse(yyyyMM), addMonths);
+		int tempYear = tempDate.getYear()+1900;
+		int tempMonth = tempDate.getMonth()+1;
+		return tempYear + (tempMonth<10?"0":"") + tempMonth ;
 	}
 }

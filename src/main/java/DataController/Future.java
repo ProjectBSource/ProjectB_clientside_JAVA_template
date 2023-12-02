@@ -80,7 +80,7 @@ public class Future implements Runnable {
 				this.enddate = Constants.addDates(this.startdate, 1);
 			}
 			
-			ArrayList<File> fileslist = Constants.requiredFileLiet(symbol, "future", startdate, enddate);
+			ArrayList<File> fileslist = Constants.requiredFileList(symbol, startdate, enddate);
 			if(fileslist!=null) {
 				for(File f : fileslist) {
 					fr = new FileReader(f.getAbsolutePath());
@@ -101,6 +101,10 @@ public class Future implements Runnable {
 							//Read data
 							linedata = (((char)firstchar)+br.readLine());
 							sbArray = linedata.toString().split(",");
+                            //ensure future data only
+                            if(sbArray[6].equals("")){
+                                continue;
+                            }
 							data_date = Constants.df_yyyyMMdd.parse(sbArray[0]);
 							data_time = Constants.df_kkmmss.parse(sbArray[1]);
 							data_datetime = Constants.df_yyyyMMddkkmmss.parse(sbArray[0]+sbArray[1]);

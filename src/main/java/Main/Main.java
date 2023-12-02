@@ -42,7 +42,11 @@ public class Main {
 
     /* Setup the indicatories you need here */
     //############################################################################################################################
-    @#indicatories#@
+              private static AdvanceORDecline indicator0 = new AdvanceORDecline(20);
+          private static AccumulationORDistribution indicator1 = new AccumulationORDistribution(20);
+          private static AccumulationORDistribution indicator2 = new AccumulationORDistribution(20);
+          private static AdvanceORDecline indicator3 = new AdvanceORDecline(20);
+
     //############################################################################################################################
 
 
@@ -103,15 +107,15 @@ public class Main {
 		        WebVersionJobConstants.logger("Request test result pass");
                 //Generate the data request JSON object
                 JSONObject dataStreamingRequest = new JSONObject();
-                dataStreamingRequest.put("activity", "@#activity#@");
-                dataStreamingRequest.put("market", "@#market#@");
-                dataStreamingRequest.put("index", "@#index#@");
-                dataStreamingRequest.put("startdate", "@#startdate#@");
-                dataStreamingRequest.put("enddate", "@#enddate#@");
-                dataStreamingRequest.put("starttime", "@#starttime#@");
-                dataStreamingRequest.put("endtime", "@#endtime#@");
-                dataStreamingRequest.put("interval", @#interval#@);
-                dataStreamingRequest.put("mitigateNoiseWithinPrecentage", @#mitigateNoiseWithinPrecentage#@);
+                dataStreamingRequest.put("activity", "TickDataStreaming");
+                dataStreamingRequest.put("market", "FUTURE");
+                dataStreamingRequest.put("index", "HSI");
+                dataStreamingRequest.put("startdate", "20230101");
+                dataStreamingRequest.put("enddate", "20230107");
+                dataStreamingRequest.put("starttime", "000000");
+                dataStreamingRequest.put("endtime", "235900");
+                dataStreamingRequest.put("interval", 59);
+                dataStreamingRequest.put("mitigateNoiseWithinPrecentage", 200);
                 WebVersionJobConstants.logger("dataStreamingRequest :" + dataStreamingRequest.toString());
                 
                 for(Object objectNode : nodeDataArray){
@@ -212,17 +216,40 @@ public class Main {
                 * You may write your back test program below within the while loop
                 * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
                 */
+                System.out.println(String.format("%s",data.toString()));
+
                 if(dataStructure.getDate().substring(0,6).equals(dataStructure.getExpiration_year_month())){
-                    @#indicatoriesUpdateLogic#@
+                                         indicator0.update(dataStructure);
+                     indicator1.update(dataStructure);
+                     indicator2.update(dataStructure);
+                     indicator3.update(dataStructure);
+
                 }
 
-                @#baseLogicResult#@
+                boolean baseLogicResult0 = (indicator0.getAdvanceSum() > 0 && 10 > 0 && indicator0.getAdvanceSum() > 10 );
+                boolean baseLogicResult1 = (indicator1.getAD() > 0 && 10 > 0 && indicator1.getAD() > 10 );
+                boolean baseLogicResult2 = (indicator2.getAD() > 0 && 10 > 0 && indicator2.getAD() < 10 );
+                boolean baseLogicResult3 = (indicator3.getDeclineSum() > 0 && 10 > 0 && indicator3.getDeclineSum() > 10 );
 
-		        @#baseLogicResultReason#@
 
-                @#logicGatewayResult#@
+                StringBuilder baseLogicResultReasonStatement = new StringBuilder();
+                if(baseLogicResult0==true){ baseLogicResultReasonStatement.append("AdvanceSum > 10; "); }
+                if(baseLogicResult1==true){ baseLogicResultReasonStatement.append("AD > 10; "); }
+                if(baseLogicResult2==true){ baseLogicResultReasonStatement.append("AD < 10; "); }
+                if(baseLogicResult3==true){ baseLogicResultReasonStatement.append("DeclineSum > 10; "); }
 
-                @#actionAndTradeLogic#@
+
+                boolean logicResult1 = ( (baseLogicResult2==true) || (baseLogicResult3==true) );
+                boolean logicResult0 = ( (baseLogicResult1==true) || (baseLogicResult0==true) );
+
+
+                if(dataStructure.getType().equals("tick")){                      
+                    if(logicResult0==true){ tradeController.placeOrder("#8674", dataStructure, Action.BUY, 1, WebVersionJobConstants.calContractExpiryYearMonth(dataStructure.getDate().substring(0,6), 1), baseLogicResultReasonStatement.toString()); }
+                    if(logicResult1==true){ tradeController.placeOrder("#2441", dataStructure, Action.SELL, 1, WebVersionJobConstants.calContractExpiryYearMonth(dataStructure.getDate().substring(0,6), 1), baseLogicResultReasonStatement.toString()); }
+                    if(logicResult0==true){ tradeController.placeOFFOrder("#2441", dataStructure, baseLogicResultReasonStatement.toString()); }
+                    if(logicResult1==true){ tradeController.placeOFFOrder("#8674", dataStructure, baseLogicResultReasonStatement.toString()); }
+                }
+
                 
                 /*
                 * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

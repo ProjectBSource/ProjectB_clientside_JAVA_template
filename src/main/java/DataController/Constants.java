@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 import Util.WebVersionJobConstants;
 
 public class Constants {
-	public static String futuretickdatafilesparentpath = "";
+	public static String alltickdatafilesparentpath = "";
 	public static SimpleDateFormat df_yyyyMMdd = new SimpleDateFormat("yyyyMMdd");
 	public static SimpleDateFormat df_yyyyMM = new SimpleDateFormat("yyyyMM");
 	public static SimpleDateFormat df_kkmmss = new SimpleDateFormat("kkmmss");
@@ -27,20 +27,18 @@ public class Constants {
 		Properties prop = new Properties();
 	    try (InputStream resourceAsStream = loader.getResourceAsStream("env.properties")) {
 	        prop.load(resourceAsStream);
-	        futuretickdatafilesparentpath = prop.get("env.futuretickdatafilesparentpath").toString();
+	        alltickdatafilesparentpath = prop.get("env.alltickdatafilesparentpath").toString();
 	    } catch (IOException e) {
 	        System.err.println("Unable to load properties file : env.properties");
 	    }
 	}
 	
-	public static ArrayList<File> requiredFileLiet(String symbol, String market, Date startdate, Date enddate) throws ParseException {
+	public static ArrayList<File> requiredFileList(String symbol, Date startdate, Date enddate) throws ParseException {
 		ArrayList<File> filesList = new ArrayList<File>();
 		//Get the files list path
 		String fileslistpath = null;
-		if(market.equalsIgnoreCase("future")) {
-			if(symbol.equalsIgnoreCase("YM")) { fileslistpath = futuretickdatafilesparentpath+"YM//"; }
-			if(symbol.equalsIgnoreCase("HSI")) { fileslistpath = futuretickdatafilesparentpath+"HSI//"; }
-		}
+        if(symbol.equalsIgnoreCase("YM")) { fileslistpath = alltickdatafilesparentpath+"YM//"; }
+		if(symbol.equalsIgnoreCase("HSI")) { fileslistpath = alltickdatafilesparentpath+"HSI//"; }
 		
 		//Find the required files
 		File f = new File(fileslistpath);

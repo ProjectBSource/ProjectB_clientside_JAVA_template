@@ -102,7 +102,7 @@ public class Future implements Runnable {
 							linedata = (((char)firstchar)+br.readLine());
 							sbArray = linedata.toString().split(",");
                             //ensure future data only
-                            if(sbArray[6].equals("")){
+                            if(sbArray[6].equals("")==false){
                                 continue;
                             }
 							data_date = Constants.df_yyyyMMdd.parse(sbArray[0]);

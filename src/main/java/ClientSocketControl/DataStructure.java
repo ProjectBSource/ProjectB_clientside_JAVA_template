@@ -6,6 +6,7 @@ public class DataStructure {
 	String symbol = null;
 	String market = null;
 	Integer strike_price = 0;
+    String direction = null;
 	String date = null;
 	String time = null;
 	String datetime = null;
@@ -50,6 +51,12 @@ public class DataStructure {
 	public void setStrike_price(Integer strike_price) {
 		this.strike_price = strike_price;
 	}
+    public String getDirection(){
+        return direction;
+    }
+    public void setDirection(String direction){
+        this.direction = direction;
+    }
 	public String getDate() {
 		return date;
 	}

@@ -71,7 +71,7 @@
                     </dependency>
 				</dependencies>
 				<properties>
-			         <env.alltickdatafilesparentpath>/Users/patrickfung/Desktop/ProjectB_notes/TickData/alltickdatafiles/HKEX</env.alltickdatafilesparentpath>
+			         <env.alltickdatafilesparentpath>/Users/patrickfung/Desktop/ProjectB_notes/TickData/alltickdatafiles</env.alltickdatafilesparentpath>
 			         <env.loggerstoragepath>//Users//patrickfung//Downloads//server.log</env.loggerstoragepath>
 			         <env.environment>dev</env.environment>
 				</properties>

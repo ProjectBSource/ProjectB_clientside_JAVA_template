@@ -38,7 +38,7 @@ public class Constants {
 		//Get the files list path
 		String fileslistpath = null;
         if(symbol.equalsIgnoreCase("YM")) { fileslistpath = alltickdatafilesparentpath+"/YM/"; }
-		if(symbol.equalsIgnoreCase("HSI")) { fileslistpath = alltickdatafilesparentpath+"/HSI/"; }
+		if(symbol.equalsIgnoreCase("HSI")) { fileslistpath = alltickdatafilesparentpath+"/HKEX/HSI/"; }
 		//Find the required files
 		File f = new File(fileslistpath);
 		for(String pathname : f.list()) {

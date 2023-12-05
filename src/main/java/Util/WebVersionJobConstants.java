@@ -1,5 +1,6 @@
 package Util;
 
+import ClientSocketControl.DataStructure;
 import DataController.Constants;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -425,12 +426,12 @@ public class WebVersionJobConstants {
 		if(ds.getSymbol().equals("HSI")){
 			int currentATM = ds.getIndex()%200<100?ds.getIndex()-(ds.getIndex() % 200):ds.getIndex()-(ds.getIndex() % 200)+200;
 			if(input.contains("+")){ 
-				currentATM += Integer.parseInt(input.splits("+")[1]);
+				currentATM += Integer.parseInt(input.split("+")[1]);
 			}
 			else if(input.contains("-")){ 
-				currentATM -= Integer.parseInt(input.splits("-")[1]);
+				currentATM -= Integer.parseInt(input.split("-")[1]);
 			}
-			return currentATM;
+			return currentATM+"";
 		}
 		return 0;
 	}

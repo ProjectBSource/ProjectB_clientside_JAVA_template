@@ -91,9 +91,9 @@ public class TradeController {
 	/**
      *For Option trading
      */
-	public boolean placeOrder(String id, String symbol, Action action, Direction direction, StrikePrice strikePrice, String expiryMonth, int quantity, String reason) throws Exception {
+	public boolean placeOrder(String id, DataStructure dataStructure, Action action, Direction direction, StrikePrice strikePrice, String expiryMonth, int quantity, String reason) throws Exception {
         if(orders.get(id)==null){
-			orders.put(id, new Order(id, symbol, action, direction, strikePrice, expiryMonth, quantity, reason));
+			orders.put(id, new Order(id, dataStructure, action, direction, strikePrice, expiryMonth, quantity, reason));
 			return true;
 		}
 		return false;

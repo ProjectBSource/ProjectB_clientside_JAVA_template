@@ -66,11 +66,11 @@ public class Order {
 		orderDetailInJSON.put("description", this.description);
 	}
 	
-	public Order(String orderAlias, String symbol, Action action, Direction direction, StrikePrice strickPrice, String expiryMonth,  int quantity, String reason) {
-		this.symbol = symbol;
+	public Order(String orderAlias, DataStructure dataStructure, Action action, Direction direction, StrikePrice strickPrice, String expiryMonth,  int quantity, String reason) {
+		this.symbol = dataStructure.getSymbol();
 		this.orderid = UUID.randomUUID().toString();
 		this.orderAlias = orderAlias;
-		this.orderDateTime = new Date();
+		this.orderDateTime = Constants.df_yyyyMMddkkmmss.parse(dataStructure.getDatetime());
 		this.action = action;
 		this.direction = direction;
 		this.strickPrice = strickPrice;
@@ -125,6 +125,32 @@ public class Order {
 				//For future trading
 				if(direction==null && strickPrice==null) {
 					if(expiryMonth.equals(data.getExpiration_year_month())){
+						int temp_trade_amount = (data.getVolume()>=this.remained)?this.remained:data.getVolume();
+						tradePrice = data.getIndex() + ( (data.getIndex() *  slippage) * (random.nextInt(2)==0?1:-1) );
+						averageTradePrice = ((averageTradePrice * totalTraded) + (temp_trade_amount * tradePrice)) / (totalTraded + temp_trade_amount);
+						totalTraded += temp_trade_amount;
+						this.remained -= temp_trade_amount;
+						orderFillDateTime = Constants.df_yyyyMMddkkmmss.parse(data.getDatetime());
+						orderDetailInJSON.put("traded", temp_trade_amount);
+						orderDetailInJSON.put("totalTraded", totalTraded);
+						orderDetailInJSON.put("remained", this.remained);
+						orderDetailInJSON.put("tradePrice", tradePrice);
+						orderDetailInJSON.put("averageTradePrice", averageTradePrice);
+						orderDetailInJSON.put("orderFillDateTime", orderFillDateTime);
+						//update order history node
+						history.add(new Order());
+						history.get(history.size()-1).copyOrder(this);
+						historyInJSON.add(orderDetailInJSON.toString());
+						//Update profle
+						if(action == Action.SELL) { temp_trade_amount *= -1; }
+						profile.update(symbol, temp_trade_amount, tradePrice);
+
+						return orderDetailInJSON;
+					}
+				}
+				//For option trading
+				else {
+					if(direction.equals(data.getDirection()) && strickPrice.equals(data.getStrike_price()) && expiryMonth.equals(data.getExpiration_year_month())){
 						int temp_trade_amount = (data.getVolume()>=this.remained)?this.remained:data.getVolume();
 						tradePrice = data.getIndex() + ( (data.getIndex() *  slippage) * (random.nextInt(2)==0?1:-1) );
 						averageTradePrice = ((averageTradePrice * totalTraded) + (temp_trade_amount * tradePrice)) / (totalTraded + temp_trade_amount);

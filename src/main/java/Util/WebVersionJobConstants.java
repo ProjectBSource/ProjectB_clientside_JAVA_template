@@ -420,4 +420,18 @@ public class WebVersionJobConstants {
 		int tempMonth = tempDate.getMonth()+1;
 		return tempYear + (tempMonth<10?"0":"") + tempMonth ;
 	}
+
+	public static String calStrikePrice(Double index, String input){
+		if(ds.getSymbol().equals("HSI")){
+			int currentATM = index%200<100?index-(index % 200):index-(index % 200)+200;
+			if(input.contains("+")){ 
+				currentATM += Integer.parseInt(input.splits("+")[1]);
+			}
+			else if(input.contains("-")){ 
+				currentATM -= Integer.parseInt(input.splits("-")[1]);
+			}
+			return currentATM;
+		}
+		return 0;
+	}
 }

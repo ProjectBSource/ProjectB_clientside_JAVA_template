@@ -421,9 +421,9 @@ public class WebVersionJobConstants {
 		return tempYear + (tempMonth<10?"0":"") + tempMonth ;
 	}
 
-	public static String calStrikePrice(Double index, String input){
+	public static String calStrikePrice(DataStructure ds, String input){
 		if(ds.getSymbol().equals("HSI")){
-			int currentATM = index%200<100?index-(index % 200):index-(index % 200)+200;
+			int currentATM = ds.getIndex()%200<100?ds.getIndex()-(ds.getIndex() % 200):ds.getIndex()-(ds.getIndex() % 200)+200;
 			if(input.contains("+")){ 
 				currentATM += Integer.parseInt(input.splits("+")[1]);
 			}

@@ -424,7 +424,7 @@ public class WebVersionJobConstants {
 
 	public static String calStrikePrice(DataStructure ds, String input){
 		if(ds.getSymbol().equals("HSI")){
-			int currentATM = ds.getIndex()%200<100?ds.getIndex()-(ds.getIndex() % 200):ds.getIndex()-(ds.getIndex() % 200)+200;
+			double currentATM = ds.getIndex()%200<100?ds.getIndex()-(ds.getIndex() % 200):ds.getIndex()-(ds.getIndex() % 200)+200;
 			if(input.contains("+")){ 
 				currentATM += Integer.parseInt(input.split("+")[1]);
 			}
@@ -433,6 +433,6 @@ public class WebVersionJobConstants {
 			}
 			return currentATM+"";
 		}
-		return 0;
+		return "";
 	}
 }

@@ -66,7 +66,7 @@ public class Order {
 		orderDetailInJSON.put("description", this.description);
 	}
 	
-	public Order(String orderAlias, DataStructure dataStructure, Action action, Direction direction, StrikePrice strickPrice, String expiryMonth,  int quantity, String reason) {
+	public Order(String orderAlias, DataStructure dataStructure, Action action, Direction direction, StrikePrice strickPrice, String expiryMonth,  int quantity, String reason) throws Exception {
 		this.symbol = dataStructure.getSymbol();
 		this.orderid = UUID.randomUUID().toString();
 		this.orderAlias = orderAlias;

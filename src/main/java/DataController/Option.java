@@ -199,13 +199,13 @@ public class Option implements Runnable {
 												if(sbArray.length>6){
 													if(previousDataDetail.get(sbArray[4]+"_"+sbArray[5]+"_"+sbArray[6])!=null) {
 														Double prevIndex = previousDataDetail.get(sbArray[4]+"_"+sbArray[5]+"_"+sbArray[6]).getDouble("index");
-														if( Math.abs((newIndex - prevIndex) / prevIndex * 100) < mitigateNoiseWithPrecentage) 
+														if( Math.abs((newIndex - prevIndex) / prevIndex * 100) > mitigateNoiseWithPrecentage) 
 															noise = true;
 													}
 												}else{
 													if(previousDataDetail.get(sbArray[4])!=null) {
 														Double prevIndex = previousDataDetail.get(sbArray[4]).getDouble("index");
-														if( Math.abs((newIndex - prevIndex) / prevIndex * 100) < mitigateNoiseWithPrecentage) 
+														if( Math.abs((newIndex - prevIndex) / prevIndex * 100) > mitigateNoiseWithPrecentage) 
 															noise = true;
 													}
 												}

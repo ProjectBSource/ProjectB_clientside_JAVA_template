@@ -194,7 +194,7 @@ public class Option implements Runnable {
 											Double newIndex = Double.parseDouble(sbArray[2]);
 											
 											//skip if the index defined as noise
-											boolean noise = false;
+											boolean noise = true;
 											if(mitigateNoiseWithPrecentage>-1) {
 												if(sbArray.length>6){
 													if(previousDataDetail.get(sbArray[4]+"_"+sbArray[5]+"_"+sbArray[6])!=null) {

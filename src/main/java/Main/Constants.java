@@ -15,6 +15,7 @@ public class Constants {
 	public final static String intervaldataStreamingRequest = "IntervalDataStreaming";
 	public final static String dataStreamingTestingRequest = "Testing";
 	public final static String dataStreamingFutureRequest = "Future";
+	public final static String dataStreamingOptionRequest = "Option";
 	private static ClassLoader loader = Thread.currentThread().getContextClassLoader();
 	private static String loggerstoragepath;
 	private static String environment;

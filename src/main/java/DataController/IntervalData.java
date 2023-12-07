@@ -1,3 +1,5 @@
+package DataController;
+
 class IntervalData{
 	public String data_date_within_interval = null;
 	public String data_time_within_interval = null;

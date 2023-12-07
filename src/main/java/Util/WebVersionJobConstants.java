@@ -247,7 +247,7 @@ public class WebVersionJobConstants {
 		if(subscribedDataListCount==0){ 
 			errorMessage.add("Error: Subscribed Data not found"); 
 		}
-
+		logger("subscribedDataListValidation() completed");
 		return errorMessage;
     }
 
@@ -303,7 +303,7 @@ public class WebVersionJobConstants {
 		if(commonIndicatorListCount==0){ 
 			errorMessage.add("Error: Common Indicator not found"); 
 		}
-
+		logger("commonIndicatorListValidation() completed");
 		return errorMessage;
     }
 
@@ -331,7 +331,7 @@ public class WebVersionJobConstants {
 		if(indicatorOutputCount==0){ 
 			errorMessage.add("Error: Indicator Output not found"); 
 		}
-
+		logger("indicatorOutputValidation() completed");
 		return errorMessage;
 	}
 
@@ -359,7 +359,7 @@ public class WebVersionJobConstants {
 		if(tradeActionCount==0){ 
 			errorMessage.add("Error: Trade Action not found"); 
 		}
-
+		logger("tradeActionValidation() completed");
 		return errorMessage;
 	}
 

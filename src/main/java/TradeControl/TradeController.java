@@ -14,8 +14,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ClientSocketControl.DataStructure;
 import TradeControl.OrderActionConstants.Action;
 import TradeControl.OrderActionConstants.Direction;
-import TradeControl.OrderActionConstants.StrikePrice;
-
 
 public class TradeController {
 	Profile profile = new Profile();
@@ -91,7 +89,7 @@ public class TradeController {
 	/**
      *For Option trading
      */
-	public boolean placeOrder(String id, DataStructure dataStructure, Action action, Direction direction, StrikePrice strikePrice, String expiryMonth, int quantity, String reason) throws Exception {
+	public boolean placeOrder(String id, DataStructure dataStructure, Action action, Direction direction, String strikePrice, String expiryMonth, int quantity, String reason) throws Exception {
         if(orders.get(id)==null){
 			orders.put(id, new Order(id, dataStructure, action, direction, strikePrice, expiryMonth, quantity, reason));
 			return true;

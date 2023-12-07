@@ -192,7 +192,7 @@ public class Future implements Runnable {
 										if(mitigateNoiseWithPrecentage>-1) {
 											if(previousDataDetail!=null) {
 												Double prevIndex = previousDataDetail.getDouble("index");
-												if( Math.abs((newIndex - prevIndex) / prevIndex * 100) < mitigateNoiseWithPrecentage) 
+												if( Math.abs((newIndex - prevIndex) / prevIndex * 100) > mitigateNoiseWithPrecentage) 
 													noise = true;
 											}
 										}

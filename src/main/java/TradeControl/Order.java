@@ -1,317 +1,182 @@
-package DataController;
+package TradeControl;
 
-import DataController.IntervalData;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Random;
+import java.util.UUID;
 
 import org.json.JSONObject;
 
-public class Option implements Runnable {
-	private String runJobID;
-	private String symbol = null;
-	private Date startdate = null;
-	private Date enddate = null;
-	private Date starttime = null;
-	private Date endtime = null;
-	private Date startdatetime = null;
-	private Date enddatetime = null;
-	private int interval_in_seconds = 0;
-	private double mitigateNoiseWithPrecentage = -1;
-	private boolean onlyIntervalData = true;
-	private boolean dataSubscriptedOrNot = true;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-	private JSONObject dataDetail = null;
+import ClientSocketControl.DataStructure;
+import TradeControl.OrderActionConstants.Action;
+import TradeControl.OrderActionConstants.Direction;
 
-	private String linedata;
-	private String[] sbArray;
-	private Date data_date = null; private Date prev_data_date = null;
-	private Date data_time = null; private Date prev_data_time = null;
-	private Date data_datetime = null; private Date prev_data_datetime = null;
+import DataController.Constants;
 
-	private Date interval_starttime = null;
-	private Date interval_endtime = null;
-	private boolean without_time_reset_interval_startendtime = false;
+import Util.WebVersionJobConstants;
 
-	private FileReader fr;
-	private BufferedReader br;
-    private static Constants constants = new Constants();
-	public boolean processDone = false;
-	public HashMap<String, JSONObject> previousDataDetail = new HashMap<String, JSONObject>();
-	public ArrayList<JSONObject> data = new ArrayList<JSONObject>();
-	public HashMap<String, IntervalData> intervalData_of_diff_contract = new HashMap<String, IntervalData>();
-	public ArrayList<JSONObject> dataForReading = new ArrayList<JSONObject>();
-	
-	public Option(JSONObject input, boolean onlyIntervalData) {
-		try {
-			this.runJobID = runJobID;
-			this.symbol = input.getString("index");
-			this.startdate = Constants.df_yyyyMMdd.parse(input.getString("startdate"));
-			this.enddate = Constants.df_yyyyMMdd.parse(input.getString("enddate"));
-			this.starttime = Constants.df_kkmmss.parse(input.getString("starttime"));
-			this.endtime = Constants.df_kkmmss.parse(input.getString("endtime"));
-			this.startdatetime = Constants.df_yyyyMMddkkmmss.parse(input.getString("startdate") + input.getString("starttime"));
-			this.enddatetime = Constants.df_yyyyMMddkkmmss.parse(input.getString("enddate") + input.getString("endtime"));
-			if(input.has("interval")==true) { 
-				this.interval_in_seconds = input.getInt("interval");
-			}
-			if(input.has("mitigateNoiseWithPrecentage")==true) { 
-				this.mitigateNoiseWithPrecentage = input.getInt("mitigateNoiseWithPrecentage");
-			}
-			this.onlyIntervalData = onlyIntervalData;
-			this.dataSubscriptedOrNot = dataSubscriptedOrNot;
-		} catch (Exception e) {
-			Constants.logger("System error ["+this.getClass().getName()+":"+e.getMessage()+"], please contact admin");
-			dataDetail = new JSONObject();
-			dataDetail.put("error", "System error ["+this.getClass().getName()+":"+e.getMessage()+"], please contact admin");
-			data.add(dataDetail);
-			processDone = true;
-		}
+public class Order {
+	public Random random = new Random();
+	public String orderid;
+	public String orderAlias;
+	public Date orderDateTime;
+	public String symbol;
+	public Action action;
+	public Direction direction;
+	public String strickPrice;
+	public String expiryMonth;
+	public int quantity;
+	public int totalTraded;
+	public int remained;
+	public double averageTradePrice;
+	public double tradePrice;
+	public Date lastUpdateDateTime;
+	public Date orderFillDateTime;
+	public JSONObject orderDetailInJSON;
+	public String description;
+	public ArrayList<Order> history = new ArrayList<>();
+	public ArrayList<String> historyInJSON = new ArrayList<>();
+
+	public Order(){}
+
+	public Order(String orderAlias, DataStructure dataStructure, Action action, int quantity, String expiryMonth, String reason) throws Exception {
+		this.symbol = dataStructure.getSymbol();
+		this.orderid = UUID.randomUUID().toString();
+		this.orderAlias = orderAlias;
+		this.orderDateTime = Constants.df_yyyyMMddkkmmss.parse(dataStructure.getDatetime());
+		this.action = action;
+		this.expiryMonth = expiryMonth;
+		this.quantity = quantity;
+		this.remained = quantity;
+		this.lastUpdateDateTime = this.orderDateTime;
+		this.description = reason;
+		orderDetailInJSON = new JSONObject();
+		orderDetailInJSON.put("symbol", this.symbol);
+		orderDetailInJSON.put("orderid", this.orderid);
+		orderDetailInJSON.put("orderAlias", this.orderAlias);
+		orderDetailInJSON.put("orderDateTime", this.orderDateTime);
+		orderDetailInJSON.put("action", this.action.getAction());
+		orderDetailInJSON.put("expiryMonth", this.expiryMonth);
+		orderDetailInJSON.put("quantity", this.quantity);
+		orderDetailInJSON.put("remained", this.remained);
+		orderDetailInJSON.put("lastUpdateDateTime", this.lastUpdateDateTime);
+		orderDetailInJSON.put("description", this.description);
 	}
 	
-	@Override
-	public void run() {
-		try {
-			if(dataSubscriptedOrNot==false) {
-				this.startdate = Constants.randomStartEndDateRangeForFreeTrail(startdate, enddate);
-				this.enddate = Constants.addDates(this.startdate, 1);
-			}
-			
-			ArrayList<File> fileslist = Constants.requiredFileList(symbol, startdate, enddate);
-			if(fileslist!=null) {
-				for(File f : fileslist) {
-					fr = new FileReader(f.getAbsolutePath());
-					br = new BufferedReader(fr);
-					while(true) {
-						int firstchar = br.read();
-						if(firstchar==-1) { 
-							break; 
-						}
-						else {
-							//wait for data clean
-							if(data.size()>=30000 && dataForReading.size()==0) {
-								dataForReading = new ArrayList<JSONObject>(data);
-								data = new ArrayList<JSONObject>();
-								Thread.sleep(3000);
-							}
-							
-							//Read data
-							linedata = (((char)firstchar)+br.readLine());
-							sbArray = linedata.toString().split(",");
-							data_date = Constants.df_yyyyMMdd.parse(sbArray[0]);
-							data_time = Constants.df_kkmmss.parse(sbArray[1]);
-							data_datetime = Constants.df_yyyyMMddkkmmss.parse(sbArray[0]+sbArray[1]);
-							
-							//check data read finished or not
-							if(Constants.outOfEndDateOrNot(enddatetime, data_datetime)==true) {
-								break;
-							}
-							
-							//select data
-							if(Constants.withinDateOrNot(startdatetime, enddatetime, data_datetime)==true) {
-								//check within time or not
-								if(Constants.withinDateOrNot(starttime, endtime, data_time)==false) {
-									without_time_reset_interval_startendtime = true;
-									continue; 
-								}
-								
-								//initial the interval time range
-								if(interval_starttime==null) {
-									interval_starttime = (data_datetime.after(startdatetime)?data_datetime:startdatetime);
-									interval_endtime = Constants.addSeconds(interval_starttime, interval_in_seconds);
-								}
-								if(without_time_reset_interval_startendtime==true) {
-									interval_starttime = data_datetime;
-									interval_endtime = Constants.addSeconds(interval_starttime, interval_in_seconds);
-									without_time_reset_interval_startendtime = false;
-								}
-								
-								//reset the interval time range
-								if(Constants.withinDateOrNot(interval_starttime, interval_endtime, data_datetime)==false) {
-									//sum up data
-									sumData();
-								}
-								
-								//select data within the interval
-								if(Constants.withinDateOrNot(interval_starttime, interval_endtime, data_datetime)==true) {
-									IntervalData tempIntervalData = null;
-									if(sbArray.length>6){
-										if(intervalData_of_diff_contract.get(sbArray[4]+"_"+sbArray[5]+"_"+sbArray[6])==null){ 
-											intervalData_of_diff_contract.put(sbArray[4]+"_"+sbArray[5]+"_"+sbArray[6], new IntervalData()); 
-										}
-										tempIntervalData = intervalData_of_diff_contract.get(sbArray[4]+"_"+sbArray[5]+"_"+sbArray[6]);
-									}else{
-										if(intervalData_of_diff_contract.get(sbArray[4])==null){ 
-											intervalData_of_diff_contract.put(sbArray[4], new IntervalData()); 
-										}
-										tempIntervalData = intervalData_of_diff_contract.get(sbArray[4]);
-									}
+	public Order(String orderAlias, DataStructure dataStructure, Action action, Direction direction, String strickPrice, String expiryMonth,  int quantity, String reason) throws Exception {
+		this.symbol = dataStructure.getSymbol();
+		this.orderid = UUID.randomUUID().toString();
+		this.orderAlias = orderAlias;
+		this.orderDateTime = Constants.df_yyyyMMddkkmmss.parse(dataStructure.getDatetime());
+		this.action = action;
+		this.direction = direction;
+		this.strickPrice = strickPrice;
+		this.expiryMonth = expiryMonth;
+		this.quantity = quantity;
+		this.remained = quantity;
+		this.lastUpdateDateTime = this.orderDateTime;
+		this.description = reason;
+		orderDetailInJSON = new JSONObject();
+		orderDetailInJSON.put("symbol", this.symbol);
+		orderDetailInJSON.put("orderid", this.orderid);
+		orderDetailInJSON.put("orderAlias", this.orderAlias);
+		orderDetailInJSON.put("orderDateTime", this.orderDateTime);
+		orderDetailInJSON.put("action", this.action.getAction());
+		orderDetailInJSON.put("direction", this.direction.getDirection());
+		orderDetailInJSON.put("StrikePrice", this.strickPrice);
+		orderDetailInJSON.put("expiryMonth", this.expiryMonth);
+		orderDetailInJSON.put("quantity", this.quantity);
+		orderDetailInJSON.put("remained", this.remained);
+		orderDetailInJSON.put("lastUpdateDateTime", this.lastUpdateDateTime);
+		orderDetailInJSON.put("description", this.description);
+	}
+	
+	public void copyOrder(Order order) {
+		this.symbol = order.symbol;
+		this.orderid = order.orderid;
+		this.orderAlias = order.orderAlias;
+		this.orderDateTime = order.orderDateTime;
+		this.action = order.action;
+		this.direction = order.direction;
+		this.strickPrice = order.strickPrice;
+		this.expiryMonth = order.expiryMonth;
+		this.quantity = order.quantity;
+		this.totalTraded = order.totalTraded;
+		this.remained = order.remained;
+		this.averageTradePrice = order.averageTradePrice;
+		this.lastUpdateDateTime = order.lastUpdateDateTime;
+		this.tradePrice = order.tradePrice;
+		this.orderFillDateTime = order.orderFillDateTime;
+		this.orderDetailInJSON = order.orderDetailInJSON;
+		this.description = order.description;
+	}
 
-									if(tempIntervalData != null){
-										//setup date
-										if(tempIntervalData.data_date_within_interval==null) { 
-											tempIntervalData.data_date_within_interval = sbArray[0]; 
-										}
-										//setup time
-										if(tempIntervalData.data_time_within_interval==null) { 
-											tempIntervalData.data_time_within_interval = sbArray[1]; 
-										}
-										//setup datetime
-										if(tempIntervalData.data_datetime_within_interval==null) { 
-											tempIntervalData.data_datetime_within_interval = sbArray[0]+sbArray[1]; 
-										}
-										//setup index
-										if(tempIntervalData.data_index_within_interval==null) { 
-											tempIntervalData.data_index_within_interval = sbArray[2]; 
-										}
-										//setup open
-										if(tempIntervalData.data_open_within_interval==null) { 
-											tempIntervalData.data_open_within_interval = sbArray[2]; 
-										}
-										//setup high
-										if(tempIntervalData.data_high_within_interval==null || Integer.parseInt(tempIntervalData.data_high_within_interval)<Integer.parseInt(sbArray[2]) ) {
-											tempIntervalData.data_high_within_interval = sbArray[2]; 
-										}
-										//setup low
-										if(tempIntervalData.data_low_within_interval==null || Integer.parseInt(tempIntervalData.data_low_within_interval)>Integer.parseInt(sbArray[2]) ) {
-											tempIntervalData.data_low_within_interval = sbArray[2]; 
-										}
-										//setup close
-										if(true) { 
-											tempIntervalData.data_close_within_interval = sbArray[2]; 
-										}
-										//setup sum up volume
-										if(true) { 
-											tempIntervalData.data_sumupvolume_within_interval = (tempIntervalData.data_sumupvolume_within_interval==null?0:Integer.parseInt(tempIntervalData.data_sumupvolume_within_interval)) + Integer.parseInt(sbArray[3]) + ""; 
-										}
+    public void addNewDescription(String description){
+        this.description += description;
+        this.orderDetailInJSON.put("description", this.description);
+    }
 
-										if(onlyIntervalData==false) {
-											Double newIndex = Double.parseDouble(sbArray[2]);
-											
-											//skip if the index defined as noise
-											boolean noise = false;
-											if(mitigateNoiseWithPrecentage>-1) {
-												if(sbArray.length>6){
-													if(previousDataDetail.get(sbArray[4]+"_"+sbArray[5]+"_"+sbArray[6])!=null) {
-														Double prevIndex = previousDataDetail.get(sbArray[4]+"_"+sbArray[5]+"_"+sbArray[6]).getDouble("index");
-														if( Math.abs((newIndex - prevIndex) / prevIndex * 100) > mitigateNoiseWithPrecentage) 
-															noise = true;
-													}
-												}else{
-													if(previousDataDetail.get(sbArray[4])!=null) {
-														Double prevIndex = previousDataDetail.get(sbArray[4]).getDouble("index");
-														if( Math.abs((newIndex - prevIndex) / prevIndex * 100) > mitigateNoiseWithPrecentage) 
-															noise = true;
-													}
-												}
-											}
-											
-											dataDetail = null;
-											if(noise == false) {
-												dataDetail = new JSONObject();
-												//setup other information
-												dataDetail.put("dataSourceID", runJobID);
-												dataDetail.put("type", "tick");
-												dataDetail.put("symbol", symbol);
-												dataDetail.put("market", "future");
-												dataDetail.put("date", sbArray[0]);
-												dataDetail.put("time", sbArray[1]);
-												dataDetail.put("datetime", sbArray[0]+sbArray[1]);
-												dataDetail.put("index", newIndex);
-												dataDetail.put("open", Double.parseDouble(tempIntervalData.data_open_within_interval));
-												dataDetail.put("high", Double.parseDouble(tempIntervalData.data_high_within_interval));
-												dataDetail.put("low", Double.parseDouble(tempIntervalData.data_low_within_interval));
-												dataDetail.put("volume", Integer.parseInt(sbArray[3]));
-												dataDetail.put("total_volume", Integer.parseInt(tempIntervalData.data_sumupvolume_within_interval));
-												dataDetail.put("expiration_year_month", sbArray[4]);
-												if(sbArray.length>6){
-													dataDetail.put("strike_price", sbArray[5]);
-													dataDetail.put("direction", sbArray[6]);
-												}
-												
-												//insert into data
-												data.add(dataDetail);
-											}
+	public JSONObject trade(Profile profile, DataStructure data, double slippage) throws Exception {
+		if(this.remained>0) {	
+			if(data.getType().equals("tick")) {
+				//For future trading
+				if(direction==null && strickPrice==null) {
+					if(expiryMonth.equals(data.getExpiration_year_month())){
+						int temp_trade_amount = (data.getVolume()>=this.remained)?this.remained:data.getVolume();
+						tradePrice = data.getIndex() + ( (data.getIndex() *  slippage) * (random.nextInt(2)==0?1:-1) );
+						averageTradePrice = ((averageTradePrice * totalTraded) + (temp_trade_amount * tradePrice)) / (totalTraded + temp_trade_amount);
+						totalTraded += temp_trade_amount;
+						this.remained -= temp_trade_amount;
+						orderFillDateTime = Constants.df_yyyyMMddkkmmss.parse(data.getDatetime());
+						orderDetailInJSON.put("traded", temp_trade_amount);
+						orderDetailInJSON.put("totalTraded", totalTraded);
+						orderDetailInJSON.put("remained", this.remained);
+						orderDetailInJSON.put("tradePrice", tradePrice);
+						orderDetailInJSON.put("averageTradePrice", averageTradePrice);
+						orderDetailInJSON.put("orderFillDateTime", orderFillDateTime);
+						//update order history node
+						history.add(new Order());
+						history.get(history.size()-1).copyOrder(this);
+						historyInJSON.add(orderDetailInJSON.toString());
+						//Update profle
+						if(action == Action.SELL) { temp_trade_amount *= -1; }
+						profile.update(symbol, temp_trade_amount, tradePrice);
 
-											if(sbArray.length>6){
-												previousDataDetail.put(sbArray[4]+"_"+sbArray[5]+"_"+sbArray[6], dataDetail);
-											}else{
-												previousDataDetail.put(sbArray[4], dataDetail);
-											}
-										}
-									}
-								}
-							}
-							
-							//Set previous data
-							prev_data_date = data_date;
-							prev_data_time = data_time;
-							prev_data_datetime = data_datetime;
-						}
+						return orderDetailInJSON;
 					}
-					
-					//sum up data
-					sumData();
 				}
-			}
-			dataForReading = new ArrayList<JSONObject>(data);
-		}catch(Exception e) {
-			Constants.logger("System error ["+this.getClass().getName()+":"+e.getMessage()+"], please contact admin");
-			dataDetail = new JSONObject();
-			dataDetail.put("error", "System error ["+this.getClass().getName()+":"+e.getMessage()+"], please contact admin");
-			data.add(dataDetail);
-			processDone = true;
-		}
-		processDone = true;
-	}
+				//For option trading
+				else {
+					if(direction.equals(data.getDirection()) && strickPrice.equals(data.getStrike_price()+"") && expiryMonth.equals(data.getExpiration_year_month())){
+						int temp_trade_amount = (data.getVolume()>=this.remained)?this.remained:data.getVolume();
+						tradePrice = data.getIndex() + ( (data.getIndex() *  slippage) * (random.nextInt(2)==0?1:-1) );
+						averageTradePrice = ((averageTradePrice * totalTraded) + (temp_trade_amount * tradePrice)) / (totalTraded + temp_trade_amount);
+						totalTraded += temp_trade_amount;
+						this.remained -= temp_trade_amount;
+						orderFillDateTime = Constants.df_yyyyMMddkkmmss.parse(data.getDatetime());
+						orderDetailInJSON.put("traded", temp_trade_amount);
+						orderDetailInJSON.put("totalTraded", totalTraded);
+						orderDetailInJSON.put("remained", this.remained);
+						orderDetailInJSON.put("tradePrice", tradePrice);
+						orderDetailInJSON.put("averageTradePrice", averageTradePrice);
+						orderDetailInJSON.put("orderFillDateTime", orderFillDateTime);
+						//update order history node
+						history.add(new Order());
+						history.get(history.size()-1).copyOrder(this);
+						historyInJSON.add(orderDetailInJSON.toString());
+						//Update profle
+						if(action == Action.SELL) { temp_trade_amount *= -1; }
+						profile.update(symbol, temp_trade_amount, tradePrice);
 
-	private void sumData() {
-		for (Map.Entry<String, IntervalData> intervalData : intervalData_of_diff_contract.entrySet()) {
-			IntervalData tempIntervalData = intervalData.getValue();
-			if(tempIntervalData.data_date_within_interval!=null) {
-				//sum up data
-				dataDetail = new JSONObject();
-				dataDetail.put("dataSourceID", runJobID);
-				dataDetail.put("type", "interval");
-				dataDetail.put("symbol", symbol);
-				dataDetail.put("market", "future");
-				dataDetail.put("date", tempIntervalData.data_date_within_interval);
-				dataDetail.put("time", tempIntervalData.data_time_within_interval);
-				dataDetail.put("datetime", tempIntervalData.data_datetime_within_interval);
-				dataDetail.put("index", Double.parseDouble(tempIntervalData.data_index_within_interval));
-				dataDetail.put("open", Double.parseDouble(tempIntervalData.data_open_within_interval));
-				dataDetail.put("high", Double.parseDouble(tempIntervalData.data_high_within_interval));
-				dataDetail.put("low", Double.parseDouble(tempIntervalData.data_low_within_interval));
-				dataDetail.put("close", Double.parseDouble(tempIntervalData.data_close_within_interval));
-				dataDetail.put("total_volume", Integer.parseInt(tempIntervalData.data_sumupvolume_within_interval));
-				if(!intervalData.getKey().contains("_")){
-					dataDetail.put("expiration_year_month", intervalData.getKey());
-				}else{
-					dataDetail.put("expiration_year_month", intervalData.getKey().split("_")[0]);
-					dataDetail.put("strike_price", Integer.parseInt(intervalData.getKey().split("_")[1]));
-					dataDetail.put("direction", intervalData.getKey().split("_")[2].equals("C")?"CALL":"PUT");
+						return orderDetailInJSON;
+					}
 				}
-				//insert into data
-				data.add(dataDetail);
 			}
-			//rest
-			tempIntervalData.data_date_within_interval = null;
-			tempIntervalData.data_time_within_interval = null;
-			tempIntervalData.data_datetime_within_interval = null;
-			tempIntervalData.data_index_within_interval = null;
-			tempIntervalData.data_open_within_interval = null;
-			tempIntervalData.data_high_within_interval = null;
-			tempIntervalData.data_low_within_interval = null;
-			tempIntervalData.data_close_within_interval = null;
-			tempIntervalData.data_sumupvolume_within_interval = null;
-			interval_starttime = Constants.addSeconds(interval_endtime, 1);
-			interval_endtime = Constants.addSeconds(interval_starttime, interval_in_seconds);
+			return null;
 		}
-		intervalData_of_diff_contract = new HashMap<String, IntervalData>();
+		return null;
 	}
+	
 }

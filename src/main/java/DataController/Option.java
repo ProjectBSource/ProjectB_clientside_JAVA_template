@@ -1,13 +1,16 @@
 package DataController;
 
+import IntervalData;
+
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.json.JSONObject;
-
 
 public class Option implements Runnable {
 	private String runJobID;
@@ -294,16 +297,4 @@ public class Option implements Runnable {
 		}
 		intervalData_of_diff_contract = new HashMap<String, IntervalData>();
 	}
-}
-
-class IntervalData{
-	public String data_date_within_interval = null;
-	public String data_time_within_interval = null;
-	public String data_datetime_within_interval = null;
-	public String data_index_within_interval = null;
-	public String data_open_within_interval = null;
-	public String data_high_within_interval = null;
-	public String data_low_within_interval = null; 
-	public String data_close_within_interval = null;
-	public String data_sumupvolume_within_interval = null;
 }

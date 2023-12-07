@@ -12,7 +12,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ClientSocketControl.DataStructure;
 import TradeControl.OrderActionConstants.Action;
 import TradeControl.OrderActionConstants.Direction;
-import TradeControl.OrderActionConstants.StrikePrice;
 
 import DataController.Constants;
 
@@ -26,7 +25,7 @@ public class Order {
 	public String symbol;
 	public Action action;
 	public Direction direction;
-	public StrikePrice strickPrice;
+	public String strickPrice;
 	public String expiryMonth;
 	public int quantity;
 	public int totalTraded;
@@ -66,7 +65,7 @@ public class Order {
 		orderDetailInJSON.put("description", this.description);
 	}
 	
-	public Order(String orderAlias, DataStructure dataStructure, Action action, Direction direction, StrikePrice strickPrice, String expiryMonth,  int quantity, String reason) throws Exception {
+	public Order(String orderAlias, DataStructure dataStructure, Action action, Direction direction, String strickPrice, String expiryMonth,  int quantity, String reason) throws Exception {
 		this.symbol = dataStructure.getSymbol();
 		this.orderid = UUID.randomUUID().toString();
 		this.orderAlias = orderAlias;
@@ -150,7 +149,7 @@ public class Order {
 				}
 				//For option trading
 				else {
-					if(direction.equals(data.getDirection()) && strickPrice.equals(data.getStrike_price()) && expiryMonth.equals(data.getExpiration_year_month())){
+					if(direction.equals(data.getDirection()) && strickPrice.equals(data.getStrike_price()+"") && expiryMonth.equals(data.getExpiration_year_month())){
 						int temp_trade_amount = (data.getVolume()>=this.remained)?this.remained:data.getVolume();
 						tradePrice = data.getIndex() + ( (data.getIndex() *  slippage) * (random.nextInt(2)==0?1:-1) );
 						averageTradePrice = ((averageTradePrice * totalTraded) + (temp_trade_amount * tradePrice)) / (totalTraded + temp_trade_amount);

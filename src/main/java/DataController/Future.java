@@ -1,5 +1,7 @@
 package DataController;
 
+import IntervalData;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -281,16 +283,4 @@ public class Future implements Runnable {
 		}
 		intervalData_of_diff_contract = new HashMap<String, IntervalData>();
 	}
-}
-
-class IntervalData{
-	public String data_date_within_interval = null;
-	public String data_time_within_interval = null;
-	public String data_datetime_within_interval = null;
-	public String data_index_within_interval = null;
-	public String data_open_within_interval = null;
-	public String data_high_within_interval = null;
-	public String data_low_within_interval = null; 
-	public String data_close_within_interval = null;
-	public String data_sumupvolume_within_interval = null;
 }

@@ -15,7 +15,6 @@ import Indicators.*;
 import TradeControl.TradeController;
 import TradeControl.OrderActionConstants.Action;
 import TradeControl.OrderActionConstants.Direction;
-import TradeControl.OrderActionConstants.StrikePrice;
 import Util.WebVersionJobConstants;
 
 import java.io.BufferedWriter;

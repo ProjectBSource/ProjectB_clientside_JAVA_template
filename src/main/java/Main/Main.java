@@ -166,6 +166,36 @@ public class Main {
                             WebVersionJobConstants.updateWebJobHistory(true, "", "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime))", "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime)*0.00003)", "Program running completed");
                         }
                     }
+
+                    if (dataStreamingRequest.getString("market").equalsIgnoreCase(Constants.dataStreamingOptionRequest) ) {
+                        WebVersionJobConstants.logger("market : OPTION");
+                        Option option = new Option(dataStreamingRequest, onlyIntervalData);
+                        Thread thread = new Thread(option);
+                        thread.start();
+                        WebVersionJobConstants.updateWebJobHistory(false, null, "NULL", "NULL", "Program running");
+                        while(option.processDone == false) {
+                            System.out.print("");
+			                try{
+                                if(option.dataForReading.size()>0){
+                                    mainLogicLevel1(option.dataForReading);
+                                    //delete processed data
+                                    option.dataForReading = new ArrayList<JSONObject>();
+                                }
+                            }catch(Exception e){
+                                WebVersionJobConstants.logger("mainLogicLevel1 error :" + e);
+                                break;
+                            }
+                        }
+                        if(option.processDone == true){
+                            WebVersionJobConstants.logger("mainLogicLevel1 completed");
+                            JSONObject testResultDetailInJSON = new JSONObject();
+                            testResultDetailInJSON.put("OrderHistory", tradeController.getOrderHistoryInJSON());
+                            testResultDetailInJSON.put("Profile", tradeController.getProfileInJSON());
+                            testResultDetailInJSON.put("runJobID", WebVersionJobConstants.runJobID);
+                            WebVersionJobConstants.postRequest("https://projectb.click/ProjectB/WebVersion/TestResult/save.php?password=AIDkrepkclkdsaf123JK", testResultDetailInJSON.toString());                            
+                            WebVersionJobConstants.updateWebJobHistory(true, "", "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime))", "(TIMESTAMPDIFF(SECOND, StartDateTime, EndDateTime)*0.00003)", "Program running completed");
+                        }
+                    }
                 }
             }
         } catch (Exception e) {

@@ -211,9 +211,10 @@ public class Option implements Runnable {
 												}
 											}
 											
+											dataDetail = null;
 											if(noise == false) {
-												//setup other information
 												dataDetail = new JSONObject();
+												//setup other information
 												dataDetail.put("dataSourceID", runJobID);
 												dataDetail.put("type", "tick");
 												dataDetail.put("symbol", symbol);
@@ -235,7 +236,12 @@ public class Option implements Runnable {
 												
 												//insert into data
 												data.add(dataDetail);
+											}
+
+											if(sbArray.length>6){
 												previousDataDetail.put(sbArray[4]+"_"+sbArray[5]+"_"+sbArray[6], dataDetail);
+											}else{
+												previousDataDetail.put(sbArray[4], dataDetail);
 											}
 										}
 									}

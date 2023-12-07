@@ -111,7 +111,7 @@ public class Main {
                 dataStreamingRequest.put("starttime", "@#starttime#@");
                 dataStreamingRequest.put("endtime", "@#endtime#@");
                 dataStreamingRequest.put("interval", @#interval#@);
-                dataStreamingRequest.put("mitigateNoiseWithinPrecentage", @#mitigateNoiseWithinPrecentage#@);
+                dataStreamingRequest.put("mitigateNoiseWithPrecentage", @#mitigateNoiseWithPrecentage#@);
                 WebVersionJobConstants.logger("dataStreamingRequest :" + dataStreamingRequest.toString());
                 
                 for(Object objectNode : nodeDataArray){

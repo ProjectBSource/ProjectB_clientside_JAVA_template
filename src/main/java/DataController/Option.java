@@ -152,7 +152,7 @@ public class Option implements Runnable {
 										IntervalData tempIntervalData = intervalData_of_diff_contract.get(sbArray[4]);
 									}
 
-									if(IntervalData tempIntervalData != null){
+									if(tempIntervalData != null){
 										//setup date
 										if(tempIntervalData.data_date_within_interval==null) { 
 											tempIntervalData.data_date_within_interval = sbArray[0]; 

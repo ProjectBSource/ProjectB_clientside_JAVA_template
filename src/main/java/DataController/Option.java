@@ -42,7 +42,7 @@ public class Option implements Runnable {
 	private BufferedReader br;
     private static Constants constants = new Constants();
 	public boolean processDone = false;
-	private JSONObject previousDataDetail = null;
+	public HashMap<String, JSONObject> previousDataDetail = new HashMap<String, JSONObject>();
 	public ArrayList<JSONObject> data = new ArrayList<JSONObject>();
 	public HashMap<String, IntervalData> intervalData_of_diff_contract = new HashMap<String, IntervalData>();
 	public ArrayList<JSONObject> dataForReading = new ArrayList<JSONObject>();
@@ -196,10 +196,12 @@ public class Option implements Runnable {
 											//skip if the index defined as noise
 											boolean noise = false;
 											if(mitigateNoiseWithPrecentage>-1) {
-												if(previousDataDetail!=null) {
-													Double prevIndex = previousDataDetail.getDouble("index");
-													if( Math.abs((newIndex - prevIndex) / prevIndex * 100) < mitigateNoiseWithPrecentage) 
-														noise = true;
+												if(sbArray.length>6){
+													if(previousDataDetail.get(sbArray[4]+"_"+sbArray[5]+"_"+sbArray[6])!=null) {
+														Double prevIndex = previousDataDetail.get(sbArray[4]+"_"+sbArray[5]+"_"+sbArray[6]).getDouble("index");
+														if( Math.abs((newIndex - prevIndex) / prevIndex * 100) < mitigateNoiseWithPrecentage) 
+															noise = true;
+													}
 												}
 											}
 											
@@ -227,7 +229,7 @@ public class Option implements Runnable {
 												
 												//insert into data
 												data.add(dataDetail);
-												previousDataDetail = dataDetail;
+												previousDataDetail.put(sbArray[4]+"_"+sbArray[5]+"_"+sbArray[6], dataDetail);
 											}
 										}
 									}

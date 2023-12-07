@@ -144,12 +144,12 @@ public class Option implements Runnable {
 										if(intervalData_of_diff_contract.get(sbArray[4]+"_"+sbArray[5]+"_"+sbArray[6])==null){ 
 											intervalData_of_diff_contract.put(sbArray[4]+"_"+sbArray[5]+"_"+sbArray[6], new IntervalData()); 
 										}
-										IntervalData tempIntervalData = intervalData_of_diff_contract.get(sbArray[4]+"_"+sbArray[5]+"_"+sbArray[6]);
+										tempIntervalData = intervalData_of_diff_contract.get(sbArray[4]+"_"+sbArray[5]+"_"+sbArray[6]);
 									}else{
 										if(intervalData_of_diff_contract.get(sbArray[4])==null){ 
 											intervalData_of_diff_contract.put(sbArray[4], new IntervalData()); 
 										}
-										IntervalData tempIntervalData = intervalData_of_diff_contract.get(sbArray[4]);
+										tempIntervalData = intervalData_of_diff_contract.get(sbArray[4]);
 									}
 
 									if(tempIntervalData != null){

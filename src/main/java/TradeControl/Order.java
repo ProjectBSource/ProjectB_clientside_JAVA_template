@@ -85,7 +85,7 @@ public class Order {
 		orderDetailInJSON.put("orderDateTime", this.orderDateTime);
 		orderDetailInJSON.put("action", this.action.getAction());
 		orderDetailInJSON.put("direction", this.direction.getDirection());
-		orderDetailInJSON.put("StrikePrice", this.strickPrice.getStrikePrice());
+		orderDetailInJSON.put("StrikePrice", this.strickPrice);
 		orderDetailInJSON.put("expiryMonth", this.expiryMonth);
 		orderDetailInJSON.put("quantity", this.quantity);
 		orderDetailInJSON.put("remained", this.remained);

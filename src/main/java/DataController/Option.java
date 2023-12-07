@@ -1,6 +1,6 @@
 package DataController;
 
-import IntervalData;
+import DataController.IntervalData;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -47,7 +47,7 @@ public class Option implements Runnable {
 	public HashMap<String, IntervalData> intervalData_of_diff_contract = new HashMap<String, IntervalData>();
 	public ArrayList<JSONObject> dataForReading = new ArrayList<JSONObject>();
 	
-	public Option(String index, String startdate, String enddate, String starttime, String endtime) {
+	public Option(JSONObject input, boolean onlyIntervalData) {
 		try {
 			this.runJobID = runJobID;
 			this.symbol = input.getString("index");
@@ -139,6 +139,7 @@ public class Option implements Runnable {
 								
 								//select data within the interval
 								if(Constants.withinDateOrNot(interval_starttime, interval_endtime, data_datetime)==true) {
+									IntervalData tempIntervalData = null;
 									if(sbArray.length>6){
 										if(intervalData_of_diff_contract.get(sbArray[4]+"_"+sbArray[5]+"_"+sbArray[6])==null){ 
 											intervalData_of_diff_contract.put(sbArray[4]+"_"+sbArray[5]+"_"+sbArray[6], new IntervalData()); 
@@ -151,81 +152,83 @@ public class Option implements Runnable {
 										IntervalData tempIntervalData = intervalData_of_diff_contract.get(sbArray[4]);
 									}
 
-									//setup date
-									if(tempIntervalData.data_date_within_interval==null) { 
-										tempIntervalData.data_date_within_interval = sbArray[0]; 
-									}
-									//setup time
-									if(tempIntervalData.data_time_within_interval==null) { 
-										tempIntervalData.data_time_within_interval = sbArray[1]; 
-									}
-									//setup datetime
-									if(tempIntervalData.data_datetime_within_interval==null) { 
-										tempIntervalData.data_datetime_within_interval = sbArray[0]+sbArray[1]; 
-									}
-									//setup index
-									if(tempIntervalData.data_index_within_interval==null) { 
-										tempIntervalData.data_index_within_interval = sbArray[2]; 
-									}
-									//setup open
-									if(tempIntervalData.data_open_within_interval==null) { 
-										tempIntervalData.data_open_within_interval = sbArray[2]; 
-									}
-									//setup high
-									if(tempIntervalData.data_high_within_interval==null || Integer.parseInt(tempIntervalData.data_high_within_interval)<Integer.parseInt(sbArray[2]) ) {
-										tempIntervalData.data_high_within_interval = sbArray[2]; 
-									}
-									//setup low
-									if(tempIntervalData.data_low_within_interval==null || Integer.parseInt(tempIntervalData.data_low_within_interval)>Integer.parseInt(sbArray[2]) ) {
-										tempIntervalData.data_low_within_interval = sbArray[2]; 
-									}
-									//setup close
-									if(true) { 
-										tempIntervalData.data_close_within_interval = sbArray[2]; 
-									}
-									//setup sum up volume
-									if(true) { 
-										tempIntervalData.data_sumupvolume_within_interval = (tempIntervalData.data_sumupvolume_within_interval==null?0:Integer.parseInt(tempIntervalData.data_sumupvolume_within_interval)) + Integer.parseInt(sbArray[3]) + ""; 
-									}
-
-									if(onlyIntervalData==false) {
-										Double newIndex = Double.parseDouble(sbArray[2]);
-										
-										//skip if the index defined as noise
-										boolean noise = false;
-										if(mitigateNoiseWithPrecentage>-1) {
-											if(previousDataDetail!=null) {
-												Double prevIndex = previousDataDetail.getDouble("index");
-												if( Math.abs((newIndex - prevIndex) / prevIndex * 100) < mitigateNoiseWithPrecentage) 
-													noise = true;
-											}
+									if(IntervalData tempIntervalData != null){
+										//setup date
+										if(tempIntervalData.data_date_within_interval==null) { 
+											tempIntervalData.data_date_within_interval = sbArray[0]; 
 										}
-										
-										if(noise == false) {
-											//setup other information
-											dataDetail = new JSONObject();
-											dataDetail.put("dataSourceID", runJobID);
-											dataDetail.put("type", "tick");
-											dataDetail.put("symbol", symbol);
-											dataDetail.put("market", "future");
-											dataDetail.put("date", sbArray[0]);
-											dataDetail.put("time", sbArray[1]);
-											dataDetail.put("datetime", sbArray[0]+sbArray[1]);
-											dataDetail.put("index", newIndex);
-											dataDetail.put("open", Double.parseDouble(tempIntervalData.data_open_within_interval));
-											dataDetail.put("high", Double.parseDouble(tempIntervalData.data_high_within_interval));
-											dataDetail.put("low", Double.parseDouble(tempIntervalData.data_low_within_interval));
-											dataDetail.put("volume", Integer.parseInt(sbArray[3]));
-											dataDetail.put("total_volume", Integer.parseInt(tempIntervalData.data_sumupvolume_within_interval));
-											dataDetail.put("expiration_year_month", sbArray[4]);
-											if(sbArray.length>6){
-												dataDetail.put("strike_price", sbArray[5]);
-												dataDetail.put("direction", sbArray[6]);
+										//setup time
+										if(tempIntervalData.data_time_within_interval==null) { 
+											tempIntervalData.data_time_within_interval = sbArray[1]; 
+										}
+										//setup datetime
+										if(tempIntervalData.data_datetime_within_interval==null) { 
+											tempIntervalData.data_datetime_within_interval = sbArray[0]+sbArray[1]; 
+										}
+										//setup index
+										if(tempIntervalData.data_index_within_interval==null) { 
+											tempIntervalData.data_index_within_interval = sbArray[2]; 
+										}
+										//setup open
+										if(tempIntervalData.data_open_within_interval==null) { 
+											tempIntervalData.data_open_within_interval = sbArray[2]; 
+										}
+										//setup high
+										if(tempIntervalData.data_high_within_interval==null || Integer.parseInt(tempIntervalData.data_high_within_interval)<Integer.parseInt(sbArray[2]) ) {
+											tempIntervalData.data_high_within_interval = sbArray[2]; 
+										}
+										//setup low
+										if(tempIntervalData.data_low_within_interval==null || Integer.parseInt(tempIntervalData.data_low_within_interval)>Integer.parseInt(sbArray[2]) ) {
+											tempIntervalData.data_low_within_interval = sbArray[2]; 
+										}
+										//setup close
+										if(true) { 
+											tempIntervalData.data_close_within_interval = sbArray[2]; 
+										}
+										//setup sum up volume
+										if(true) { 
+											tempIntervalData.data_sumupvolume_within_interval = (tempIntervalData.data_sumupvolume_within_interval==null?0:Integer.parseInt(tempIntervalData.data_sumupvolume_within_interval)) + Integer.parseInt(sbArray[3]) + ""; 
+										}
+
+										if(onlyIntervalData==false) {
+											Double newIndex = Double.parseDouble(sbArray[2]);
+											
+											//skip if the index defined as noise
+											boolean noise = false;
+											if(mitigateNoiseWithPrecentage>-1) {
+												if(previousDataDetail!=null) {
+													Double prevIndex = previousDataDetail.getDouble("index");
+													if( Math.abs((newIndex - prevIndex) / prevIndex * 100) < mitigateNoiseWithPrecentage) 
+														noise = true;
+												}
 											}
 											
-											//insert into data
-											data.add(dataDetail);
-											previousDataDetail = dataDetail;
+											if(noise == false) {
+												//setup other information
+												dataDetail = new JSONObject();
+												dataDetail.put("dataSourceID", runJobID);
+												dataDetail.put("type", "tick");
+												dataDetail.put("symbol", symbol);
+												dataDetail.put("market", "future");
+												dataDetail.put("date", sbArray[0]);
+												dataDetail.put("time", sbArray[1]);
+												dataDetail.put("datetime", sbArray[0]+sbArray[1]);
+												dataDetail.put("index", newIndex);
+												dataDetail.put("open", Double.parseDouble(tempIntervalData.data_open_within_interval));
+												dataDetail.put("high", Double.parseDouble(tempIntervalData.data_high_within_interval));
+												dataDetail.put("low", Double.parseDouble(tempIntervalData.data_low_within_interval));
+												dataDetail.put("volume", Integer.parseInt(sbArray[3]));
+												dataDetail.put("total_volume", Integer.parseInt(tempIntervalData.data_sumupvolume_within_interval));
+												dataDetail.put("expiration_year_month", sbArray[4]);
+												if(sbArray.length>6){
+													dataDetail.put("strike_price", sbArray[5]);
+													dataDetail.put("direction", sbArray[6]);
+												}
+												
+												//insert into data
+												data.add(dataDetail);
+												previousDataDetail = dataDetail;
+											}
 										}
 									}
 								}

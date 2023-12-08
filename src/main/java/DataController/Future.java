@@ -95,7 +95,7 @@ public class Future implements Runnable {
 						else {
 							//wait for data clean
 							if(data.size()>=30000 && dataForReading.size()==0) {
-								dataForReading = new ArrayList<JSONObject>(data);
+								dataForReading.addAll(data);
 								data = new ArrayList<JSONObject>();
 								Thread.sleep(3000);
 							}
@@ -196,6 +196,8 @@ public class Future implements Runnable {
 													noise = true;
 												else
 													noise = false;
+											}else{
+												noise = false;
 											}
 										}
 										

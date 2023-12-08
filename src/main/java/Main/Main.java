@@ -242,7 +242,7 @@ public class Main {
                 * You may write your back test program below within the while loop
                 * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
                 */
-                if(dataStructure.getDate().substring(0,6).equals(dataStructure.getExpiration_year_month()) && dataStructure.getStrike_price()==0){
+                if(dataStructure.getDate().substring(0,6).equals(dataStructure.getExpiration_year_month()) && data.has("strike_price")==false){
                     @#indicatoriesUpdateLogic#@
                 }
 

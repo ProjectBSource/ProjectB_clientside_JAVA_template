@@ -301,7 +301,7 @@ public class Option implements Runnable {
 					dataDetail.put("expiration_year_month", intervalData.getKey());
 				}else{
 					dataDetail.put("expiration_year_month", intervalData.getKey().split("_")[0]);
-					dataDetail.put("strike_price", Integer.parseInt(intervalData.getKey().split("_")[1]));
+					dataDetail.put("strike_price", (int)(Double.parseDouble(intervalData.getKey().split("_")[1])) );
 					dataDetail.put("direction", intervalData.getKey().split("_")[2].equals("C")?"CALL":"PUT");
 				}
 				//insert into data

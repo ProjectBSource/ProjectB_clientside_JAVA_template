@@ -238,7 +238,7 @@ public class Option implements Runnable {
 												dataDetail.put("total_volume", Integer.parseInt(tempIntervalData.data_sumupvolume_within_interval));
 												dataDetail.put("expiration_year_month", sbArray[4]);
 												if(sbArray.length>6){
-													dataDetail.put("strike_price", (int)(Double.parseDouble(sbArray[5]));
+													dataDetail.put("strike_price", (int)(Double.parseDouble(sbArray[5])));
 													dataDetail.put("direction", sbArray[6]);
 												}
 												

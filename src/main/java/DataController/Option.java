@@ -201,6 +201,8 @@ public class Option implements Runnable {
 														Double prevIndex = previousDataDetail.get(sbArray[4]+"_"+sbArray[5]+"_"+sbArray[6]).getDouble("index");
 														if( Math.abs((newIndex - prevIndex) / prevIndex * 100) > mitigateNoiseWithPrecentage) 
 															noise = true;
+														else 
+															noise = false;
 													}else{
 														noise = false;
 													}
@@ -209,6 +211,8 @@ public class Option implements Runnable {
 														Double prevIndex = previousDataDetail.get(sbArray[4]).getDouble("index");
 														if( Math.abs((newIndex - prevIndex) / prevIndex * 100) > mitigateNoiseWithPrecentage) 
 															noise = true;
+														else	
+															noise = false;
 													}else{
 														noise = false;
 													}

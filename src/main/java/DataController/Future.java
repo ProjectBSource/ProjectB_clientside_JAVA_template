@@ -94,7 +94,7 @@ public class Future implements Runnable {
 						}
 						else {
 							//wait for data clean
-							if(data.size()>=30000 && dataForReading.size()==0) {
+							if(data.size()>=100000 && dataForReading.size()==0) {
 								dataForReading.addAll(data);
 								data = new ArrayList<JSONObject>();
 								Thread.sleep(3000);
@@ -282,9 +282,9 @@ public class Future implements Runnable {
 			tempIntervalData.data_low_within_interval = null;
 			tempIntervalData.data_close_within_interval = null;
 			tempIntervalData.data_sumupvolume_within_interval = null;
-			interval_starttime = Constants.addSeconds(interval_endtime, 1);
-			interval_endtime = Constants.addSeconds(interval_starttime, interval_in_seconds);
 		}
 		intervalData_of_diff_contract = new HashMap<String, IntervalData>();
+        interval_starttime = Constants.addSeconds(interval_endtime, 1);
+		interval_endtime = Constants.addSeconds(interval_starttime, interval_in_seconds);
 	}
 }

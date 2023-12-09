@@ -94,7 +94,7 @@ public class Option implements Runnable {
 						}
 						else {
 							//wait for data clean
-							if(data.size()>=30000 && dataForReading.size()==0) {
+							if(data.size()>=100000 && dataForReading.size()==0) {
 								dataForReading.addAll(data);
 								data = new ArrayList<JSONObject>();
 								Thread.sleep(3000);
@@ -199,9 +199,10 @@ public class Option implements Runnable {
 												if(sbArray.length>6){
 													if(previousDataDetail.get(sbArray[4]+"_"+sbArray[5]+"_"+sbArray[6])!=null) {
 														Double prevIndex = previousDataDetail.get(sbArray[4]+"_"+sbArray[5]+"_"+sbArray[6]).getDouble("index");
-														if( Math.abs((newIndex - prevIndex) / prevIndex * 100) > mitigateNoiseWithPrecentage) 
+														if( Math.abs((newIndex - prevIndex) / prevIndex * 100) > mitigateNoiseWithPrecentage) {
 															noise = true;
-														else 
+                                                        }
+														else
 															noise = false;
 													}else{
 														noise = false;
@@ -209,8 +210,9 @@ public class Option implements Runnable {
 												}else{
 													if(previousDataDetail.get(sbArray[4])!=null) {
 														Double prevIndex = previousDataDetail.get(sbArray[4]).getDouble("index");
-														if( Math.abs((newIndex - prevIndex) / prevIndex * 100) > mitigateNoiseWithPrecentage) 
+														if( Math.abs((newIndex - prevIndex) / prevIndex * 100) > mitigateNoiseWithPrecentage) {
 															noise = true;
+                                                        }
 														else	
 															noise = false;
 													}else{
@@ -267,7 +269,8 @@ public class Option implements Runnable {
 					sumData();
 				}
 			}
-			dataForReading = new ArrayList<JSONObject>(data);
+            dataForReading.addAll(data);
+
 		}catch(Exception e) {
 			Constants.logger("System error ["+this.getClass().getName()+":"+e.getMessage()+"], please contact admin");
 			dataDetail = new JSONObject();
@@ -317,9 +320,9 @@ public class Option implements Runnable {
 			tempIntervalData.data_low_within_interval = null;
 			tempIntervalData.data_close_within_interval = null;
 			tempIntervalData.data_sumupvolume_within_interval = null;
-			interval_starttime = Constants.addSeconds(interval_endtime, 1);
-			interval_endtime = Constants.addSeconds(interval_starttime, interval_in_seconds);
 		}
 		intervalData_of_diff_contract = new HashMap<String, IntervalData>();
+        interval_starttime = Constants.addSeconds(interval_endtime, 1);
+		interval_endtime = Constants.addSeconds(interval_starttime, interval_in_seconds);
 	}
 }

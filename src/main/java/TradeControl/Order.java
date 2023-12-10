@@ -150,10 +150,9 @@ public class Order {
 				//For option trading
 				else {
 					if( direction.getDirection().equals(data.getDirection()) && 
-                        Double.parseDouble(strickPrice) == data.getStrike_price() && 
+                        !strickPrice.equals("") && Double.parseDouble(strickPrice) == data.getStrike_price() && 
                         expiryMonth.equals(data.getExpiration_year_month())
                     ){
-                        System.out.println("asd");
 						int temp_trade_amount = (data.getVolume()>=this.remained)?this.remained:data.getVolume();
 						tradePrice = data.getIndex() + ( (data.getIndex() *  slippage) * (random.nextInt(2)==0?1:-1) );
 						averageTradePrice = ((averageTradePrice * totalTraded) + (temp_trade_amount * tradePrice)) / (totalTraded + temp_trade_amount);

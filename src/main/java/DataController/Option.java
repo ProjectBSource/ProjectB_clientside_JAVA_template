@@ -141,6 +141,7 @@ public class Option implements Runnable {
 								if(Constants.withinDateOrNot(interval_starttime, interval_endtime, data_datetime)==true) {
 									IntervalData tempIntervalData = null;
 									if(sbArray.length>6){
+                                        sbArray[6] = sbArray[6].equals("P")?"PUT":"CALL";
 										if(intervalData_of_diff_contract.get(sbArray[4]+"_"+sbArray[5]+"_"+sbArray[6])==null){ 
 											intervalData_of_diff_contract.put(sbArray[4]+"_"+sbArray[5]+"_"+sbArray[6], new IntervalData()); 
 										}

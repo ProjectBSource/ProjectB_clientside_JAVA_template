@@ -25,7 +25,7 @@ class Profile {
 
 	public void addHistoryNode(DataStructure data){
 		JSONObject profileDetailInJSON = new JSONObject();
-		profileDetailInJSON.put("orderDateTime", data.orderDateTime);
+		profileDetailInJSON.put("orderDateTime", data.getDatetime());
 		profileDetailInJSON.put("holding", this.holding);
 		profileDetailInJSON.put("profits", this.profits);
 		profileDetailInJSON.put("cash", this.cash);

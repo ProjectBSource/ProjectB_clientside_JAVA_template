@@ -1,6 +1,11 @@
 package TradeControl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+
+import org.json.JSONObject;
+
+import ClientSocketControl.DataStructure;
 
 class Profile {
 	public HashMap<String, Integer> holding = new HashMap<>();
@@ -20,7 +25,7 @@ class Profile {
 
 	public void addHistoryNode(DataStructure data){
 		JSONObject profileDetailInJSON = new JSONObject();
-		orderDetailInJSON.put("orderDateTime", this.orderDateTime);
+		profileDetailInJSON.put("orderDateTime", this.orderDateTime);
 		profileDetailInJSON.put("holding", this.holding);
 		profileDetailInJSON.put("profits", this.profits);
 		profileDetailInJSON.put("cash", this.cash);

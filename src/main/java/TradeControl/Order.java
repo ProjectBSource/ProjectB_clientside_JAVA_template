@@ -66,7 +66,7 @@ public class Order {
 	}
 	
 	public Order(String orderAlias, DataStructure dataStructure, Action action, Direction direction, String strickPrice, String expiryMonth,  int quantity, String reason) throws Exception {
-		this.symbol = dataStructure.getSymbol();
+		this.symbol = dataStructure.getSymbol()+"-"+action.getAction()+"-"+strickPrice;
 		this.orderid = UUID.randomUUID().toString();
 		this.orderAlias = orderAlias;
 		this.orderDateTime = Constants.df_yyyyMMddkkmmss.parse(dataStructure.getDatetime());

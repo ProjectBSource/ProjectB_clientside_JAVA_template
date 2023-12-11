@@ -56,9 +56,16 @@ public class TradeController {
 		//update profile profits
 		profile.profits = 0;
 		for (Map.Entry<String, Integer> item : profile.holding.entrySet()) {
-		    if(item.getKey().equals(ds.getSymbol())) {
-		    	profile.profits += item.getValue() * ds.getIndex();
-		    }
+			if(item.getKey().contains("-")){
+				if(item.getKey().equals(ds.getSymbol()+"-"+ds.getAction()+"-"+ds.getStrike_price())) {
+					profile.profits += item.getValue() * ds.getIndex();
+				}
+			}
+			else{
+				if(item.getKey().equals(ds.getSymbol())) {
+					profile.profits += item.getValue() * ds.getIndex();
+				}
+			}
 		}
 		profile.profits += profile.cash;  
 		

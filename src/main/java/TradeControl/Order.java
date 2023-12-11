@@ -143,6 +143,7 @@ public class Order {
 						//Update profle
 						if(action == Action.SELL) { temp_trade_amount *= -1; }
 						profile.update(symbol, temp_trade_amount, tradePrice);
+						profile.addHistoryNode(data);
 
 						return orderDetailInJSON;
 					}

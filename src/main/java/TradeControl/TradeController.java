@@ -156,14 +156,14 @@ public class TradeController {
 	 * @throws JSONException
 	 * @throws JsonProcessingException
      */
-	public JSONObject getProfileInJSON() throws JsonProcessingException, JSONException {
-		//return profile.toJSONObject();
-        ObjectMapper mapper = new ObjectMapper();
-		JSONObject p = new JSONObject(mapper.writeValueAsString(profile));
-		if(p!=null) {
-			return p;
-		}
-		return null;
+	public JSONObject getProfileHistoryInJSON() throws JsonProcessingException, JSONException {
+		JSONArray history = new JSONArray();
+        for(String pH : profile.historyInJSON){
+			history.put(new JSONObject(pH));
+        }
+		JSONObject result = new JSONObject();
+		result.put("profileHistory", history);
+		return result;
 	}
 
     /**

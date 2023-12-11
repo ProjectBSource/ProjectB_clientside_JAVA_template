@@ -12,6 +12,14 @@ class Profile {
 	public double profits;
 	public double cash;
 	public ArrayList<String> historyInJSON = new ArrayList<>();
+
+	public Profile(){
+		JSONObject profileDetailInJSON = new JSONObject();
+		profileDetailInJSON.put("holding", this.holding);
+		profileDetailInJSON.put("profits", this.profits);
+		profileDetailInJSON.put("cash", this.cash);
+		historyInJSON.add(profileDetailInJSON.toString());
+	}
 	
 	public void update(String symbol, int quantity, double price) {
 		if(holding.containsKey(symbol)) {  

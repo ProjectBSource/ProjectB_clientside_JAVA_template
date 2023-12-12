@@ -57,7 +57,7 @@ public class TradeController {
 		profile.profits = 0;
 		for (Map.Entry<String, Integer> item : profile.holding.entrySet()) {
 			if(item.getKey().contains("-")){
-				if(item.getKey().equals(ds.getSymbol()+"-"+ds.getDirection()+"-"+ds.getStrike_price();)) {
+				if(item.getKey().equals(ds.getSymbol()+"-"+ds.getDirection()+"-"+ds.getStrike_price())) {
 					profile.profits += item.getValue() * ds.getIndex();
 				}
 			}

@@ -67,7 +67,6 @@ public class TradeController {
 				}
 			}
 		}
-		profile.profits += profile.cash;  
 		
 		//return 
 		if(trade_notification_list.isEmpty()) return null;

@@ -10,14 +10,12 @@ import ClientSocketControl.DataStructure;
 class Profile {
 	public HashMap<String, Integer> holding = new HashMap<>();
 	public double profits;
-	public double cash;
 	public ArrayList<String> historyInJSON = new ArrayList<>();
 
 	public Profile(){
 		JSONObject profileDetailInJSON = new JSONObject();
 		profileDetailInJSON.put("holding", this.holding);
 		profileDetailInJSON.put("profits", this.profits);
-		profileDetailInJSON.put("cash", this.cash);
 		historyInJSON.add(profileDetailInJSON.toString());
 	}
 	
@@ -28,7 +26,6 @@ class Profile {
 		else {
 			holding.put(symbol, quantity);
 		}
-		cash -= (quantity * price);
 	}
 
 	public void addHistoryNode(DataStructure data){
@@ -36,7 +33,6 @@ class Profile {
 		profileDetailInJSON.put("orderDateTime", data.getDatetime());
 		profileDetailInJSON.put("holding", this.holding);
 		profileDetailInJSON.put("profits", this.profits);
-		profileDetailInJSON.put("cash", this.cash);
 		historyInJSON.add(profileDetailInJSON.toString());
 	}
 }

@@ -101,19 +101,27 @@ public class TradeController {
 				//For non option trade off
 				if(targetOrder.direction==null){
 					if(targetOrder.action==Action.BUY){
-						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", dataStructure, Action.SELL, targetOrder.totalTraded, targetOrder.expiryMonth, reason));
+						Order order = new Order(targetId+"_OFF", dataStructure, Action.SELL, targetOrder.totalTraded, targetOrder.expiryMonth, reason);
+						order.targetOffTradeId = targetOrder.orderid;
+						orders.put(targetId+"_OFF", order);
 					}
 					else if(targetOrder.action==Action.SELL){
-						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", dataStructure, Action.BUY, targetOrder.totalTraded, targetOrder.expiryMonth, reason));
+						Order order = new Order(targetId+"_OFF", dataStructure, Action.BUY, targetOrder.totalTraded, targetOrder.expiryMonth, reason);
+						order.targetOffTradeId = targetOrder.orderid;
+						orders.put(targetId+"_OFF", order);
 					}
 				}
 				//For option trade off
 				if(targetOrder.direction!=null){
 					if(targetOrder.action==Action.BUY){
-						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", dataStructure, Action.SELL, targetOrder.direction, targetOrder.strickPrice, targetOrder.expiryMonth, targetOrder.totalTraded, reason));
+						Order order = new Order(targetId+"_OFF", dataStructure, Action.SELL, targetOrder.direction, targetOrder.strickPrice, targetOrder.expiryMonth, targetOrder.totalTraded, reason);
+						order.targetOffTradeId = targetOrder.orderid;
+						orders.put(targetId+"_OFF", order);
 					}
 					else if(targetOrder.action==Action.SELL){
-						orders.put(targetId+"_OFF", new Order(targetId+"_OFF", dataStructure, Action.BUY, targetOrder.direction, targetOrder.strickPrice, targetOrder.expiryMonth, targetOrder.totalTraded, reason));
+						Order order = new Order(targetId+"_OFF", dataStructure, Action.BUY, targetOrder.direction, targetOrder.strickPrice, targetOrder.expiryMonth, targetOrder.totalTraded, reason);
+						order.targetOffTradeId = targetOrder.orderid;
+						orders.put(targetId+"_OFF", order);
 					}
 				}
 				return true;

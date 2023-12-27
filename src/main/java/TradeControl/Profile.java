@@ -12,7 +12,7 @@ import TradeControl.OrderActionConstants.Action;
 class Profile {
 	public HashMap<String, Integer> holding = new HashMap<>();
 	public HashMap<String, Double> orderID_tradePrice = new HashMap<>();
-	public HashMap<String, Double> orderID_profits = new HashMap<>();
+	public ArrayList<Object[]> orderID_profits = new ArrayList<>();
 	public HashMap<String, Double> symbol_accumProfits = new HashMap<>();
 	public ArrayList<String> historyInJSON = new ArrayList<>();
 
@@ -40,7 +40,7 @@ class Profile {
 			}
 		}else{
 			double tempProfits = (order.action==Action.SELL?(order.tradePrice - orderID_tradePrice.get(order.targetOffTradeId)):(orderID_tradePrice.get(order.targetOffTradeId) - order.tradePrice));
-			orderID_profits.put(order.targetOffTradeId, tempProfits );
+			orderID_profits.put(new Object{order.targetOffTradeId, new Double(tempProfits)} );
 			symbol_accumProfits.put(order.symbol, symbol_accumProfits.get(order.symbol)+tempProfits );
 		}
 	}

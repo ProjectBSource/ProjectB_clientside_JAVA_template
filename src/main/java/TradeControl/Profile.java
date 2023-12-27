@@ -19,12 +19,27 @@ class Profile {
 		historyInJSON.add(profileDetailInJSON.toString());
 	}
 	
-	public void update(String symbol, int quantity, double price) {
+	public void update(String symbol, int quantity, double price, DataStructure ds) {
 		if(holding.containsKey(symbol)) {  
 			holding.put(symbol, holding.get(symbol)+quantity);
 		}
 		else {
 			holding.put(symbol, quantity);
+		}
+
+		//update profile profits
+		profits = 0;
+		for (Map.Entry<String, Integer> item : holding.entrySet()) {
+			if(item.getKey().contains("-")){
+				if(item.getKey().equals(ds.getSymbol()+"-"+ds.getDirection()+"-"+ds.getStrike_price())) {
+					profits += item.getValue() * ds.getIndex();
+				}
+			}
+			else{
+				if(item.getKey().equals(ds.getSymbol())) {
+					profits += item.getValue() * ds.getIndex();
+				}
+			}
 		}
 	}
 

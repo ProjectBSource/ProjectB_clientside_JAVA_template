@@ -107,11 +107,13 @@ public class TradeController {
 	public boolean placeOFFOrder(String targetId, DataStructure dataStructure, String reason) throws Exception {
 		Order targetOrder = orders.get(targetId);
 		if(targetOrder!=null && orders.get(targetId+"_OFF")==null){
+			boolean forceOFF = false;
             if(targetOrder.remained>0){
                 targetOrder.remained = 0;
                 targetOrder.addNewDescription("off trade signal triggered; ");
+				forceOFF = true;
             }
-			if(profile.holding.get(targetOrder.symbol)!=null){
+			if(profile.holding.get(targetOrder.symbol)!=null || forceOFF==true){
 				//For non option trade off
 				if(targetOrder.direction==null){
 					if(targetOrder.action==Action.BUY){

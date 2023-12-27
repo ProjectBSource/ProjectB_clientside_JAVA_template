@@ -19,7 +19,8 @@ class Profile {
 	public Profile(){
 		JSONObject profileDetailInJSON = new JSONObject();
 		profileDetailInJSON.put("holding", this.holding);
-		profileDetailInJSON.put("profits", this.profits);
+		profileDetailInJSON.put("accum.Profits", this.symbol_accumProfits);
+		profileDetailInJSON.put("profits", this.orderID_profits);
 		historyInJSON.add(profileDetailInJSON.toString());
 	}
 	
@@ -31,14 +32,14 @@ class Profile {
 			holding.put(symbol, temp_trade_amount);
 		}
 
-		offTrade = order.orderAlias.contains("OFF");
+		boolean offTrade = order.orderAlias.contains("OFF");
 		if(offTrade==false){
-			tradePrice.put(order.orderid, order.tradePrice);
+			orderID_tradePrice.put(order.orderid, order.tradePrice);
 			if(symbol_accumProfits.containsKey(order.symbol)==false) {  
 				symbol_accumProfits.put(order.symbol, 0.0);
 			}
 		}else{
-			tempProfits = (order.action==Action.SELL?(order.tradePrice - tradePrice.get(order.targetOffTradeId)):(tradePrice.get(order.targetOffTradeId) - order.tradePrice));
+			double tempProfits = (order.action==Action.SELL?(order.tradePrice - orderID_tradePrice.get(order.targetOffTradeId)):(orderID_tradePrice.get(order.targetOffTradeId) - order.tradePrice));
 			profits.put(order.targetOffTradeId, tempProfits );
 			symbol_accumProfits.put(order.symbol, symbol_accumProfits.get(order.symbol)+tempProfits );
 		}

@@ -36,6 +36,7 @@ public class Order {
 	public Date orderFillDateTime;
 	public JSONObject orderDetailInJSON;
 	public String description;
+	public String targetOffTradeId;
 	public ArrayList<Order> history = new ArrayList<>();
 	public ArrayList<String> historyInJSON = new ArrayList<>();
 
@@ -142,7 +143,7 @@ public class Order {
 						historyInJSON.add(orderDetailInJSON.toString());
 						//Update profle
 						if(action == Action.SELL) { temp_trade_amount *= -1; }
-						profile.update(symbol, temp_trade_amount, tradePrice, data);
+						profile.update(symbol, temp_trade_amount, tradePrice, data, this);
 						profile.addHistoryNode(data);
 
 						return orderDetailInJSON;
@@ -172,7 +173,7 @@ public class Order {
 						historyInJSON.add(orderDetailInJSON.toString());
 						//Update profle
 						if(action == Action.SELL) { temp_trade_amount *= -1; }
-						profile.update(symbol, temp_trade_amount, tradePrice, data);
+						profile.update(symbol, temp_trade_amount, tradePrice, data, this);
 						profile.addHistoryNode(data);
 
 						return orderDetailInJSON;

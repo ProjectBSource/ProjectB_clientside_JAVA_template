@@ -142,7 +142,7 @@ public class Order {
 						historyInJSON.add(orderDetailInJSON.toString());
 						//Update profle
 						if(action == Action.SELL) { temp_trade_amount *= -1; }
-						profile.update(symbol, temp_trade_amount, tradePrice);
+						profile.update(symbol, temp_trade_amount, tradePrice, data);
 						profile.addHistoryNode(data);
 
 						return orderDetailInJSON;
@@ -172,7 +172,7 @@ public class Order {
 						historyInJSON.add(orderDetailInJSON.toString());
 						//Update profle
 						if(action == Action.SELL) { temp_trade_amount *= -1; }
-						profile.update(symbol, temp_trade_amount, tradePrice);
+						profile.update(symbol, temp_trade_amount, tradePrice, data);
 						profile.addHistoryNode(data);
 
 						return orderDetailInJSON;

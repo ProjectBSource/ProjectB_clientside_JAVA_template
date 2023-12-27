@@ -53,21 +53,6 @@ public class TradeController {
 		}
 		orders = tempNewOrders;
 		
-		//update profile profits
-		profile.profits = 0;
-		for (Map.Entry<String, Integer> item : profile.holding.entrySet()) {
-			if(item.getKey().contains("-")){
-				if(item.getKey().equals(ds.getSymbol()+"-"+ds.getDirection()+"-"+ds.getStrike_price())) {
-					profile.profits += item.getValue() * ds.getIndex();
-				}
-			}
-			else{
-				if(item.getKey().equals(ds.getSymbol())) {
-					profile.profits += item.getValue() * ds.getIndex();
-				}
-			}
-		}
-		
 		//return 
 		if(trade_notification_list.isEmpty()) return null;
 		else return trade_notification_list;

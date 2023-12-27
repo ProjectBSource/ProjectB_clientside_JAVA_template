@@ -40,7 +40,7 @@ class Profile {
 			}
 		}else{
 			double tempProfits = (order.action==Action.SELL?(order.tradePrice - orderID_tradePrice.get(order.targetOffTradeId)):(orderID_tradePrice.get(order.targetOffTradeId) - order.tradePrice));
-			orderID_profits.put(new Object{order.targetOffTradeId, new Double(tempProfits)} );
+			orderID_profits.put(new Object[]{order.targetOffTradeId, new Double(tempProfits)} );
 			symbol_accumProfits.put(order.symbol, symbol_accumProfits.get(order.symbol)+tempProfits );
 		}
 	}

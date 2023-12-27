@@ -19,7 +19,7 @@ class Profile {
 	public Profile(){
 		JSONObject profileDetailInJSON = new JSONObject();
 		profileDetailInJSON.put("holding", this.holding);
-		profileDetailInJSON.put("accum.Profits", this.symbol_accumProfits);
+		profileDetailInJSON.put("accumProfits", this.symbol_accumProfits);
 		profileDetailInJSON.put("profits", this.orderID_profits);
 		historyInJSON.add(profileDetailInJSON.toString());
 	}
@@ -49,7 +49,7 @@ class Profile {
 		JSONObject profileDetailInJSON = new JSONObject();
 		profileDetailInJSON.put("orderDateTime", data.getDatetime());
 		profileDetailInJSON.put("holding", this.holding);
-		profileDetailInJSON.put("accum.Profits", this.symbol_accumProfits);
+		profileDetailInJSON.put("accumProfits", this.symbol_accumProfits);
 		profileDetailInJSON.put("profits", this.orderID_profits);
 		historyInJSON.add(profileDetailInJSON.toString());
 	}
